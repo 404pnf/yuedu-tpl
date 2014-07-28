@@ -23,9 +23,11 @@ function userEdit() {
 
 function userSave() {
   $('#save_user_info').click(function() {
-    $('#edit_user_info').hide();
-    $('#user_show').show();
-    $( this ).preventDefault();
+    //$('#edit_user_info').hide();
+    //$('#user_show').show();
+    var form_data = $('form').serialize();
+    console.log(from_data);
+    //$( this ).preventDefault();
   });
 };
 
@@ -52,11 +54,10 @@ function userPhotoEdit() {
   });
 };
 
-function userSave() {
+function userPhotoSave() {
   $('#save_user_photo').click(function() {
     $('#edit_user_photo').hide();
-    $('#user_photo').show();
-    $( this ).preventDefault();
+    //$( this ).preventDefault();
   });
 };
 
