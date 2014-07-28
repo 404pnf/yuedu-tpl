@@ -52,5 +52,13 @@ function userPhotoEdit() {
   });
 };
 
+function userSave() {
+  $('#save_user_photo').click(function() {
+    $('#edit_user_photo').hide();
+    $('#user_photo').show();
+    $( this ).preventDefault();
+  });
+};
+
 $(document).ready( userShow() );
 $(document).ready( userPhotoShow() );

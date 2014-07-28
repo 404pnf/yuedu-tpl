@@ -3,4 +3,5 @@
 {{#photos}}
 <input type="radio" name={{.}} value={{.}}><img src={{.}} ><br>
 {{/photos}}
+<input type="submit" id= "save_user_photo" value="保存新头像"> <br>
 </form>
