@@ -1,41 +1,56 @@
-var Y;
-var user;
-$.getJSON("http://0.0.0.0:4567/user/1/show", function(json) {
-  user = json;
-  new EJS({url: 'tpl/user_show.ejs'}).update('bf', user);
-});
-
-$(document).ready(function() {
-  //$('#user-edit').css('background-color', 'red');
-});
-
-$(document).ready(function() {
-  $('#edit-user-info').click(function() {
-    $('#user-show').hide();
+function userShow() {
+  $.get('/user/1/show', function(data) {
+    $.get('tpl/user_show.mst', function(template) {
+      var rendered = Mustache.render(template, data);
+      $('#user_show').html(rendered);
+      userEdit();
+    });
   });
-});
+};
 
-// Y.showUserInfo = function () {
-//   $(document).ready(function() {
-//   $('#user-info').show();
-//   });
-// };
+function userEdit() {
+  $('#edit_user_info').click(function() {
+    $('#user_show').hide();
+    $.get('/user/1/show', function(data) {
+      $.get('tpl/user_edit.mst', function(template) {
+        var rendered = Mustache.render(template, data);
+        $('#user_edit').html(rendered);
+        userSave();
+      });
+    });
+  });
+};
 
-// Y.hideUserEdit = function () {
-//   $(document).ready(function() {
-//     $('#user-edit').hide();
-//   });
-// };
+function userSave() {
+  $('#save_user_info').click(function() {
+    $('#edit_user_info').hide();
+    $('#user_show').show();
+    $( this ).preventDefault();
+  });
+};
 
-// Y.showUserEdit = function () {
-//   $(document).ready(function() {
-//   $('#user-edit').show();
-//   });
-// };
+function userPhotoShow() {
+  $.get('/user/1/show', function(data) {
+    $.get('tpl/user_photo.mst', function(template) {
+      var rendered = Mustache.render(template, data);
+      $('#user_photo').html(rendered);
+      userPhotoEdit();
+    });
+  });
+};
 
-// $(document).ready(function() {
-//   $('#edit-user-info').click(function() {
-//     Y.hideUserInfo();
-//     Y.showUserEdit();
-//   })
-// });
+function userPhotoEdit() {
+  $('#edit_user_photo').click(function() {
+    $('#user_photo').hide();
+    $.get('/user/photos', function(data) {
+      $.get('tpl/user_photo_edit.mst', function(template) {
+        var rendered = Mustache.render(template, data);
+        $('#user_photo_edit').html(rendered);
+        //userPhotoShow();
+      });
+    });
+  });
+};
+
+$(document).ready( userShow() );
+$(document).ready( userPhotoShow() );

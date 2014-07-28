@@ -1,0 +1,6 @@
+<h2>编辑头像<h2>
+<form>
+{{#photos}}
+<input type="radio" name={{.}} value={{.}}><img src={{.}} ><br>
+{{/photos}}
+</form>
