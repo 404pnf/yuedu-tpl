@@ -12,7 +12,8 @@ before do
 end
 
 get '/user/photos' do
-  photos = [
+  photos = {
+    photos: [
       "http://placehold.it/100x100",
       "http://placehold.it/100x100",
       "http://placehold.it/100x100",
@@ -21,6 +22,7 @@ get '/user/photos' do
       "http://placehold.it/100x100",
       "http://placehold.it/100x100"
       ]
+    }
   JSONP photos
 end
 
@@ -37,4 +39,12 @@ get '/user/1/show' do
     loginName: 'stu20'
   }
   JSONP user
+end
+
+post '/user/save' do
+  status = {
+    code: 'error',
+    msg: '123456'
+  }
+  JSONP status
 end

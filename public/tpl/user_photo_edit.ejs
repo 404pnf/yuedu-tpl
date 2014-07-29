@@ -1,11 +1,7 @@
-
 <h2>编辑头像<h2>
-<form>
-<input type="radio" name="1" value="1"><img src=<%= user['photo'] %>><br>
-<input type="radio" name="2" value="1"><img src=<%= user['photo'] %>><br>
-<input type="radio" name="2" value="1"><img src=<%= user['photo'] %>><br>
-<input type="radio" name="2" value="1"><img src=<%= user['photo'] %>><br>
-<input type="radio" name="2" value="1"><img src=<%= user['photo'] %>><br>
-<input type="radio" name="2" value="1"><img src=<%= user['photo'] %>><br>
-<input type="radio" name="2" value="1"><img src=<%= user['photo'] %>><br>
+<form id='user_photo'>
+<% $.each(photos, function(idx, val) { %>
+  <input type="radio" name='photo_id' value='<%= idx %>' ><img src=<%= val %>><br>
+<% }); %>
+<input type="submit" id="save_user_phot_" value="保存头像" onclick='YD.userPhotoSave()'> <br>
 </form>
