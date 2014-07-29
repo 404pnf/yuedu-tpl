@@ -42,9 +42,12 @@ get '/user/1/show' do
 end
 
 post '/user/save' do
+  #logger.info "in /user/save "
   status = {
-    code: 'error',
-    msg: '123456'
+    code: 'sucess',
+    msg: '成功啦'
+    # code: 'error',
+    # msg: '出问题了。学校名字不对'
   }
   JSONP status
 end
