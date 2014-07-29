@@ -11,25 +11,22 @@ before do
   headers['Access-Control-Allow-Credentials'] = 'true'
 end
 
-get '/supplies' do
-  data = ["milk", "butter", "coffee", "bread"]
-  JSONP data  # JSONP is an alias for jsonp method
-end
-
-get '/supplies' do
-  data = ["milk", "butter", "coffee", "bread"]
-  JSONP data  # JSONP is an alias for jsonp method
-end
-
-# same with symbol param
-get '/hallo' do
-  data = ["hello","hi","hallo"]
-  jsonp data, :functionB
+get '/user/photos' do
+  photos = [
+      "http://placehold.it/100x100",
+      "http://placehold.it/100x100",
+      "http://placehold.it/100x100",
+      "http://placehold.it/100x100",
+      "http://placehold.it/100x100",
+      "http://placehold.it/100x100",
+      "http://placehold.it/100x100"
+      ]
+  JSONP photos
 end
 
 get '/user/1/show' do
   user = {
-    userName: "王小军",
+    userName: "王大军",
     gender: "女",
     age: 12,
     dob: "2004-07-26 11:37:53 +0800",

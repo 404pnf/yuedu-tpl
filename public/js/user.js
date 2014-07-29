@@ -1,33 +1,58 @@
-function userShow() {
-  $.get('/user/1/show', function(data) {
-    $.get('tpl/user_show.mst', function(template) {
+
+var loadData = function(dataUrl, tplUrl, callback) {
+  $.get(dataUrl, function(data) {
+    $.get(tplUrl, function(template) {
       var rendered = Mustache.render(template, data);
-      $('#user_show').html(rendered);
-      userEdit();
+      callback(rendered);
     });
   });
 };
 
-function userEdit() {
-  $('#edit_user_info').click(function() {
-    $('#user_show').hide();
-    $.get('/user/1/show', function(data) {
-      $.get('tpl/user_edit.mst', function(template) {
-        var rendered = Mustache.render(template, data);
-        $('#user_edit').html(rendered);
-        userSave();
-      });
-    });
+var userShow = function() {
+  loadData('/user/1/show', 'tpl/user_show.mst', function(r) {
+    $('#user_show').html(r);
+    //userEdit();
   });
 };
 
-function userSave() {
+$(document).ready( userShow() );
+
+var setState = function(state) {
+  var states = ['edit', 'show', 'save'];
+  for(var i = 0; i < states.length; var += 1) {
+    if (state !== states[i]) {
+      $('#user_' + states).hide();
+    };
+  };
+};
+
+var userEdit = function() {
+  setState('edit');
+  loadData('/user/1/show', 'tpl/user_edit.mst', function(r) {
+  $('#user_edit').html(r);
+    userSave();
+  });
+});
+};
+
+var userSave = function() {
   $('#save_user_info').click(function() {
-    //$('#edit_user_info').hide();
-    //$('#user_show').show();
-    var form_data = $('form').serialize();
-    console.log(from_data);
-    //$( this ).preventDefault();
+    var form_data = $('form').serializeJSON();
+    alert(form_data);
+    $.ajax({
+      type: "POST",
+      url: "/user/save",
+      data: form_data,
+      error: function() {
+        $('#status').text('有错！').slideDown('slow');
+      },
+      success: function() {
+        $('#status').text('更新成功了');
+      },
+      complete: function() {
+        $('#status').text('complete');
+      }
+    });
   });
 };
 
@@ -56,10 +81,28 @@ function userPhotoEdit() {
 
 function userPhotoSave() {
   $('#save_user_photo').click(function() {
-    $('#edit_user_photo').hide();
-    //$( this ).preventDefault();
+    var form_data = $('form').serializeJSON();
+    $('#status').text('i am here');
+    alert(form_data);
+    $.ajax({
+      type: "POST",
+      url: "/user/save",
+      data: form_data,
+      error: function() {
+        $('#status').text('有错！').slideDown('slow');
+      },
+      success: function() {
+        $('#status').text('更新成功了');
+      },
+      complete: function() { //错误和正确都执行
+        $('#status').text('complete').slideDown('slow');
+      }
+    });
   });
 };
 
-$(document).ready( userShow() );
+
 $(document).ready( userPhotoShow() );
+$(document).ready(function() {
+  //$('#status').text('i am here');
+});

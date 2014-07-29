@@ -7,4 +7,4 @@
 年级：{{grade}}  <br>
 学校：{{school}} <br>
 邮箱：{{email}} <br>
-<input type="submit" id= "edit_user_info" value="编辑用户信息"> <br>
+<input o type="submit" id= "edit_user_info" value="编辑用户信息"> <br>
