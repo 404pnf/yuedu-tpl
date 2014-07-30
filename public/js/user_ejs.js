@@ -29,10 +29,10 @@ var YD = {};
   // for side-effect only
   var postJson = function(url, cssID) {
     var form_data = $(cssID).serializeJSON();
-    //alert(form_data);
+    alert(form_data);
     $.post(url, form_data)
       .done(function(data) {
-        //alert( "success" );
+        console.log( "postJson success" );
         if ('error' == data.code) {
           $('#error').text(data.msg).slideDown('slow');
         }
@@ -41,18 +41,12 @@ var YD = {};
         }
       })
       .fail(function() {
-        //alert( "error" );
+        console.log( "postJson error" );
       })
       .always(function() {
-        //alert( "finished" );
+        console.log( "postJson finished" );
       });
     };
-
-  var showAjaxError =  function() {
-    $('#msg').ajaxError(function(event, request, settings, ex) {
-      $(this).html('Error requesting page ' + settings.url + '!');
-    });
-  };
 
   YD.userShow = function() {
     renderData('/user/1/show', 'tpl/user_show.ejs', 'user_info');
@@ -83,4 +77,5 @@ var YD = {};
 $(document).ready(function() {
   YD.userShow();
   YD.userPhotoShow();
+  $('#datepicker').datepicker();
 });
