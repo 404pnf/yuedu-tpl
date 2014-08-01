@@ -10,12 +10,7 @@ var YD = {};
           callback(data);
         }
         new EJS({url: tpl}).update(cssID, data);
-        if ('error' == data.code) {
-          $('#error').text(data.msg).slideDown('slow');
-        }
-        else {
-          $('#success').text(data.msg).slideDown('slow');
-        }
+
       })
       .fail(function(data, status, xhr) {
         $('#error').text(data).slideDown('slow');
@@ -39,12 +34,16 @@ var YD = {};
     $.post(url, form_data)
       .done(function(data) {
         console.log( "postJson success" );
-        if ('error' == data.code) {
-          $('#error').text(data.msg).slideDown('slow');
-        }
-        else {
-          $('#success').text(data.msg).slideDown('slow');
-        }
+        // http://api.jquery.com/jQuery.each/
+        // $.each( obj, function( key, value ) {});
+        // var msg =
+        $.each( data, function( k, v ) {
+          //http://api.jquery.com/appendTo/
+          console.log( k + ': ' + v )
+          //$( ' <div id=' + msg + '>' + v + '</div>' ).appendTo( $('#msg') );
+          $( '#msg' ).html( v );
+          //$( '#msg' ).text('from ejs');
+         });
       })
       .fail(function() {
         console.log( "postJson error" );
