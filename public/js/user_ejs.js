@@ -10,10 +10,9 @@ var YD = {};
           callback(data);
         }
         new EJS({url: tpl}).update(cssID, data);
-        //showStatusMsg(data);
       })
       .fail(function(data, status, xhr) {
-        $('#error').text(data).slideDown('slow');
+        $('#msg').text(data).slideDown('slow');
       })
       .always(function(data, status, xhr) {
         // both sucess and failure
@@ -37,8 +36,9 @@ var YD = {};
       .done(function(data) {
         showStatusMsg(data);
       })
-      .fail(function() {
-        // console.log( "postJson error" );
+      .fail(function(data) {
+        console.log( data );
+        $('#msg').text(data).slideDown('slow');
       })
       .always(function() {
         // console.log( "postJson finished" );
