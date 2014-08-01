@@ -28,31 +28,34 @@ var YD = {};
   var postJson = function(url, cssID, callback) {
     var form_data = $(cssID).serializeJSON();
     //alert(form_data);
+
     if (callback) {
       callback(form_data);
     }
+
     $.post(url, form_data)
       .done(function(data) {
         showStatusMsg(data);
       })
       .fail(function() {
-        console.log( "postJson error" );
+        // console.log( "postJson error" );
       })
       .always(function() {
-        console.log( "postJson finished" );
+        // console.log( "postJson finished" );
       });
     };
 
   var showStatusMsg = function(data) {
-      console.log( "showStatusMsg success" );
+      // console.log( "showStatusMsg success" );
       // 先清除之前的msg内容
       // http://api.jquery.com/empty/
       $( '#msg' ).empty();
-      // http://api.jquery.com/jQuery.each/
+
       // $.each( obj, function( key, value ) {});
+      // http://api.jquery.com/jQuery.each/
       $.each( data, function( k, v ) {
-        //http://api.jquery.com/appendTo/
-        console.log( k + ': ' + v )
+        // http://api.jquery.com/append/
+        // console.log( k + ': ' + v )
         $( '#msg' ).append('<div class=' + k + '>' + v +'</div>' );
        });
     };
@@ -80,14 +83,15 @@ var YD = {};
       if (data.sucess) {
         YD.userShow();
       };
-    }) ;
+    });
   };
 
   YD.userPhotoSave = function() {
     postJson('/user/save', 'form#user_photo', function(data) {
-      YD.userPhotoShow();
-    }) ;
+      if (data.sucess) {
+        YD.userPhotoShow();
+      };
+    });
   };
 
 })(); // end of let scope
-
