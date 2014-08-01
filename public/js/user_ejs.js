@@ -34,7 +34,7 @@ var YD = {};
     var form_data = $(cssID).serializeJSON();
     alert(form_data);
     if (callback) {
-      callback(data);
+      callback(form_data);
     }
     $.post(url, form_data)
       .done(function(data) {
@@ -73,17 +73,16 @@ var YD = {};
   };
 
   YD.userSave = function() {
-    postJson('/user/save', 'form#user_info') ;
+    postJson('/user/save', 'form#user_info', function(data) {
+      YD.userShow();
+    }) ;
   };
 
   YD.userPhotoSave = function() {
-    postJson('/user/save', 'form#user_photo') ;
+    postJson('/user/save', 'form#user_photo', function(data) {
+      YD.userPhotoShow();
+    }) ;
   };
 
 })(); // end of let scope
 
-$(document).ready(function() {
-  YD.userShow();
-  YD.userPhotoShow();
-  $('#datepicker').datepicker();
-});
