@@ -56,7 +56,9 @@ var YD = {};
       $.each( data, function( k, v ) {
         // http://api.jquery.com/append/
         // console.log( k + ': ' + v )
-        $( '#msg' ).append('<div class=' + k + '>' + v +'</div>' );
+        // $( '#msg' ).append('<div class=' + k + '>' + v +'</div>' );
+        // 我喜欢用Array.join拼字符串，视觉上更干净
+        $( '#msg' ).append( ['<div class=', k, '>', v, '</div>'].join('') );
        });
     };
 
