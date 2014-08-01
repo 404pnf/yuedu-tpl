@@ -11,6 +11,9 @@ before do
   headers['Access-Control-Allow-Credentials'] = 'true'
 end
 
+get '/' do
+  '<a href=/user-ejs.html>user-ejs.html</a>'
+end
 get '/user/photos' do
   photos = {
     photos: [

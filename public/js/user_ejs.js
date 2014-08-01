@@ -3,9 +3,12 @@ var YD = {};
 (function() {
   // function used for side-effect only
   // changing text in html
-  var renderData = function(url, tpl, cssID) {
+  var renderData = function(url, tpl, cssID, callback) {
     $.get(url)
       .done(function(data, status, xhr) {
+        if (callback) {
+          callback(data);
+        }
         new EJS({url: tpl}).update(cssID, data);
         if ('error' == data.code) {
           $('#error').text(data.msg).slideDown('slow');
@@ -27,9 +30,12 @@ var YD = {};
   // post json to api
   // error msg dipsplayed in html
   // for side-effect only
-  var postJson = function(url, cssID) {
+  var postJson = function(url, cssID, callback) {
     var form_data = $(cssID).serializeJSON();
     alert(form_data);
+    if (callback) {
+      callback(data);
+    }
     $.post(url, form_data)
       .done(function(data) {
         console.log( "postJson success" );
@@ -49,7 +55,9 @@ var YD = {};
     };
 
   YD.userShow = function() {
-    renderData('/user/1/show', 'tpl/user_show.ejs', 'user_info');
+    renderData('/user/1/show', 'tpl/user_show.ejs', 'user_info', function(data) {
+      YD.userInfo = data;
+    });
   };
 
   YD.userEdit = function() {
