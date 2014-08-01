@@ -47,7 +47,7 @@ end
 post '/user/save' do
   #logger.info "in /user/save "
   status = {
-    success: '成功啦',
+    #success: '成功啦',
     error: '错误',
     warn: '警告',
     info: '信息'

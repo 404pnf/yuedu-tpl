@@ -1,8 +1,8 @@
 var YD = {};
 
 (function() {
+  // 1. changing text in html
   // function used for side-effect only
-  // changing text in html
   var renderData = function(url, tpl, cssID, callback) {
     $.get(url)
       .done(function(data, status, xhr) {
@@ -10,7 +10,7 @@ var YD = {};
           callback(data);
         }
         new EJS({url: tpl}).update(cssID, data);
-
+        //showStatusMsg(data);
       })
       .fail(function(data, status, xhr) {
         $('#error').text(data).slideDown('slow');
@@ -20,30 +20,20 @@ var YD = {};
       });
   };
 
-  // get data from form
-  // convert data to json
-  // post json to api
-  // error msg dipsplayed in html
+  // 1. get data from form
+  // 2. convert data to json
+  // 3. post json to api
+  // 4. error msg dipsplayed in html
   // for side-effect only
   var postJson = function(url, cssID, callback) {
     var form_data = $(cssID).serializeJSON();
-    alert(form_data);
+    //alert(form_data);
     if (callback) {
       callback(form_data);
     }
     $.post(url, form_data)
       .done(function(data) {
-        console.log( "postJson success" );
-        // http://api.jquery.com/jQuery.each/
-        // $.each( obj, function( key, value ) {});
-        // var msg =
-        $.each( data, function( k, v ) {
-          //http://api.jquery.com/appendTo/
-          console.log( k + ': ' + v )
-          //$( ' <div id=' + msg + '>' + v + '</div>' ).appendTo( $('#msg') );
-          $( '#msg' ).html( v );
-          //$( '#msg' ).text('from ejs');
-         });
+        showStatusMsg(data);
       })
       .fail(function() {
         console.log( "postJson error" );
@@ -51,6 +41,20 @@ var YD = {};
       .always(function() {
         console.log( "postJson finished" );
       });
+    };
+
+  var showStatusMsg = function(data) {
+      console.log( "showStatusMsg success" );
+      // 先清除之前的msg内容
+      // http://api.jquery.com/empty/
+      $( '#msg' ).empty();
+      // http://api.jquery.com/jQuery.each/
+      // $.each( obj, function( key, value ) {});
+      $.each( data, function( k, v ) {
+        //http://api.jquery.com/appendTo/
+        console.log( k + ': ' + v )
+        $( '#msg' ).append('<div class=' + k + '>' + v +'</div>' );
+       });
     };
 
   YD.userShow = function() {
@@ -73,7 +77,9 @@ var YD = {};
 
   YD.userSave = function() {
     postJson('/user/save', 'form#user_info', function(data) {
-      YD.userShow();
+      if (data.sucess) {
+        YD.userShow();
+      };
     }) ;
   };
 
