@@ -29,7 +29,22 @@ get '/user/photos' do
   JSONP photos
 end
 
-get '/user/1/show' do
+get '/user/photos' do
+  photos = {
+    photos: [
+      "http://placehold.it/100x100",
+      "http://placehold.it/100x100",
+      "http://placehold.it/100x100",
+      "http://placehold.it/100x100",
+      "http://placehold.it/100x100",
+      "http://placehold.it/100x100",
+      "http://placehold.it/100x100"
+      ]
+    }
+  JSONP photos
+end
+
+get '/user/show' do
   user = {
     userName: "王大军",
     gender: "女",
@@ -47,7 +62,7 @@ end
 post '/user/save' do
   #logger.info "in /user/save "
   status = {
-    #success: '成功啦',
+    success: '成功啦',
     error: '错误',
     warn: '警告',
     info: '信息'
