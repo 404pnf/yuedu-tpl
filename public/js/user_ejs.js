@@ -3,15 +3,23 @@ var YD = {};
 (function() {
   // 1. changing text in html
   // function used for side-effect only
-  var renderData = function(url, tpl, cssID, callback) {
+  var renderData = function(url, tpl, cssID, callback, name) {
     $.get(url)
       .done(function(data, status, xhr) {
-        console.log( 'get data from' + url + ': ' );
-        console.log( data );
-        if (callback) {
+        // console.log( callback );
+        if (!!callback) {
           callback(data);
         }
-        new EJS({url: tpl}).update(cssID, data);
+        // console.log( name );
+        if (name) {
+          var d = {};
+          d[name] = data;
+          new EJS({url: tpl}).update(cssID, d);
+        }
+        else {
+          new EJS({url: tpl}).update(cssID, data);
+        }
+
       })
       .fail(function(data, status, xhr) {
         $('#msg').text(data).slideDown('slow');
@@ -69,8 +77,8 @@ var YD = {};
     };
 
   YD.userShow = function() {
-    renderData('/user/show', 'tpl/user_show.ejs', 'user_info', function(data) {
-      YD.userInfo = data;
+    renderData('/user/show', 'tpl/user_show.ejs', 'user_info', function(d) {
+      YD.userInfo = d;
     });
   };
 
@@ -83,7 +91,7 @@ var YD = {};
   };
 
   YD.userPhotoEdit = function() {
-    renderData('/user/photos', 'tpl/user_photo_edit.ejs', 'user_photo');
+    renderData('/user/photos', 'tpl/user_photo_edit.ejs', 'user_photo', undefined, 'photos');
   };
 
   YD.userSave = function() {

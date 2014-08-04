@@ -14,33 +14,17 @@ end
 get '/' do
   '<a href=/user-ejs.html>user-ejs.html</a>'
 end
-get '/user/photos' do
-  photos = {
-    photos: [
-      "http://placehold.it/100x100",
-      "http://placehold.it/100x100",
-      "http://placehold.it/100x100",
-      "http://placehold.it/100x100",
-      "http://placehold.it/100x100",
-      "http://placehold.it/100x100",
-      "http://placehold.it/100x100"
-      ]
-    }
-  JSONP photos
-end
 
 get '/user/photos' do
-  photos = {
-    photos: [
-      "http://placehold.it/100x100",
-      "http://placehold.it/100x100",
-      "http://placehold.it/100x100",
-      "http://placehold.it/100x100",
-      "http://placehold.it/100x100",
-      "http://placehold.it/100x100",
-      "http://placehold.it/100x100"
-      ]
-    }
+  photos = [
+    "http://placehold.it/100x100",
+    "http://placehold.it/100x100",
+    "http://placehold.it/100x100",
+    "http://placehold.it/100x100",
+    "http://placehold.it/100x100",
+    "http://placehold.it/100x100",
+    "http://placehold.it/100x100"
+    ]
   JSONP photos
 end
 
