@@ -37,7 +37,7 @@ get '/userController/grades' do
       { f: "六年级" },
       { g: "七年级" }
     ]
-  JSONP grade
+  JSONP photos
 end
 get '/userController/show/loginUser' do
   user = {

@@ -80,11 +80,11 @@ var YD = {};
   };
 
   YD.userEdit = function() {
-    renderData('/userController/show', 'tpl/user_edit.ejs', 'user_info');
+    renderData('/userController/show/loginUser', 'tpl/user_edit.ejs', 'user_info');
   };
 
   YD.userPhotoShow = function() {
-    renderData('/userController/show', 'tpl/user_photo.ejs', 'user_photo');
+    renderData('/userController/show/loginUser', 'tpl/user_photo.ejs', 'user_photo');
   };
 
   YD.userPhotoEdit = function() {
