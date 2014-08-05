@@ -1,25 +1,25 @@
 var YD = {};
 
 (function() {
-  // 1. changing text in html
+  //
+  // renderData
+  //
+  // changing text in html
   // function used for side-effect only
-  var renderData = function(url, tpl, cssID, callback, name) {
+  //
+  // @url : uri where json resides
+  // @tpl : path to the template failure
+  // @cssID : after binding data to tpl, insert the result to cssID
+  // @callback : a. massage json data if needed
+  //             b. functions for side-effect, i.e, saving tmp data
+  //             c. must explicitly return data or massaged data
+  var renderData = function(url, tpl, cssID, callback) {
     $.get(url)
       .done(function(data, status, xhr) {
-        // console.log( callback );
-        if (!!callback) {
-          callback(data);
-        }
-        // console.log( name );
-        if (name) {
-          var d = {};
-          d[name] = data;
-          new EJS({url: tpl}).update(cssID, d);
-        }
-        else {
-          new EJS({url: tpl}).update(cssID, data);
-        }
-
+        console.log( 'from renderData, showing callback function' )
+        console.log( callback );
+        var cb = callback || function (x) { return x };
+        new EJS( {url: tpl} ).update( cssID, cb( data ) );
       })
       .fail(function(data, status, xhr) {
         $('#msg').text(data).slideDown('slow');
@@ -36,13 +36,8 @@ var YD = {};
   // for side-effect only
   var postJson = function(url, cssID, callback) {
     var form_data = $(cssID).serializeJSON();
-    console.log( 'post data to ' + url + ': ')
+    console.log( 'from postJson, showing post data to ' + url + ': ')
     console.log( form_data );
-
-    // if (callback) {
-    //   callback(form_data);
-    // }
-
     $.post(url, form_data)
       .done(function(data) {
         if (!!callback) {
@@ -69,6 +64,7 @@ var YD = {};
       // http://api.jquery.com/jQuery.each/
       $.each( data, function( k, v ) {
         // http://api.jquery.com/append/
+        console.log( 'from showStatusMsg, showing each msg: ')
         console.log( k + ': ' + v )
         // $( '#msg' ).append('<div class=' + k + '>' + v +'</div>' );
         // 我喜欢用Array.join拼字符串，视觉上更干净
@@ -79,6 +75,7 @@ var YD = {};
   YD.userShow = function() {
     renderData('/user/show', 'tpl/user_show.ejs', 'user_info', function(d) {
       YD.userInfo = d;
+      return d;
     });
   };
 
@@ -91,11 +88,16 @@ var YD = {};
   };
 
   YD.userPhotoEdit = function() {
-    renderData('/user/photos', 'tpl/user_photo_edit.ejs', 'user_photo', undefined, 'photos');
+    renderData('/user/photos', 'tpl/user_photo_edit.ejs', 'user_photo', function(d) {
+      var n = {};
+      n['photos'] = d;
+      return n;
+    });
   };
 
   YD.userSave = function() {
     postJson('/user/save', 'form#user_info', function(data) {
+      console.log( 'from YD.userSave, showing post data: ')
       console.log( data )
       if (data.success) {
         YD.userShow();
@@ -105,6 +107,7 @@ var YD = {};
 
   YD.userPhotoSave = function() {
     postJson('/user/save', 'form#user_photo', function(data) {
+      console.log( 'from YD.userPhotoSave, showing post data: ')
       console.log( data )
       if (data.success) {
         YD.userPhotoShow();
