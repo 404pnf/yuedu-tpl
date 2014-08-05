@@ -60,8 +60,8 @@ post '/userController/save' do
   status = {
     success: '成功啦',
     error: '错误',
-    warn: '警告',
-    info: '信息'
+    # warn: '警告',
+    # info: '信息'
   }
   JSONP status
 end
