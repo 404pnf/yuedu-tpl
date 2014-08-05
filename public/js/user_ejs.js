@@ -45,7 +45,7 @@ var YD = {};
 
     $.post(url, form_data)
       .done(function(data) {
-        if (callback) {
+        if (!!callback) {
           callback(data);
         }
         showStatusMsg(data);
