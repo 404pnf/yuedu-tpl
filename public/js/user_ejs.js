@@ -73,22 +73,22 @@ var YD = {};
     };
 
   YD.userShow = function() {
-    renderData('/user/show', 'tpl/user_show.ejs', 'user_info', function(d) {
+    renderData('/userController/show/loginUser', 'tpl/user_show.ejs', 'user_info', function(d) {
       YD.userInfo = d;
       return d;
     });
   };
 
   YD.userEdit = function() {
-    renderData('/user/show', 'tpl/user_edit.ejs', 'user_info');
+    renderData('/userController/show', 'tpl/user_edit.ejs', 'user_info');
   };
 
   YD.userPhotoShow = function() {
-    renderData('/user/show', 'tpl/user_photo.ejs', 'user_photo');
+    renderData('/userController/show', 'tpl/user_photo.ejs', 'user_photo');
   };
 
   YD.userPhotoEdit = function() {
-    renderData('/user/photos', 'tpl/user_photo_edit.ejs', 'user_photo', function(d) {
+    renderData('/userController/photos', 'tpl/user_photo_edit.ejs', 'user_photo', function(d) {
       var n = {};
       n['photos'] = d;
       return n;
@@ -96,7 +96,7 @@ var YD = {};
   };
 
   YD.userSave = function() {
-    postJson('/user/save', 'form#user_info', function(data) {
+    postJson('/userController/save', 'form#user_info', function(data) {
       console.log( 'from YD.userSave, showing post data: ')
       console.log( data )
       if (data.success) {
@@ -106,7 +106,7 @@ var YD = {};
   };
 
   YD.userPhotoSave = function() {
-    postJson('/user/save', 'form#user_photo', function(data) {
+    postJson('/userController/save', 'form#user_photo', function(data) {
       console.log( 'from YD.userPhotoSave, showing post data: ')
       console.log( data )
       if (data.success) {
