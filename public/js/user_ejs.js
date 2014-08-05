@@ -62,9 +62,9 @@ var YD = {};
 
       // $.each( obj, function( key, value ) {});
       // http://api.jquery.com/jQuery.each/
+      console.log( 'from showStatusMsg, showing each msg: ')
       $.each( data, function( k, v ) {
         // http://api.jquery.com/append/
-        console.log( 'from showStatusMsg, showing each msg: ')
         console.log( k + ': ' + v )
         // $( '#msg' ).append('<div class=' + k + '>' + v +'</div>' );
         // 我喜欢用Array.join拼字符串，视觉上更干净
