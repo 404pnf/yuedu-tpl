@@ -121,4 +121,60 @@ var YD = {};
     });
   };
 
+  YD.startDispache = function () {
+    $.get('/examController/show')
+      .done(function (data) {
+        YD.examInfo = data;
+        YD.examCurrent();
+        YD.examSimulating();
+        YD.examUpcoming();
+        YD.examScores();
+        //console.log(data);
+      })
+      .fail(function (data, status, xhr) {
+        $('#msg').text(data, status, xhr).slideDown('slow');
+      });
+  };
+
+  YD.examCurrent = function () {
+    if (YD.examInfo.current && !YD.examInfo.scores && !YD.examInfo.upcoming) {
+      renderData('/examController/show', 'tpl/start_current_no_score.ejs', 'stack2')
+    }
+    else if (YD.examInfo.current && !YD.examInfo.upcoming) {
+      renderData('/examController/show', 'tpl/start_current_with_score.ejs', 'stack2')
+    };
+  };
+
+  YD.examSimulating = function () {
+    if (!YD.examInfo.scores) {
+      renderData('/examController/show', 'tpl/start_simulating.ejs', 'stack1')
+    };
+  };
+
+  YD.examUpcoming = function () {
+    if (YD.examInfo.upcoming) {
+      console.log(YD.examInfo.upcoming);
+      renderData('/examController/show', 'tpl/start_upcoming.ejs', 'stack2', function (d) {
+        upcoming = _.map(YD.examInfo.upcoming, function (e) {
+          if (e.today) {
+            e.ending_time = '';
+            e.today = '今天';
+            return e;
+          } else {
+            e.today = '';
+            return e;
+          }
+        });
+        return upcoming;
+      });
+    };
+  };
+
+  YD.examScores = function () {
+    if (YD.examInfo.scores) {
+      renderData('/examController/show', 'tpl/start_scores.ejs', 'stack1')
+    };
+  };
+
+
 }()); // end of let scope
