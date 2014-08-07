@@ -42,7 +42,7 @@ var YD = {};
         console.log(callback);
         //console.log(data, status, xhr)
         var cb = callback || _.identity
-        new EJS({url: tpl}).update(cssID, cb(data));
+        new EJS({url: 'tpl/' + tpl}).update(cssID, cb(data));
       })
       .fail(function (data, status, xhr) {
         $('#msg').text(data, status, xhr).slideDown('slow');
@@ -51,6 +51,7 @@ var YD = {};
         // both sucess and failure
       });
   };
+
 
   // 1. get data from form
   // 2. convert data to json
@@ -121,6 +122,11 @@ var YD = {};
     });
   };
 
+
+  var startPageInStack1 = _.partial(renderData, '/examController/show', _, 'stack1', _);
+  var startPageInStack2 = _.partial(renderData, '/examController/show', _, 'stack2', _);
+
+
   YD.startDispache = function () {
     $.get('/examController/show')
       .done(function (data) {
@@ -138,23 +144,22 @@ var YD = {};
 
   YD.examCurrent = function () {
     if (YD.examInfo.current && !YD.examInfo.scores && !YD.examInfo.upcoming) {
-      renderData('/examController/show', 'tpl/start_current_no_score.ejs', 'stack2')
+      startPageInStack2('start_current_no_score.ejs');
     }
     else if (YD.examInfo.current && !YD.examInfo.upcoming) {
-      renderData('/examController/show', 'tpl/start_current_with_score.ejs', 'stack2')
+      startPageInStack2('start_current_with_score.ejs');
     };
   };
 
   YD.examSimulating = function () {
-    if (!YD.examInfo.scores) {
-      renderData('/examController/show', 'tpl/start_simulating.ejs', 'stack1')
-    };
+    startPageInStack1('start_simulating.ejs');
+    console.log('simulating')
   };
 
   YD.examUpcoming = function () {
     if (YD.examInfo.upcoming) {
-      console.log(YD.examInfo.upcoming);
-      renderData('/examController/show', 'tpl/start_upcoming.ejs', 'stack2', function (d) {
+      //console.log(YD.examInfo.upcoming);
+      renderData('/examController/show', 'start_upcoming.ejs', 'stack2', function (d) {
         upcoming = _.map(YD.examInfo.upcoming, function (e) {
           if (e.today) {
             e.ending_time = '';
@@ -172,7 +177,7 @@ var YD = {};
 
   YD.examScores = function () {
     if (YD.examInfo.scores) {
-      renderData('/examController/show', 'tpl/start_scores.ejs', 'stack1')
+      startPageInStack1('start_scores.ejs');
     };
   };
 
