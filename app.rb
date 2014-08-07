@@ -12,7 +12,7 @@ before do
 end
 
 get '/' do
-  '<a href=/user-ejs.html>user-ejs.html</a>'
+  '<a href=/user.html>user.html</a><br><a href=/start.html>start.html</a>'
 end
 
 get '/userController/photos' do
@@ -60,8 +60,40 @@ post '/userController/save' do
   status = {
     success: '成功啦',
     error: '错误',
-    # warn: '警告',
-    # info: '信息'
   }
   JSONP status
 end
+
+get '/examController/show' do
+  r = {
+        current: {
+                    ending_time: '2014-05-26 15:20',
+                    name: '2014秋季测试',
+                    examId: 'exam_id'
+                  },
+
+        upcoming: [
+                     {
+                        name: '2014秋季测试',
+                        starting_time: '2014-03-26 15:20',
+                        ending_time: '2014-03-26 15:20',
+                        today: true
+                      },
+                      {
+                         name: '2014秋季测试',
+                         starting_time: '2014-03-26 15:20',
+                         ending_time: '2014-03-26 15:20',
+                         today:  false
+                      },
+
+                    ],
+        # scores: {
+        #           level: '4级，还不错',
+        #           voc: '22000',
+        #           last_exam_time: '2014-03-26'
+        #         }
+
+        }
+  JSONP r
+end
+
