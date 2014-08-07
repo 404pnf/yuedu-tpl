@@ -72,26 +72,26 @@ get '/examController/show' do
                     examId: 'exam_id'
                   },
 
-        upcoming: [
-                     {
-                        name: '2014秋季测试',
-                        starting_time: '2014-03-26 15:20',
-                        ending_time: '2014-03-26 15:20',
-                        today: true
-                      },
-                      {
-                         name: '2014秋季测试',
-                         starting_time: '2014-03-26 15:20',
-                         ending_time: '2014-03-26 15:20',
-                         today:  false
-                      },
+        # upcoming: [
+        #              {
+        #                 name: '2014秋季测试',
+        #                 starting_time: '2014-03-26 15:20',
+        #                 ending_time: '2014-03-26 15:20',
+        #                 today: true
+        #               },
+        #               {
+        #                  name: '2014秋季测试',
+        #                  starting_time: '2014-03-26 15:20',
+        #                  ending_time: '2014-03-26 15:20',
+        #                  today:  false
+        #               },
+        #             ],
 
-                    ],
-        # scores: {
-        #           level: '4级，还不错',
-        #           voc: '22000',
-        #           last_exam_time: '2014-03-26'
-        #         }
+        scores: {
+                  level: '4级，还不错',
+                  voc: '22000',
+                  last_exam_time: '2014-03-26'
+                }
 
         }
   JSONP r
