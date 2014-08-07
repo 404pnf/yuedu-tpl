@@ -1,5 +1,5 @@
-require "sinatra"
-require "sinatra/jsonp"
+require 'sinatra'
+require 'sinatra/jsonp'
 
 before do
   # 帮助
@@ -17,35 +17,35 @@ end
 
 get '/userController/photos' do
   photos = [
-      { a: "http://placehold.it/100x100" },
-      { b: "http://placehold.it/100x100" },
-      { c: "http://placehold.it/100x100" },
-      { d: "http://placehold.it/100x100" },
-      { e: "http://placehold.it/100x100" },
-      { f: "http://placehold.it/100x100" },
-      { g: "http://placehold.it/100x100" }
+      { a: '/img/kitten2.jpg' },
+      { b: '/img/kitten2.jpg' },
+      { c: '/img/kitten2.jpg' },
+      { d: '/img/kitten2.jpg' },
+      { e: '/img/kitten2.jpg' },
+      { f: '/img/kitten2.jpg' },
+      { g: '/img/kitten2.jpg' }
     ]
   JSONP photos
 end
 get '/userController/grades' do
   grades = [
-      { a: "一年级" },
-      { b: "二年级" },
-      { c: "三年级" },
-      { d: "四年级" },
-      { e: "五年级" },
-      { f: "六年级" },
-      { g: "七年级" }
+      { a: '一年级' },
+      { b: '二年级' },
+      { c: '三年级' },
+      { d: '四年级' },
+      { e: '五年级' },
+      { f: '六年级' },
+      { g: '七年级' }
     ]
   JSONP photos
 end
 get '/userController/show/loginUser' do
   user = {
-    userName: "王大军",
+    userName: '王大军',
     gender: { male: '男' },
     age: 12,
-    dob: "2004-07-26 11:37:53 +0800",
-    photo: { e: 'http://placehold.it/100x100' },
+    dob: '2004-07-26 11:37:53 +0800',
+    photo: { e: '/img/kitten2.jpg' },
     grade: { d: '小学四年级' },
     school: '史家胡同小学',
     email: 'ererer@fltrp.com',
@@ -56,7 +56,7 @@ get '/userController/show/loginUser' do
 end
 
 post '/userController/save' do
-  #logger.info "in /user/save "
+  #logger.info 'in /user/save '
   status = {
     success: '成功啦',
     error: '错误',
@@ -87,11 +87,11 @@ get '/examController/show' do
         #               },
         #             ],
 
-        scores: {
-                  level: '4级，还不错',
-                  voc: '22000',
-                  last_exam_time: '2014-03-26'
-                }
+        # scores: {
+        #           level: '4级，还不错',
+        #           voc: '22000',
+        #           last_exam_time: '2014-03-26'
+        #         }
 
         }
   JSONP r
