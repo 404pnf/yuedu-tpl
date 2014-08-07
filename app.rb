@@ -87,11 +87,11 @@ get '/examController/show' do
         #               },
         #             ],
 
-        # scores: {
-        #           level: '4级，还不错',
-        #           voc: '22000',
-        #           last_exam_time: '2014-03-26'
-        #         }
+        scores: {
+                  level: '4级，还不错',
+                  voc: '22000',
+                  last_exam_time: '2014-03-26'
+                }
 
         }
   JSONP r
