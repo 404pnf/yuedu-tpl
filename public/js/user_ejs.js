@@ -1,8 +1,13 @@
 // http://jslint.com/
 
-var YD = {};
+var YD = YD || {};
+
 
 (function () {
+
+  // work as status tracking accross YD.fn
+  YD.flags = YD.flags || {};
+
   //
   // Utilities
   //
@@ -19,9 +24,14 @@ var YD = {};
      });
     };
 
-  // 下面两个函数在单独的模版文件中无法使用，报undefined
-  var getKey = function (o) { _.keys(o)[0] }
-  var getVal = function (o) { _.values(o)[0] }
+    // 下面两个函数在单独的模版文件中无法使用，报undefined
+    var getKey = function (o) { _.keys(o)[0] }
+      , getVal = function (o) { _.values(o)[0] }
+      // http://stackoverflow.com/questions/503093/how-can-i-make-a-redirect-page-in-jquery-javascript
+      // window.location.replace("http://stackoverflow.com");
+      , redirectToUrl = function(url) {
+        window.location.replace(url);
+      };
 
   //
   // renderData
@@ -126,60 +136,105 @@ var YD = {};
     });
   };
 
-  // 用 partial application 设定一些固定的参数
-  var startPageInStack1 = _.partial(renderData, '/examController/studentLogin', _, 'stack1', _);
-  var startPageInStack2 = _.partial(renderData, '/examController/studentLogin', _, 'stack2', _);
+  var renderLocalData = function (data, cssID, tpl, isVisable, callback) {
+    var cb = callback || _.identity;
+    var show = isVisable;
+    //console.log('show show ' +  show)
+    if (show) {
+      new EJS({url: 'tpl/' + tpl}).update(cssID, cb(data));
+    };
+  };
 
-  YD.startDispache = function () {
+  // start.html 生成页面的主函数
+  var repeat = function () {
     $.get('/examController/studentLogin')
       .done(function (data) {
-        // use setTime to re-evaluate these functions again and again
-        YD.examInfo = data;
-        YD.examCurrent();
-        YD.examSimulating();
-        YD.examUpcoming();
-        YD.examScores();
-        console.log(YD.examInfo);
+
+        // bind data to local variable
+        var examInfo = data;
+
+        // predicts
+        // 判定时要注意，如果某objec他没有那个键名，我们去取值了，会报 Uncaught ReferenceError: latestExamResult is not defined
+        // 这是ejs报的错
+        var canTakeExam = !!examInfo.currentExam
+          , TookNoExam = canTakeExam && examInfo.currentExam.userExamState === '0'
+          , hasUpcomingExam = !!examInfo.upcomingExam
+          , haslatestExamResult = !!examInfo.latestExamResult
+          , showExamSimulating = !haslatestExamResult
+
+        // partial application to pre-configure functions
+        var startPageInStack1 = _.partial(renderLocalData, examInfo, 'stack1')
+          , startPageInStack2 = _.partial(renderLocalData, examInfo, 'stack2')
+
+        // functions to render page
+        // 再测一次看看自己有没有进步？
+        // 你有测试尚未完成，可继续测试
+        // 你还没有测试。再来测一下
+        var examCurrent = function () {
+              startPageInStack2('start_current.ejs', canTakeExam, function (d) {
+                console.log(d);
+                var o = _.clone(d.currentExam);
+
+                o = _.extend(o, {button: '开始考试'});
+                console.log(o);
+                if (haslatestExamResult) {
+                  o = _.extend(o, {title: '再测一次看看自己有没有进步'});
+                  return o;
+                } else if (TookNoExam) {
+                  o = _.extend(o, {title: '你有测试尚未完成，可继续测试'});
+                  return o;
+                } else {
+                  o = _.extend(o, {title: '你还没有测试。再来测一下'});
+                  return o;
+                }
+              })
+            }
+          , examSimulating = function () {
+              startPageInStack1('start_simulating.ejs', showExamSimulating)
+            }
+          , examUpcoming = function () {
+              startPageInStack2('start_upcoming.ejs', hasUpcomingExam,  function (d) {
+                                upcomingExam = _.map(examInfo.upcomingExam, function (e) {
+                                  if (e.isTodayExam) {
+                                    e.endTime = '';
+                                    e.isTodayExam = '今天';
+                                    return e;
+                                  } else {
+                                    e.isTodayExam = '';
+                                    return e;
+                                  }
+                                });
+                                return upcomingExam;
+                              })
+            }
+          , examScores = function () {
+              startPageInStack1('start_scores.ejs', haslatestExamResult);
+            };
+
+        // main function
+        var renderPage = function () {
+          _.map([
+            examCurrent(),
+            examSimulating(),
+            examUpcoming(),
+            examScores()
+            ],
+            function (e) { e });
+          };
+
+        // run repeat once to get data at once
+        // then run repeat every n millseconds
+        renderPage();
       })
       .fail(function (data, status, xhr) {
         $('#msg').text(data, status, xhr).slideDown('slow');
       });
-  };
-
-  YD.examCurrent = function () {
-    if (YD.examInfo.currentExam && !YD.examInfo.latestExamResult && !YD.examInfo.upcomingExam) {
-      startPageInStack2('start_current_no_score.ejs');
-    }
-    else if (YD.examInfo.currentExam && !YD.examInfo.upcomingExam) {
-      startPageInStack2('start_current_with_score.ejs');
     };
-  };
 
-  YD.examSimulating = function () { startPageInStack1('start_simulating.ejs'); };
-
-  YD.examUpcoming = function () {
-    if (YD.examInfo.upcomingExam) {
-      console.log(YD.examInfo.upcomingExam);
-      startPageInStack2('start_upcoming.ejs', function (d) {
-        upcomingExam = _.map(YD.examInfo.upcomingExam, function (e) {
-          if (e.isTodayExam) {
-            e.endTime = '';
-            e.isTodayExam = '今天';
-            return e;
-          } else {
-            e.isTodayExam = '';
-            return e;
-          }
-        });
-        return upcomingExam;
-      });
-    };
-  };
-
-  YD.examScores = function () {
-    if (YD.examInfo.latestExamResult) {
-      startPageInStack1('start_scores.ejs');
-    };
+  YD.startDispache = function () {
+    console.log('in dispache')
+    repeat();
+    setInterval(repeat, 2000);
   };
 
 }()); // end of let scope
