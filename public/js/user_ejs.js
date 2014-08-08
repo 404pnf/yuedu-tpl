@@ -93,6 +93,15 @@ var YD = YD || {};
   // user.html 页面
   //
 
+  var renderLocalData = function (data, cssID, tpl, isVisable, callback) {
+    var cb = callback || _.identity;
+    var show = isVisable;
+    //console.log('show show ' +  show)
+    if (show) {
+      new EJS({url: 'tpl/' + tpl}).update(cssID, cb(data));
+    };
+  };
+
   // 用 partial application 设定一些固定的参数
   var userPageInStack1 = _.partial(renderData, '/userController/show/loginUser', _, 'user_info', _);
   var userPageInStack2 = _.partial(renderData, '/userController/show/loginUser', _, 'user_photo', _);
@@ -136,18 +145,13 @@ var YD = YD || {};
     });
   };
 
-  var renderLocalData = function (data, cssID, tpl, isVisable, callback) {
-    var cb = callback || _.identity;
-    var show = isVisable;
-    //console.log('show show ' +  show)
-    if (show) {
-      new EJS({url: 'tpl/' + tpl}).update(cssID, cb(data));
-    };
-  };
+
 
   // start.html 生成页面的主函数
-  var repeat = function () {
-    $.get('/examController/studentLogin')
+
+  YD.startDispache = function () {
+    var repeat = function () {
+      $.get('/examController/studentLogin')
       .done(function (data) {
 
         // bind data to local variable
@@ -231,10 +235,10 @@ var YD = YD || {};
       });
     };
 
-  YD.startDispache = function () {
-    console.log('in dispache')
-    repeat();
-    setInterval(repeat, 2000);
+    return function () {
+      repeat();
+      setInterval(repeat, 2000);
+    }();
   };
 
 }()); // end of let scope
