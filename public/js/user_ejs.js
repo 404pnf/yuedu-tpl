@@ -24,9 +24,14 @@ var YD = YD || {};
      });
     };
 
-  // 下面两个函数在单独的模版文件中无法使用，报undefined
-  var getKey = function (o) { _.keys(o)[0] }
-  var getVal = function (o) { _.values(o)[0] }
+    // 下面两个函数在单独的模版文件中无法使用，报undefined
+    var getKey = function (o) { _.keys(o)[0] }
+      , getVal = function (o) { _.values(o)[0] }
+      // http://stackoverflow.com/questions/503093/how-can-i-make-a-redirect-page-in-jquery-javascript
+      // window.location.replace("http://stackoverflow.com");
+      , redirectToUrl = function(url) {
+        window.location.replace(url);
+      };
 
   //
   // renderData
@@ -140,6 +145,7 @@ var YD = YD || {};
     };
   };
 
+  // start.html 生成页面的主函数
   var repeat = function () {
     $.get('/examController/studentLogin')
       .done(function (data) {
