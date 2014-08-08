@@ -64,33 +64,35 @@ post '/userController/save' do
   JSONP status
 end
 
-get '/examController/show' do
+get '/examController/studentLogin' do
   r = {
-        current: {
-                    ending_time: '2014-05-26 15:20',
+        currentExam: {
+                    endTime: '2014-05-26 15:20',
                     name: '2014秋季测试',
-                    examId: 'exam_id'
+                    id: 'exam_id',
+                    examStatus: '0'
                   },
 
-        # upcoming: [
-        #              {
-        #                 name: '2014秋季测试',
-        #                 starting_time: '2014-03-26 15:20',
-        #                 ending_time: '2014-03-26 15:20',
-        #                 today: true
-        #               },
-        #               {
-        #                  name: '2014秋季测试',
-        #                  starting_time: '2014-03-26 15:20',
-        #                  ending_time: '2014-03-26 15:20',
-        #                  today:  false
-        #               },
-        #             ],
+        upcomingExam: [
+                     {
+                        name: '2014秋季测试',
+                        startTime: '2014-03-26 15:20',
+                        endTime: '2014-03-26 15:20',
+                        isTodayExam: true
+                      },
+                     {
+                        name: '2014秋季测试',
+                        startTime: '2014-03-26 15:20',
+                        endTime: '2014-03-26 15:20',
+                        isTodayExam: false
+                      },
+                    ],
 
-        scores: {
-                  level: '4级，还不错',
-                  voc: '22000',
-                  last_exam_time: '2014-03-26'
+        latestExamResult: {
+                  examGradeResult: '4级，还不错',
+                  vocabularySize: '22000',
+                  personalEndTime: '2014-03-26',
+                  id: 'exam_result_id'
                 }
 
         }

@@ -127,12 +127,13 @@ var YD = {};
   };
 
   // 用 partial application 设定一些固定的参数
-  var startPageInStack1 = _.partial(renderData, '/examController/show', _, 'stack1', _);
-  var startPageInStack2 = _.partial(renderData, '/examController/show', _, 'stack2', _);
+  var startPageInStack1 = _.partial(renderData, '/examController/studentLogin', _, 'stack1', _);
+  var startPageInStack2 = _.partial(renderData, '/examController/studentLogin', _, 'stack2', _);
 
   YD.startDispache = function () {
-    $.get('/examController/show')
+    $.get('/examController/studentLogin')
       .done(function (data) {
+        // use setTime to re-evaluate these functions again and again
         YD.examInfo = data;
         YD.examCurrent();
         YD.examSimulating();
@@ -146,10 +147,10 @@ var YD = {};
   };
 
   YD.examCurrent = function () {
-    if (YD.examInfo.current && !YD.examInfo.scores && !YD.examInfo.upcoming) {
+    if (YD.examInfo.currentExam && !YD.examInfo.latestExamResult && !YD.examInfo.upcomingExam) {
       startPageInStack2('start_current_no_score.ejs');
     }
-    else if (YD.examInfo.current && !YD.examInfo.upcoming) {
+    else if (YD.examInfo.currentExam && !YD.examInfo.upcomingExam) {
       startPageInStack2('start_current_with_score.ejs');
     };
   };
@@ -157,26 +158,26 @@ var YD = {};
   YD.examSimulating = function () { startPageInStack1('start_simulating.ejs'); };
 
   YD.examUpcoming = function () {
-    if (YD.examInfo.upcoming) {
-      console.log(YD.examInfo.upcoming);
-      startPageInStack2('start_current_with_score.ejs', function (d) {
-        upcoming = _.map(YD.examInfo.upcoming, function (e) {
-          if (e.today) {
-            e.ending_time = '';
-            e.today = '今天';
+    if (YD.examInfo.upcomingExam) {
+      console.log(YD.examInfo.upcomingExam);
+      startPageInStack2('start_upcoming.ejs', function (d) {
+        upcomingExam = _.map(YD.examInfo.upcomingExam, function (e) {
+          if (e.isTodayExam) {
+            e.endTime = '';
+            e.isTodayExam = '今天';
             return e;
           } else {
-            e.today = '';
+            e.isTodayExam = '';
             return e;
           }
         });
-        return upcoming;
+        return upcomingExam;
       });
     };
   };
 
   YD.examScores = function () {
-    if (YD.examInfo.scores) {
+    if (YD.examInfo.latestExamResult) {
       startPageInStack1('start_scores.ejs');
     };
   };
