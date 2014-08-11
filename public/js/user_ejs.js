@@ -6,11 +6,7 @@ var YD = YD || {};
 (function () {
 
   // work as status tracking accross YD.fn
-  // var userInfoEditing = false
-  // , userPhotoEditing = false;
   YD.flags = YD.flags || {};
-  YD.flags.userInfoEditing = false;
-  YD.flags.userPhotoEditing = false;
 
   //
   // Utilities
@@ -106,6 +102,29 @@ var YD = YD || {};
     };
   };
 
+  // 用 partial application 设定一些固定的参数
+  var userPageInStack1 = _.partial(renderData, '/userController/show/loginUser', _, 'user_info', _);
+  var userPageInStack2 = _.partial(renderData, '/userController/show/loginUser', _, 'user_photo', _);
+
+  YD.userShow = function () {
+    userPageInStack1('user_show.ejs', function(d) {
+      YD.userInfo = d;
+      return d;
+    });
+  };
+
+  YD.userEdit = function () { userPageInStack1('user_edit.ejs') };
+
+  YD.userPhotoShow = function () { userPageInStack2('user_photo.ejs') };
+
+  YD.userPhotoEdit = function () {
+    renderData('/userController/photos', 'user_photo_edit.ejs', 'user_photo', function(d) {
+      var n = {};
+      n['photos'] = d;
+      return n;
+    });
+  };
+
   YD.userSave = function () {
     postJson('/userController/save', 'form#user_info', function(data) {
       console.log( 'from YD.userSave, showing post data: ')
@@ -126,92 +145,7 @@ var YD = YD || {};
     });
   };
 
-  YD.userDispache = function () {
-    var repeat = function () {
-      $.get('/userController/show/loginUser')
-      .done(function (data) {
-        console.log(data);
 
-        // bind data to local variable
-        var userInfo = data;
-
-        // predicts
-        // 判定时要注意，如果某objec他没有那个键名，我们去取值了，会报 Uncaught ReferenceError: latestExamResult is not defined
-        // 这是ejs报的错
-
-
-        // partial application to pre-configure functions
-        var stack1 = _.partial(renderLocalData, userInfo, 'stack1')
-          , stack2 = _.partial(renderLocalData, userInfo, 'stack2');
-
-        // functions to render page
-        // 再测一次看看自己有没有进步？
-        // 你有测试尚未完成，可继续测试
-        // 你还没有测试。再来测一下
-        var userInfo = function () {
-              console.log( 'userInfoEditing status: ' + !YD.flags.userInfoEditing);
-              stack1('user_show.ejs', !YD.flags.userInfoEditing);
-            }
-          , userPhoto = function () {
-              stack2('user_photo.ejs', !YD.flags.userPhotoEditing);
-            }
-          , userInfoEdit = function () {
-            stack1('user_show.ejs', YD.flags.userInfoEditing);
-          }
-          , userPhotoEdit = function () {
-            stack2('user_photo.ejs', YD.flags.userPhotoEditing, function(d) {
-              var n = {};
-              n['photos'] = d;
-              return n;
-            });
-          };
-
-        YD.userInfoEdit = function () {
-          YD.flags.userInfoEditing = true;
-          console.log('here in userInfoEdit');
-          renderPage();
-
-        }
-
-        YD.userPhotoEdit = function () {
-          userPhotoEditing = true;
-          renderPage();
-        }
-
-        YD.userSave = function () {
-
-        }
-
-        YD.userPhotoSave = function () {
-
-        }
-
-        // main function
-        var renderPage = function () {
-          console.log('in rederPage')
-          _.map([
-            userInfo(),
-            userPhoto(),
-            userInfoEdit(),
-            userPhotoEdit()
-            ],
-            function (e) { e });
-          };
-
-        // run repeat once to get data at once
-        // then run repeat every n millseconds
-        renderPage();
-      })
-      .fail(function (data, status, xhr) {
-        $('#msg').text(data, status, xhr).slideDown('slow');
-      });
-    };
-
-    return function () {
-      repeat();
-      //setInterval(repeat, 12000);
-    }();
-  };
 
   // start.html 生成页面的主函数
 
