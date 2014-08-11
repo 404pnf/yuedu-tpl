@@ -142,9 +142,7 @@ var YD = YD || {};
 
     YD.userPhotoEdit = function () {
       renderData('/userController/photos', 'user_photo_edit.ejs', 'user_photo', function (d) {
-        var n = {};
-        n.photos = d;
-        return n;
+        return {photos: d};
       });
     };
 
