@@ -190,6 +190,7 @@ var YD = YD || {};
             examSimulating,
             examUpcoming,
             examScores,
+            // upcomingExam,
             renderPage;
 
           // partial application to pre-configure functions
@@ -202,16 +203,16 @@ var YD = YD || {};
           // 你还没有测试。再来测一下
           examCurrent = function () {
             startPageInStack2('start_current.ejs', canTakeExam, function (d) {
-              console.log(d);
+              //console.log(d);
               var o = _.clone(d.currentExam);
               o = _.extend(o, {button: '开始考试'});
-              console.log(o);
+              //console.log(o);
               if (haslatestExamResult) {
                 o = _.extend(o, {title: '再测一次看看自己有没有进步'});
               } else if (TookNoExam) {
-                o = _.extend(o, {title: '你有测试尚未完成，可继续测试'});
-              } else {
                 o = _.extend(o, {title: '你还没有测试。再来测一下'});
+              } else {
+                o = _.extend(o, {title: '你有测试尚未完成，可继续测试'});
               }
               return o;
             });
@@ -222,17 +223,19 @@ var YD = YD || {};
           };
 
           examUpcoming = function () {
-            startPageInStack2('start_upcoming.ejs', hasUpcomingExam,  function () {
-              var upcomingExam = _.map(examInfo.upcomingExam, function (e) {
+            startPageInStack2('start_upcoming.ejs', hasUpcomingExam,  function (d) {
+              var o = _.map(d.upcomingExam, function (e) {
                 if (e.isTodayExam) {
                   e.endTime = '';
                   e.isTodayExam = '今天';
+                  // return e;
                 } else {
                   e.isTodayExam = '';
+                  // return e;
                 }
-                //return e;
+                return e;
               });
-              return upcomingExam;
+              return {upcomingExam: o};
             });
           };
 
@@ -249,9 +252,7 @@ var YD = YD || {};
                 examUpcoming(),
                 examScores()
               ],
-              function (e) {
-                e();
-              }
+              _.identity
             );
           };
 
@@ -266,7 +267,7 @@ var YD = YD || {};
 
     return (function () {
       repeat();
-      setInterval(repeat, 2000);
+      setInterval(repeat, 12000);
     }());
   };
 
