@@ -135,16 +135,22 @@ var YD = YD || {};
         // bind data to local variable
         var userInfo = data;
 
+        // predicts
+        // 判定时要注意，如果某objec他没有那个键名，我们去取值了，会报 Uncaught ReferenceError: latestExamResult is not defined
+        // 这是ejs报的错
+
+
         // partial application to pre-configure functions
         var stack1 = _.partial(renderLocalData, userInfo, 'stack1')
           , stack2 = _.partial(renderLocalData, userInfo, 'stack2');
 
         // functions to render page
-
+        // 再测一次看看自己有没有进步？
+        // 你有测试尚未完成，可继续测试
+        // 你还没有测试。再来测一下
         var userInfo = function () {
-              console.log( 'userInfoEditing status: ' + YD.flags.userInfoEditing);
+              console.log( 'userInfoEditing status: ' + !YD.flags.userInfoEditing);
               stack1('user_show.ejs', !YD.flags.userInfoEditing);
-              //stack1('user_show.ejs', false);
             }
           , userPhoto = function () {
               stack2('user_photo.ejs', !YD.flags.userPhotoEditing);
@@ -160,6 +166,26 @@ var YD = YD || {};
             });
           };
 
+        YD.userInfoEdit = function () {
+          YD.flags.userInfoEditing = true;
+          console.log('here in userInfoEdit');
+          renderPage();
+
+        }
+
+        YD.userPhotoEdit = function () {
+          userPhotoEditing = true;
+          renderPage();
+        }
+
+        YD.userSave = function () {
+
+        }
+
+        YD.userPhotoSave = function () {
+
+        }
+
         // main function
         var renderPage = function () {
           console.log('in rederPage')
@@ -171,6 +197,7 @@ var YD = YD || {};
             ],
             function (e) { e });
           };
+
         // run repeat once to get data at once
         // then run repeat every n millseconds
         renderPage();
@@ -185,31 +212,6 @@ var YD = YD || {};
       //setInterval(repeat, 12000);
     }();
   };
-
-
-  YD.userInfoEdit = function () {
-    console.log('in userInfoEdit');
-    YD.flags.userInfoEditing = true;
-    console.log('here in userInfoEdit');
-    YD.userDispache();
-
-  }
-
-  YD.userPhotoEdit = function () {
-    YD.flags.userPhotoEditing = true;
-    YD.userDispache();
-  }
-
-  YD.userSave = function () {
-
-    YD.userDispache();
-
-  }
-
-  YD.userPhotoSave = function () {
-
-    YD.userDispache();
-  }
 
   // start.html 生成页面的主函数
 
@@ -301,7 +303,7 @@ var YD = YD || {};
 
     return function () {
       repeat();
-      setInterval(repeat, 12000);
+      setInterval(repeat, 2000);
     }();
   };
 
