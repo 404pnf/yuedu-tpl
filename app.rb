@@ -67,12 +67,12 @@ end
 get '/examController/studentLogin' do
   # userExamState:'0|1', //用户考试状态（0：未开始 1：开始 2：结束 3：弃考）
   r = {
-        currentExam: {
-                    endTime: '2014-05-26 15:20',
-                    name: '2014秋季测试',
-                    id: 'exam_id',
-                    userExamState: '0'
-                  },
+        # currentExam: {
+        #             endTime: '2014-05-26 15:20',
+        #             name: '2014秋季测试',
+        #             id: 'exam_id',
+        #             userExamState: '0'
+        #           },
 
         upcomingExam: [
                      {
@@ -89,12 +89,12 @@ get '/examController/studentLogin' do
                       },
                     ],
 
-        latestExamResult: {
-                  examGradeResult: '4级，还不错',
-                  vocabularySize: '22000',
-                  personalEndTime: '2014-03-26',
-                  id: 'exam_result_id'
-                }
+        # latestExamResult: {
+        #           examGradeResult: '4级，还不错',
+        #           vocabularySize: '22000',
+        #           personalEndTime: '2014-03-26',
+        #           id: 'exam_result_id'
+        #         }
 
         }
   JSONP r
