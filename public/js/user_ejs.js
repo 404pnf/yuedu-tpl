@@ -2,12 +2,14 @@
 /*jslint browser: true , nomen: true, indent: 2*/
 /*global $, jQuer, EJS, _ */
 
-// http://jslint.com/
-// http://www.jslint.com/lint.html
-// http://stackoverflow.com/questions/3039587/jslint-reports-unexpected-dangling-character-in-an-underscore-prefixed-variabl
+/*
+  http://jslint.com/
+  http://www.jslint.com/lint.html
+  http://stackoverflow.com/questions/3039587/jslint-reports-unexpected-dangling-character-in-an-underscore-prefixed-variabl
 
-// jslint警告信息中文版
-// https://github.com/SFantasy/jslint-error-explanations-zh
+  jslint警告信息中文版
+  https://github.com/SFantasy/jslint-error-explanations-zh
+*/
 
 var YD = YD || {};
 
@@ -44,18 +46,19 @@ var YD = YD || {};
     window.location.replace(url);
   };
 
-  //
-  // renderData
-  //
-  // changing text in html
-  // function used for side-effect only
-  //
-  // @url : uri where json resides
-  // @tpl : path to the template failure
-  // @cssID : after binding data to tpl, insert the result to cssID
-  // @callback : a. massage json data if needed
-  //             b. functions for side-effect, i.e, saving tmp data
-  //             c. must explicitly return data or massaged data
+  /*
+    renderData
+
+    changing text in html
+    function used for side-effect only
+
+    @url : uri where json resides
+    @tpl : path to the template failure
+    @cssID : after binding data to tpl, insert the result to cssID
+    @callback : a. massage json data if needed
+                b. functions for side-effect, i.e, saving tmp data
+                c. must explicitly return data or massaged data
+  */
   renderData = function (url, tpl, cssID, callback) {
     $.get(url)
       .done(function (data) {
@@ -68,9 +71,6 @@ var YD = YD || {};
       .fail(function (data, status, xhr) {
         $('#msg').text(data, status, xhr).slideDown('slow');
       });
-      // .always(function (data, status, xhr) {
-      //   // both sucess and failure
-      // });
   };
 
 
@@ -88,9 +88,6 @@ var YD = YD || {};
     //console.log( form_data );
     $.post(url, form_data)
       .done(function (data) {
-        // if (!!callback) {
-        //   callback(data);
-        // }
         if (data.success && callbackOnSuccess) {
           callbackOnSuccess();
         }
@@ -100,9 +97,6 @@ var YD = YD || {};
         console.log(data);
         $('#msg').text(data).slideDown('slow');
       });
-      // .always(function () {
-      //   // console.log( "postJson finished" );
-      // });
   };
 
   renderLocalData = function (data, cssID, tpl, isVisable, callback) {
@@ -115,10 +109,11 @@ var YD = YD || {};
     }
   };
 
+  /*
 
-  //
-  // user.html 页面
-  //
+    user.html 页面
+
+  */
 
   (function () {
 
@@ -147,7 +142,7 @@ var YD = YD || {};
     };
 
     YD.userSave = function () {
-      postJson('/userController/save', 'form#user_info',YD.userShow);
+      postJson('/userController/save', 'form#user_info', YD.userShow);
     };
 
     YD.userPhotoSave = function () {
