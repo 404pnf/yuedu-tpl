@@ -1,18 +1,20 @@
 
+// ## jslint配置
 /*jslint browser: true , nomen: true, indent: 2*/
 /*global $, jQuer, EJS, _ */
 
-/*
-  http://jslint.com/
-  http://www.jslint.com/lint.html
-  http://stackoverflow.com/questions/3039587/jslint-reports-unexpected-dangling-character-in-an-underscore-prefixed-variabl
 
-  jslint警告信息中文版
-  https://github.com/SFantasy/jslint-error-explanations-zh
-*/
+// ## jslint 帮助信息
+// - http://jslint.com/
+// - http://www.jslint.com/lint.html
+// - http://stackoverflow.com/questions/3039587/jslint-reports-unexpected-dangling-character-in-an-underscore-prefixed-variabl
+// jslint警告信息中文版 https://github.com/SFantasy/jslint-error-explanations-zh
 
+
+// ## 唯一暴露出来的全局变量。也是程序的命名空间
 var YD = YD || {};
 
+// ## 用匿名函数做为 let scope
 
 (function () {
   "use strict";
@@ -24,47 +26,41 @@ var YD = YD || {};
     redirectToUrl;
 
   //
-  // Utilities
+  // ## 工具函数
   //
-  showStatusMsg = function (data) {
-    // 先清除之前的msg内容
-    // http://api.jquery.com/empty/
-    $('#msg').empty();
 
-    console.log('from showStatusMsg, showing each msg: ');
+  // 先清除之前的msg内容
+  showStatusMsg = function (data) {
+    $('#msg').empty();
     _.each(data, function (v, k) {
-      // http://api.jquery.com/append/
-      console.log(k + ': ' + v);
       $('#msg').append(['<div class=', k, '>', v, '</div>'].join(''));
     });
   };
 
 
   // http://stackoverflow.com/questions/503093/how-can-i-make-a-redirect-page-in-jquery-javascript
+  //
   // window.location.replace("http://stackoverflow.com");
   redirectToUrl = function (url) {
     window.location.replace(url);
   };
 
-  /*
-    renderData
 
-    changing text in html
-    function used for side-effect only
+    // ## 获取后台数据，绑定到模版并显示在html中
+    //
+    // 此函数只有副作用。
+    //
+    // - @url : 从url去json数据
+    // - @tpl : 模版文件的izhi
+    // - @cssID : 数据绑定模版后应该显示在html中的哪个cssID区块
+    // - @callback :
+    //    - 在使用前可处理从后台获得的数据
+    //    - 执行一些有副作用的函数，如保存后台json到某全局变量
+    //    - 不过是否处理后台数据，都需要显性的返回数据，即，最后一样必须是 return data;
 
-    @url : uri where json resides
-    @tpl : path to the template failure
-    @cssID : after binding data to tpl, insert the result to cssID
-    @callback : a. massage json data if needed
-                b. functions for side-effect, i.e, saving tmp data
-                c. must explicitly return data or massaged data
-  */
   renderData = function (url, tpl, cssID, callback) {
     $.get(url)
       .done(function (data) {
-        //console.log('from renderData, showing callback function');
-        //console.log(callback);
-        //console.log(data, status, xhr)
         var cb = callback || _.identity;
         new EJS({url: 'tpl/' + tpl}).update(cssID, cb(data));
       })
@@ -74,18 +70,16 @@ var YD = YD || {};
   };
 
 
-  /*
-    1. get data from form
-    2. convert data to json
-    3. post json to api
-    4. error msg dipsplayed in html
-    5. if the post is succeed, backend will return a object with 'success' as key. e.g { success: true }
-    for side-effect only
-  */
+  // ## 提交表单内容到后台
+  //
+  // 1. 从表单获取数据
+  // 2. 将数据转为json
+  // 3. 提交json给后台api
+  // 4. 显示错误信息到html，此函数写死在.done里面
+  // 5. 如果成功，后台会返回带有'success'键名的对象，此时执行成功时的回调函数
+
   postJson = function (url, cssID, callbackOnSuccess) {
     var form_data = $(cssID).serializeJSON();
-    //console.log( 'from postJson, showing post data to ' + url + ': ');
-    //console.log( form_data );
     $.post(url, form_data)
       .done(function (data) {
         if (data.success && callbackOnSuccess) {
@@ -102,24 +96,20 @@ var YD = YD || {};
   renderLocalData = function (data, cssID, tpl, isVisable, callback) {
     var cb = callback || _.identity,
       show = isVisable;
-
-    //console.log('show show ' +  show)
     if (show) {
       new EJS({url: 'tpl/' + tpl}).update(cssID, cb(data));
     }
   };
 
-  /*
 
-    user.html 页面
-
-  */
+  // ##  user.html 页面
 
   (function () {
 
     var userPageInStack1 = _.partial(renderData, '/userController/show/loginUser', _, 'user_info', _),
       userPageInStack2 = _.partial(renderData, '/userController/show/loginUser', _, 'user_photo', _);
 
+    // 显示用户信息
     YD.userShow = function () {
       userPageInStack1('user_show.ejs', function (d) {
         YD.userInfo = d;
@@ -127,44 +117,47 @@ var YD = YD || {};
       });
     };
 
+    // 编辑用户信息
     YD.userEdit = function () {
       userPageInStack1('user_edit.ejs');
     };
 
+    // 显示用户头像
     YD.userPhotoShow = function () {
       userPageInStack2('user_photo.ejs');
     };
 
+    // 编辑用户头像
     YD.userPhotoEdit = function () {
       renderData('/userController/photos', 'user_photo_edit.ejs', 'user_photo', function (d) {
         return {photos: d};
       });
     };
 
+    // 保存用户信息
     YD.userSave = function () {
       postJson('/userController/save', 'form#user_info', YD.userShow);
     };
 
+    // 保存用户头像
     YD.userPhotoSave = function () {
       postJson('/userController/save', 'form#user_photo', YD.userPhotoShow);
     };
 
   }());
 
-  // 用 partial application 设定一些固定的参数
 
-
-  // start.html 生成页面的主函数
+  // ## start.html 生成页面的主函数
 
   YD.startDispache = function () {
     var repeat = function () {
       $.get('/examController/studentLogin')
         .done(function (data) {
 
-          // bind data to local variable
-          // predicts
-          // 判定时要注意，如果某objec他没有那个键名，我们去取值了，会报 Uncaught ReferenceError: latestExamResult is not defined
-          // 这是ejs报的错
+          // - bind data to local variable
+          // - 一些判定
+          //  判定时要注意，如果某objec他没有那个键名，我们去取值了，会报 Uncaught ReferenceError: latestExamResult is not defined
+          //  这是ejs报的错
           var examInfo = data,
             canTakeExam = !!examInfo.currentExam,
             TookNoExam = canTakeExam && examInfo.currentExam.userExamState === '0',
@@ -180,14 +173,11 @@ var YD = YD || {};
             // upcomingExam,
             renderPage;
 
-          // partial application to pre-configure functions
+          // 用 partial application 固定一些参数
           startPageInStack1 = _.partial(renderLocalData, examInfo, 'stack1');
           startPageInStack2 = _.partial(renderLocalData, examInfo, 'stack2');
 
-          // functions to render page
-          // 再测一次看看自己有没有进步？
-          // 你有测试尚未完成，可继续测试
-          // 你还没有测试。再来测一下
+          // 当前考试区块
           examCurrent = function () {
             startPageInStack2('start_current.ejs', canTakeExam, function (d) {
               //console.log(d);
@@ -205,20 +195,20 @@ var YD = YD || {};
             });
           };
 
+          // 模拟考试区块
           examSimulating = function () {
             startPageInStack1('start_simulating.ejs', showExamSimulating);
           };
 
+          // 考试预告区块
           examUpcoming = function () {
             startPageInStack2('start_upcoming.ejs', hasUpcomingExam,  function (d) {
               var o = _.map(d.upcomingExam, function (e) {
                 if (e.isTodayExam) {
                   e.endTime = '';
                   e.isTodayExam = '今天';
-                  // return e;
                 } else {
                   e.isTodayExam = '';
-                  // return e;
                 }
                 return e;
               });
@@ -226,11 +216,12 @@ var YD = YD || {};
             });
           };
 
+          // 考试成绩区块
           examScores = function () {
             startPageInStack1('start_scores.ejs', haslatestExamResult);
           };
 
-          // main function
+          // 渲染页面的主函数
           renderPage = function () {
             _.map(
               [
@@ -243,8 +234,9 @@ var YD = YD || {};
             );
           };
 
-          // run repeat once to get data at once
-          // then run repeat every n millseconds
+          // 需要先执行渲染页面的函数，
+          // 然后再每隔一段时间刷新。
+          // 直接调用每隔一段时间刷新的函数，会先等待一段时间才第一次渲染页面。
           renderPage();
         })
         .fail(function (data, status, xhr) {
@@ -252,6 +244,8 @@ var YD = YD || {};
         });
     };
 
+    // 整个函数的返回值，暴露出来的唯一东西，就是这个匿名函数。哈哈。
+    // 处理这个页面的代码还算过得去。
     return (function () {
       repeat();
       setInterval(repeat, 12000);
