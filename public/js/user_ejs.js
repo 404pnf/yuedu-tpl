@@ -74,19 +74,25 @@ var YD = YD || {};
   };
 
 
-  // 1. get data from form
-  // 2. convert data to json
-  // 3. post json to api
-  // 4. error msg dipsplayed in html
-  // for side-effect only
-  postJson = function (url, cssID, callback) {
+  /*
+    1. get data from form
+    2. convert data to json
+    3. post json to api
+    4. error msg dipsplayed in html
+    5. if the post is succeed, backend will return a object with 'success' as key. e.g { success: true }
+    for side-effect only
+  */
+  postJson = function (url, cssID, callbackOnSuccess) {
     var form_data = $(cssID).serializeJSON();
     //console.log( 'from postJson, showing post data to ' + url + ': ');
     //console.log( form_data );
     $.post(url, form_data)
       .done(function (data) {
-        if (!!callback) {
-          callback(data);
+        // if (!!callback) {
+        //   callback(data);
+        // }
+        if (data.success && callbackOnSuccess) {
+          callbackOnSuccess();
         }
         showStatusMsg(data);
       })
@@ -143,23 +149,11 @@ var YD = YD || {};
     };
 
     YD.userSave = function () {
-      postJson('/userController/save', 'form#user_info', function (data) {
-        console.log('from YD.userSave, showing post data: ');
-        console.log(data);
-        if (data.success) {
-          YD.userShow();
-        }
-      });
+      postJson('/userController/save', 'form#user_info',YD.userShow);
     };
 
     YD.userPhotoSave = function () {
-      postJson('/userController/save', 'form#user_photo', function (data) {
-        // console.log( 'from YD.userPhotoSave, showing post data: ')
-        // console.log(data)
-        if (data.success) {
-          YD.userPhotoShow();
-        }
-      });
+      postJson('/userController/save', 'form#user_photo', YD.userPhotoShow);
     };
 
   }());
