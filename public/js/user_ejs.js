@@ -29,10 +29,10 @@ var YD = YD || {};
     // http://api.jquery.com/empty/
     $('#msg').empty();
 
-    // console.log('from showStatusMsg, showing each msg: ');
+    console.log('from showStatusMsg, showing each msg: ');
     _.each(data, function (v, k) {
       // http://api.jquery.com/append/
-      // console.log(k + ': ' + v);
+      console.log(k + ': ' + v);
       $('#msg').append(['<div class=', k, '>', v, '</div>'].join(''));
     });
   };
@@ -114,7 +114,7 @@ var YD = YD || {};
   // user.html 页面
   //
 
-  YD.userDispache = function () {
+  (function () {
 
     var userPageInStack1 = _.partial(renderData, '/userController/show/loginUser', _, 'user_info', _),
       userPageInStack2 = _.partial(renderData, '/userController/show/loginUser', _, 'user_photo', _);
@@ -122,14 +122,11 @@ var YD = YD || {};
     YD.userShow = function () {
       userPageInStack1('user_show.ejs', function (d) {
         YD.userInfo = d;
-        console.log(d);
-        console.log( (_.keys(YD.userInfo.photo))[0] );
         return d;
       });
     };
 
-    YD.userInfoEdit = function () {
-      // console.log('user info edit')
+    YD.userEdit = function () {
       userPageInStack1('user_edit.ejs');
     };
 
@@ -145,10 +142,10 @@ var YD = YD || {};
       });
     };
 
-    YD.userInfoSave = function () {
+    YD.userSave = function () {
       postJson('/userController/save', 'form#user_info', function (data) {
-        // console.log('from YD.userSave, showing post data: ');
-        // console.log(data);
+        console.log('from YD.userSave, showing post data: ');
+        console.log(data);
         if (data.success) {
           YD.userShow();
         }
@@ -165,12 +162,7 @@ var YD = YD || {};
       });
     };
 
-    $('#user_info_edit').on("click", YD.userInfoEdit());
-    $('#user_info_save').on("click", YD.userInfoSave());
-    $('#user_photo_edit').on("click", YD.userPhotoEdit());
-    $('#user_photo_save').on("click", YD.userPhotoSave());
-
-  };
+  }());
 
   // 用 partial application 设定一些固定的参数
 
