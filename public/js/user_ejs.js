@@ -129,10 +129,18 @@ var YD = YD || {};
       userPageInStack2('user_photo.ejs');
     };
 
-    // 编辑用户头像
-    YD.userPhotoEdit = function () {
-      renderData('/userController/photos', 'user_photo_edit.ejs', 'user_photo', function (d) {
-        return {photos: d};
+    // 编辑用户信息
+    YD.userEdit = function () {
+      // '/userController/grades'
+      // '/userController/photos'
+
+      // http://api.jquery.com/jQuery.when/
+      $.when( $.ajax( "/userController/grades" ), $.ajax( "/userController/photos" ) ).done(function( a1, a2 ) {
+        // a1 and a2 are arguments resolved for the page1 and page2 ajax requests, respectively.
+        // Each argument is an array with the following structure: [ data, statusText, jqXHR ]
+        var data = _.extend({grades: a1[0]}, {photos: a2[0]}, YD.userInfo);
+        console.log(data);
+        renderLocalData(data, 'user_info', 'user_edit.ejs', true);
       });
     };
 
@@ -156,11 +164,11 @@ var YD = YD || {};
       $.get('/examController/studentLogin')
         .done(function (data) {
 
-          // - bind data to local variable
+
           // - 一些判定
-          //  判定时要注意，如果某objec他没有那个键名，我们去取值了，会报 Uncaught ReferenceError: latestExamResult is not defined
-          //  这是ejs报的错
-          var examInfo = data,
+          // - 判定时要注意，如果某objec他没有那个键名，我们去取值了，会报 Uncaught ReferenceError: latestExamResult is not defined
+          // - 这是ejs报的错
+          var examInfo = data, // - bind data to local variable
             canTakeExam = !!examInfo.currentExam,
             TookNoExam = canTakeExam && examInfo.currentExam.userExamState === '0',
             hasUpcomingExam = !!examInfo.upcomingExam,
@@ -172,7 +180,6 @@ var YD = YD || {};
             examSimulating,
             examUpcoming,
             examScores,
-            // upcomingExam,
             renderPage;
 
           // 用 partial application 固定一些参数
@@ -182,10 +189,8 @@ var YD = YD || {};
           // 当前考试区块
           examCurrent = function () {
             startPageInStack2('start_current.ejs', canTakeExam, function (d) {
-              //console.log(d);
               var o = _.clone(d.currentExam);
               o = _.extend(o, {button: '开始考试'});
-              //console.log(o);
               if (haslatestExamResult) {
                 o = _.extend(o, {title: '再测一次看看自己有没有进步'});
               } else if (TookNoExam) {
@@ -240,6 +245,7 @@ var YD = YD || {};
           // 然后再每隔一段时间刷新。
           // 直接调用每隔一段时间刷新的函数，会先等待一段时间才第一次渲染页面。
           renderPage();
+          console.log('又看到我啦。证明页面刷新啦。')
         })
         .fail(function (data, status, xhr) {
           $('#msg').text(data, status, xhr).slideDown('slow');
