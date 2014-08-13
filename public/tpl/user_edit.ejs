@@ -4,10 +4,10 @@
 登录名：  <input type="text" name="loginName" value=<%= loginName %> ><br>
 姓名:  <input type="text" name="userName" value=<%= userName %> ><br>
 出生日期： <input type="text" name="dob" value=<%= dob %> ><br>
-性别：  <input type="text" name="gender" value=<%= gender %> ><br>
+性别：  <input type="text" name="gender" value=<%= gender.value %> ><br>
 年龄： <input type="text" name="age" value=<%= age %> ><br>
-年级： <input type="text" name="grade" value=<%= grade.d %> ><br>
+年级： <input type="text" name="grade" value=<%= grade.value %> ><br>
 学校： <input type="text" name="school" value=<%= school %> > <br>
 邮箱： <input type="text" name="email" value=<%= email %> ><br>
 </form>
-<button type="buttom"  onclick='YD.userSave()'>保存用户信息 <button>
+<button type = "buttom"  id = "user_info_save">保存用户信息 <button>
