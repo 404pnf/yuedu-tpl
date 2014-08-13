@@ -3,14 +3,6 @@
 /*jslint browser: true , nomen: true, indent: 2*/
 /*global $, jQuer, EJS, _ */
 
-
-// ## jslint 帮助信息
-// - http://jslint.com/
-// - http://www.jslint.com/lint.html
-// - http://stackoverflow.com/questions/3039587/jslint-reports-unexpected-dangling-character-in-an-underscore-prefixed-variabl
-// jslint警告信息中文版 https://github.com/SFantasy/jslint-error-explanations-zh
-// ----
-
 // ## 唯一暴露出来的全局变量。也是程序的命名空间
 var YD = YD || {};
 
@@ -23,7 +15,11 @@ var YD = YD || {};
     renderData,
     postJson,
     renderLocalData,
-    redirectToUrl;
+    redirectToUrl,
+    fail,
+    warn,
+    note,
+    error;
 
   //
   // ## 工具函数
@@ -69,6 +65,18 @@ var YD = YD || {};
       });
   };
 
+  // 报告错误的帮助函数
+  fail = function (msg) {
+    throw new Error(msg);
+  };
+
+  warn = function (msg) {
+    console.log(["WARNING: ", msg].join(''));
+  };
+
+  note = function (msg) {
+    console.log(["NOTE: ", msg].join(''));
+  };
 
   // ## 提交表单内容到后台
   //
@@ -130,16 +138,16 @@ var YD = YD || {};
     };
 
     // 编辑用户信息
+    //
+    // - 年级信息 '/userController/grades'
+    // - 头像信息'/userController/photos'
+    // - jquery命令 http://api.jquery.com/jQuery.when/
     YD.userEdit = function () {
-      // '/userController/grades'
-      // '/userController/photos'
-
-      // http://api.jquery.com/jQuery.when/
-      $.when( $.ajax( "/userController/grades" ), $.ajax( "/userController/photos" ) ).done(function( a1, a2 ) {
+      $.when($.ajax("/userController/grades"), $.ajax("/userController/photos")).done(function (a1, a2) {
         // a1 and a2 are arguments resolved for the page1 and page2 ajax requests, respectively.
         // Each argument is an array with the following structure: [ data, statusText, jqXHR ]
         var data = _.extend({grades: a1[0]}, {photos: a2[0]}, YD.userInfo);
-        console.log(data);
+        note(data);
         renderLocalData(data, 'user_info', 'user_edit.ejs', true);
       });
     };
@@ -158,13 +166,12 @@ var YD = YD || {};
 
 
   // ## start.html 生成页面的主函数
+  // 每隔一段时间时间查看一下数据源并重新刷新页面
 
   YD.startDispache = function () {
     var repeat = function () {
       $.get('/examController/studentLogin')
         .done(function (data) {
-
-
           // - 一些判定
           // - 判定时要注意，如果某objec他没有那个键名，我们去取值了，会报 Uncaught ReferenceError: latestExamResult is not defined
           // - 这是ejs报的错
@@ -245,7 +252,7 @@ var YD = YD || {};
           // 然后再每隔一段时间刷新。
           // 直接调用每隔一段时间刷新的函数，会先等待一段时间才第一次渲染页面。
           renderPage();
-          console.log('又看到我啦。证明页面刷新啦。')
+          note('又看到我啦。证明页面刷新啦。');
         })
         .fail(function (data, status, xhr) {
           $('#msg').text(data, status, xhr).slideDown('slow');
