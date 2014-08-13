@@ -75,7 +75,8 @@ var YD = YD || {};
   };
 
   note = function (msg) {
-    console.log(["NOTE: ", msg].join(''));
+    console.log("NOTE: ");
+    console.log(msg);
   };
 
   // ## 提交表单内容到后台
@@ -122,6 +123,7 @@ var YD = YD || {};
     // 显示用户信息
     YD.userShow = function () {
       userPageInStack1('user_show.ejs', function (d) {
+        $('#use_info_edit').on('click', YD.userEdit);
         YD.userInfo = d;
         return d;
       });
@@ -149,6 +151,7 @@ var YD = YD || {};
         var data = _.extend({grades: a1[0]}, {photos: a2[0]}, YD.userInfo);
         note(data);
         renderLocalData(data, 'user_info', 'user_edit.ejs', true);
+        $('#user_info_save').on('click', YD.userSave);
       });
     };
 
@@ -162,9 +165,11 @@ var YD = YD || {};
       postJson('/userController/save', 'form#user_photo', YD.userPhotoShow);
     };
 
+
+
   }());
 
-
+  //$('#user_info_save').on('click', YD.userSave);
   // ## start.html 生成页面的主函数
   // 每隔一段时间时间查看一下数据源并重新刷新页面
 
