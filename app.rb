@@ -16,27 +16,31 @@ get '/' do
 end
 
 get '/userController/photos' do
-  photos = [
-      { a: '/img/kitten2.jpg' },
-      { b: '/img/kitten2.jpg' },
-      { c: '/img/kitten2.jpg' },
-      { d: '/img/kitten2.jpg' },
-      { e: '/img/kitten2.jpg' },
-      { f: '/img/kitten2.jpg' },
-      { g: '/img/kitten2.jpg' }
-    ]
+  photos = {
+            photos: [
+                      { a: '/img/kitten2.jpg' },
+                      { b: '/img/kitten2.jpg' },
+                      { c: '/img/kitten2.jpg' },
+                      { d: '/img/kitten2.jpg' },
+                      { e: '/img/kitten2.jpg' },
+                      { f: '/img/kitten2.jpg' },
+                      { g: '/img/kitten2.jpg' }
+                    ]
+           }
   JSONP photos
 end
 get '/userController/grades' do
-  grades = [
-      { a: '一年级' },
-      { b: '二年级' },
-      { c: '三年级' },
-      { d: '四年级' },
-      { e: '五年级' },
-      { f: '六年级' },
-      { g: '七年级' }
-    ]
+  grades = {
+            grades: [
+                      { a: '一年级' },
+                      { b: '二年级' },
+                      { c: '三年级' },
+                      { d: '四年级' },
+                      { e: '五年级' },
+                      { f: '六年级' },
+                      { g: '七年级' }
+                    ]
+            }
   JSONP grades
 end
 get '/userController/show/loginUser' do

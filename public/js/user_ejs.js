@@ -147,7 +147,7 @@ var YD = YD || {};
       $.when($.ajax("/userController/grades"), $.ajax("/userController/photos")).done(function (a1, a2) {
         // a1 and a2 are arguments resolved for the page1 and page2 ajax requests, respectively.
         // Each argument is an array with the following structure: [ data, statusText, jqXHR ]
-        var data = _.extend({grades: a1[0]}, {photos: a2[0]}, YD.userInfo);
+        var data = _.extend(a1[0], a2[0], YD.userInfo);
         note(data);
         renderLocalData(data, 'user_info', 'user_edit.ejs', true, null, "$('#user_info_save').on('click', YD.userSave);");
 
@@ -161,9 +161,7 @@ var YD = YD || {};
 
     // 编辑用户头像
     YD.userPhotoEdit = function () {
-      renderData('/userController/photos', 'user_photo_edit.ejs', 'user_photo', function (d) {
-        return {photos: d};
-      }, "$('#user_photo_save').on('click', YD.userPhotoSave);");
+      renderData('/userController/photos', 'user_photo_edit.ejs', 'user_photo', null, "$('#user_photo_save').on('click', YD.userPhotoSave);");
     };
 
 
