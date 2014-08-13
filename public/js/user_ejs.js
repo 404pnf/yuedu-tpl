@@ -12,6 +12,7 @@ var YD = YD || {};
   "use strict";
 
   var showStatusMsg,
+    doWhen,
     renderData,
     postJson,
     renderLocalData,
@@ -33,6 +34,9 @@ var YD = YD || {};
     });
   };
 
+  doWhen = function (action, predict) {
+    ( predict ? action() : undefined );
+  }
 
   // http://stackoverflow.com/questions/503093/how-can-i-make-a-redirect-page-in-jquery-javascript
   //
