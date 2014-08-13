@@ -215,19 +215,19 @@ var YD = YD || {};
           note(canTakeExam);
           // 当前考试区块
           examCurrent = doWhen(startPageInStack2('start_current.ejs', function (d) {
-            // var o = _.clone(d.currentExam);
+            var o = _.clone(d.currentExam);
 
-            // o = _.extend(o, {button: '开始考试'});
+            o = _.extend(o, {button: '开始考试'});
 
-            // if (haslatestExamResult) {
-            //   o = _.extend(o, {title: '再测一次看看自己有没有进步'});
-            // } else if (TookNoExam) {
-            //   o = _.extend(o, {title: '你还没有测试。来测一下'});
-            // } else {
-            //   o = _.extend(o, {title: '你有测试尚未完成，可继续测试'});
-            // }
+            if (haslatestExamResult) {
+              o = _.extend(o, {title: '再测一次看看自己有没有进步'});
+            } else if (TookNoExam) {
+              o = _.extend(o, {title: '你还没有测试。来测一下'});
+            } else {
+              o = _.extend(o, {title: '你有测试尚未完成，可继续测试'});
+            }
 
-            // return o;
+            return o;
           }), canTakeExam);
 
 
