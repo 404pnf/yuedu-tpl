@@ -54,11 +54,16 @@ var YD = YD || {};
     //    - 执行一些有副作用的函数，如保存后台json到某全局变量
     //    - 不过是否处理后台数据，都需要显性的返回数据，即，最后一样必须是 return data;
 
-  renderData = function (url, tpl, cssID, callback) {
+  renderData = function (url, tpl, cssID, callback, eventListener) {
     $.get(url)
       .done(function (data) {
         var cb = callback || _.identity;
         new EJS({url: 'tpl/' + tpl}).update(cssID, cb(data));
+        if (eventListener) {
+          eval(eventListener);
+        } else {
+          undefined;
+        }
       })
       .fail(function (data, status, xhr) {
         $('#msg').text(data, status, xhr).slideDown('slow');
@@ -104,11 +109,16 @@ var YD = YD || {};
 
   // ## 从局部变量中获取数据，绑定到模版并显示在html中
   // 除了变量来源不同，其它和renderData一样
-  renderLocalData = function (data, cssID, tpl, isVisable, callback) {
+  renderLocalData = function (data, cssID, tpl, isVisable, callback, eventListener) {
     var cb = callback || _.identity,
       show = isVisable;
     if (show) {
       new EJS({url: 'tpl/' + tpl}).update(cssID, cb(data));
+    }
+    if (eventListener) {
+      eval(eventListener);
+    } else {
+      undefined;
     }
   };
 
@@ -117,26 +127,15 @@ var YD = YD || {};
 
   (function () {
 
-    var userPageInStack1 = _.partial(renderData, '/userController/show/loginUser', _, 'user_info', _),
-      userPageInStack2 = _.partial(renderData, '/userController/show/loginUser', _, 'user_photo', _);
+    var userPageInStack1 = _.partial(renderData, '/userController/show/loginUser', _, 'user_info', _, _),
+      userPageInStack2 = _.partial(renderData, '/userController/show/loginUser', _, 'user_photo', _, _);
 
     // 显示用户信息
     YD.userShow = function () {
       userPageInStack1('user_show.ejs', function (d) {
-        $('#use_info_edit').on('click', YD.userEdit);
         YD.userInfo = d;
         return d;
-      });
-    };
-
-    // 编辑用户信息
-    YD.userEdit = function () {
-      userPageInStack1('user_edit.ejs');
-    };
-
-    // 显示用户头像
-    YD.userPhotoShow = function () {
-      userPageInStack2('user_photo.ejs');
+      }, "$('#user_info_edit').on('click', YD.userEdit)");
     };
 
     // 编辑用户信息
@@ -150,10 +149,23 @@ var YD = YD || {};
         // Each argument is an array with the following structure: [ data, statusText, jqXHR ]
         var data = _.extend({grades: a1[0]}, {photos: a2[0]}, YD.userInfo);
         note(data);
-        renderLocalData(data, 'user_info', 'user_edit.ejs', true);
-        $('#user_info_save').on('click', YD.userSave);
+        renderLocalData(data, 'user_info', 'user_edit.ejs', true, null, "$('#user_info_save').on('click', YD.userSave);");
+
       });
     };
+
+    // 显示用户头像
+    YD.userPhotoShow = function () {
+      userPageInStack2('user_photo.ejs', null, "$('#user_photo_edit').on('click', YD.userPhotoEdit);");
+    };
+
+    // 编辑用户头像
+    YD.userPhotoEdit = function () {
+      renderData('/userController/photos', 'user_photo_edit.ejs', 'user_photo', function (d) {
+        return {photos: d};
+      }, "$('#user_photo_save').on('click', YD.userPhotoSave);");
+    };
+
 
     // 保存用户信息
     YD.userSave = function () {
@@ -164,8 +176,6 @@ var YD = YD || {};
     YD.userPhotoSave = function () {
       postJson('/userController/save', 'form#user_photo', YD.userPhotoShow);
     };
-
-
 
   }());
 
