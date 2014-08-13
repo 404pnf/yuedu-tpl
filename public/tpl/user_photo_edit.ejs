@@ -2,10 +2,10 @@
 <form id='user_photo'>
 <% _.each(photos, function(e) { %>
   <input type="radio" name='photo_id' value='<%=_.keys(e)[0] %>'
-    <% if ( _.keys(e)[0] === _.keys(YD.userInfo.photo)[0] ) { %>
+    <% if (e.key === YD.userInfo.photo.key) { %>
       checked
     <% } %>
-    ><img src=<%= _.values(e)[0] %>><br>
+    ><img src=<%= e.value %>><br>
 <% }); %>
 </form>
 <button type="buttom" id="user_photo_save">保存头像</button> <br>

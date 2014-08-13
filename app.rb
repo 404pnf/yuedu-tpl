@@ -18,13 +18,13 @@ end
 get '/userController/photos' do
   photos = {
             photos: [
-                      { a: '/img/kitten2.jpg' },
-                      { b: '/img/kitten2.jpg' },
-                      { c: '/img/kitten2.jpg' },
-                      { d: '/img/kitten2.jpg' },
-                      { e: '/img/kitten2.jpg' },
-                      { f: '/img/kitten2.jpg' },
-                      { g: '/img/kitten2.jpg' }
+                      { key: 'a', value: '/img/kitten2.jpg' },
+                      { key: 'b', value: '/img/kitten2.jpg' },
+                      { key: 'c', value: '/img/kitten2.jpg' },
+                      { key: 'd', value: '/img/kitten2.jpg' },
+                      { key: 'e', value: '/img/kitten2.jpg' },
+                      { key: 'f', value: '/img/kitten2.jpg' },
+                      { key: 'g', value: '/img/kitten2.jpg' }
                     ]
            }
   JSONP photos
@@ -32,13 +32,12 @@ end
 get '/userController/grades' do
   grades = {
             grades: [
-                      { a: '一年级' },
-                      { b: '二年级' },
-                      { c: '三年级' },
-                      { d: '四年级' },
-                      { e: '五年级' },
-                      { f: '六年级' },
-                      { g: '七年级' }
+                      { key: 'a', value: '小学一年级' },
+                      { key: 'b', value: '小学二年级' },
+                      { key: 'c', value: '小学三年级' },
+                      { key: 'd', value: '小学四年级' },
+                      { key: 'e', value: '小学五年级' },
+                      { key: 'f', value: '小学刘年级' }
                     ]
             }
   JSONP grades
@@ -46,11 +45,11 @@ end
 get '/userController/show/loginUser' do
   user = {
     userName: '王大军',
-    gender: { male: '男' },
+    gender: { key: 'male', value: '男' },
     age: 12,
     dob: '2004-07-26 11:37:53 +0800',
-    photo: { e: '/img/kitten2.jpg' },
-    grade: { d: '小学四年级' },
+    photo: { key: 'e', value: '/img/kitten2.jpg' },
+    grade: { key: 'd', value: '小学四年级' },
     school: '史家胡同小学',
     email: 'ererer@fltrp.com',
     loginName: 'stu20',
