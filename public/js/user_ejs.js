@@ -35,8 +35,12 @@ var YD = YD || {};
   };
 
   doWhen = function (action, predict) {
-    ( predict ? action() : undefined );
-  }
+    if (predict) {
+      return action();
+    } else {
+      return undefined;
+    }
+  };
 
   // http://stackoverflow.com/questions/503093/how-can-i-make-a-redirect-page-in-jquery-javascript
   //
@@ -113,16 +117,13 @@ var YD = YD || {};
 
   // ## 从局部变量中获取数据，绑定到模版并显示在html中
   // 除了变量来源不同，其它和renderData一样
-  renderLocalData = function (data, cssID, tpl, isVisable, callback, eventListener) {
-    var cb = callback || _.identity,
-      show = isVisable;
-    if (show) {
-      new EJS({url: 'tpl/' + tpl}).update(cssID, cb(data));
-    }
+  renderLocalData = function (data, cssID, tpl, callback, eventListener) {
+    var cb = callback || _.identity;
+    new EJS({url: 'tpl/' + tpl}).update(cssID, cb(data));
     if (eventListener) {
-      eval(eventListener);
+      return eval(eventListener);
     } else {
-      undefined;
+      return undefined;
     }
   };
 
@@ -206,60 +207,64 @@ var YD = YD || {};
             examScores,
             renderPage;
 
+
           // 用 partial application 固定一些参数
           startPageInStack1 = _.partial(renderLocalData, examInfo, 'stack1');
           startPageInStack2 = _.partial(renderLocalData, examInfo, 'stack2');
 
+          note(canTakeExam);
           // 当前考试区块
-          examCurrent = function () {
-            startPageInStack2('start_current.ejs', canTakeExam, function (d) {
-              var o = _.clone(d.currentExam);
-              o = _.extend(o, {button: '开始考试'});
-              if (haslatestExamResult) {
-                o = _.extend(o, {title: '再测一次看看自己有没有进步'});
-              } else if (TookNoExam) {
-                o = _.extend(o, {title: '你还没有测试。再来测一下'});
-              } else {
-                o = _.extend(o, {title: '你有测试尚未完成，可继续测试'});
-              }
-              return o;
-            });
-          };
+          examCurrent = doWhen(startPageInStack2('start_current.ejs', function (d) {
+            // var o = _.clone(d.currentExam);
+
+            // o = _.extend(o, {button: '开始考试'});
+
+            // if (haslatestExamResult) {
+            //   o = _.extend(o, {title: '再测一次看看自己有没有进步'});
+            // } else if (TookNoExam) {
+            //   o = _.extend(o, {title: '你还没有测试。来测一下'});
+            // } else {
+            //   o = _.extend(o, {title: '你有测试尚未完成，可继续测试'});
+            // }
+
+            // return o;
+          }), canTakeExam);
+
+
+          note(hasUpcomingExam);
 
           // 模拟考试区块
-          examSimulating = function () {
-            startPageInStack1('start_simulating.ejs', showExamSimulating);
-          };
+          examSimulating = doWhen(startPageInStack1('start_simulating.ejs'), showExamSimulating);
 
-          // 考试预告区块
-          examUpcoming = function () {
-            startPageInStack2('start_upcoming.ejs', hasUpcomingExam,  function (d) {
-              var o = _.map(d.upcomingExam, function (e) {
-                if (e.isTodayExam) {
-                  e.endTime = '';
-                  e.isTodayExam = '今天';
-                } else {
-                  e.isTodayExam = '';
-                }
-                return e;
-              });
-              return {upcomingExam: o};
+          //考试预告区块
+          examUpcoming = doWhen(startPageInStack2('start_upcoming.ejs', function (d) {
+            var o = _.map(d.upcomingExam, function (e) {
+              if (e.isTodayExam) {
+                e.endTime = '';
+                e.isTodayExam = '今天';
+              } else {
+                e.isTodayExam = '';
+              }
+              return e;
             });
-          };
+            return {upcomingExam: o};
+          }), hasUpcomingExam);
 
+
+
+          //note(haslatestExamResult);
+          //note(showExamSimulating);
           // 考试成绩区块
-          examScores = function () {
-            startPageInStack1('start_scores.ejs', haslatestExamResult);
-          };
+          examScores = doWhen(startPageInStack1('start_scores.ejs'), haslatestExamResult);
 
           // 渲染页面的主函数
           renderPage = function () {
             _.map(
               [
-                examCurrent(),
-                examSimulating(),
-                examUpcoming(),
-                examScores()
+                examSimulating,
+                examCurrent,
+                examUpcoming,
+                examScores
               ],
               _.identity
             );
