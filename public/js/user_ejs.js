@@ -164,15 +164,12 @@ var YD = YD || {};
           examSimulating = doWhen(showExamSimulating,
             renderLocalData(examInfo, 'stack1', 'start_simulating.ejs'));
 
-          // note(canTakeExam);
           // 当前考试区块
-
-          //note(oo);
           examCurrent = doWhen(canTakeExam,
             renderLocalData(examInfo, 'stack2', 'start_current.ejs', function (d) {
               var oo = _.clone(d.currentExam);
-              oo = _.extend(oo, {button: '开始考试'});
 
+              oo = _.extend(oo, {button: '开始考试'});
 
               if (haslatestExamResult) {
                 oo = _.extend(oo, {title: '再测一次看看自己有没有进步'});
@@ -183,8 +180,6 @@ var YD = YD || {};
               }
               return oo;
             }));
-
-          //note(hasUpcomingExam);
 
           //考试预告区块
           examUpcoming = doWhen(hasUpcomingExam,
@@ -205,7 +200,7 @@ var YD = YD || {};
           examScores = doWhen(haslatestExamResult,
             renderLocalData(examInfo, 'stack1', 'start_scores.ejs'));
 
-          // 渲染页面的主函数。
+          // 渲染整个页面。
           // 对每个函数执行_identity就等于执行了它们。
           _.map(
             [
