@@ -13,14 +13,15 @@ var YD = YD || {};
 
   var showStatusMsg,
     doWhen,
-    renderData,
+    //renderData,
     postJson,
     renderLocalData,
-    redirectToUrl,
-    fail,
-    warn,
-    note,
-    error;
+    //redirectToUrl,
+    // fail,
+    // warn,
+    //error,
+    note;
+
 
   //
   // ## 工具函数
@@ -34,20 +35,15 @@ var YD = YD || {};
     });
   };
 
-  doWhen = function (action, predict) {
+  doWhen = function (predict, action) {
     if (predict) {
       return action();
-    } else {
-      return undefined;
     }
   };
 
-  // http://stackoverflow.com/questions/503093/how-can-i-make-a-redirect-page-in-jquery-javascript
-  //
-  // window.location.replace("http://stackoverflow.com");
-  redirectToUrl = function (url) {
-    window.location.replace(url);
-  };
+  // redirectToUrl = function (url) {
+  //   window.location.replace(url);
+  // };
 
 
     // ## 获取后台数据，绑定到模版并显示在html中
@@ -62,30 +58,30 @@ var YD = YD || {};
     //    - 执行一些有副作用的函数，如保存后台json到某全局变量
     //    - 不过是否处理后台数据，都需要显性的返回数据，即，最后一样必须是 return data;
 
-  renderData = function (url, tpl, cssID, callback, eventListener) {
-    $.get(url)
-      .done(function (data) {
-        var cb = callback || _.identity;
-        new EJS({url: 'tpl/' + tpl}).update(cssID, cb(data));
-        if (eventListener) {
-          eval(eventListener);
-        } else {
-          undefined;
-        }
-      })
-      .fail(function (data, status, xhr) {
-        $('#msg').text(data, status, xhr).slideDown('slow');
-      });
-  };
+  // renderData = function (url, tpl, cssID, callback, eventListener) {
+  //   $.get(url)
+  //     .done(function (data) {
+  //       var cb = callback || _.identity;
+  //       new EJS({url: 'tpl/' + tpl}).update(cssID, cb(data));
+  //       if (eventListener) {
+  //         eval(eventListener);
+  //       } else {
+  //         undefined;
+  //       }
+  //     })
+  //     .fail(function (data, status, xhr) {
+  //       $('#msg').text(data, status, xhr).slideDown('slow');
+  //     });
+  // };
 
   // 报告错误的帮助函数
-  fail = function (msg) {
-    throw new Error(msg);
-  };
+  // fail = function (msg) {
+  //   throw new Error(msg);
+  // };
 
-  warn = function (msg) {
-    console.log(["WARNING: ", msg].join(''));
-  };
+  // warn = function (msg) {
+  //   console.log(["WARNING: ", msg].join(''));
+  // };
 
   note = function (msg) {
     console.log("NOTE: ");
@@ -117,72 +113,57 @@ var YD = YD || {};
 
   // ## 从局部变量中获取数据，绑定到模版并显示在html中
   // 除了变量来源不同，其它和renderData一样
-  renderLocalData = function (data, cssID, tpl, callback, eventListener) {
+  renderLocalData = _.constant(function (cssID, tpl, callback, eventListener) {
     var cb = callback || _.identity;
+
+    // f = new EJS({url: '/mytemplate.ejs'}).update('my_element')
     new EJS({url: 'tpl/' + tpl}).update(cssID, cb(data));
     if (eventListener) {
       eval(eventListener);
-    } else {
-      undefined;
     }
-  };
+  });
+
+  var f = function (ejsFn) {
+    return function (data) {
+      ejsFn(data);
+      // if (event) {
+      //   eval(event);
+      // }
+    }
+  }
 
 
   // ##  user.html 页面
 
   (function () {
 
-    var userPageInStack1 = _.partial(renderData, '/userController/show/loginUser', _, 'user_info', _, _),
-      userPageInStack2 = _.partial(renderData, '/userController/show/loginUser', _, 'user_photo', _, _);
+    YD.userPage = function () {
+        var userShow, userEdit, userPhotoShow, userPhotoEdit, userSave, userPhotoSave;
 
-    // 显示用户信息
-    YD.userShow = function () {
-      userPageInStack1('user_show.ejs', function (d) {
-        YD.userInfo = d;
-        return d;
-      }, "$('#user_info_edit').on('click', YD.userEdit)");
-    };
+        //userShow = f(_.constant((new EJS({url: 'tpl/user_show.ejs'}).update('user_info'))));
+        //userEdit = f((new EJS({url: 'tpl/user_edit.ejs'}).update('user_info')));
+        // userShow = _.partial(renderLocalData(_, 'user_info', 'user_show.ejs', null, "$('#user_info_edit').on('click', userEdit);"));
+        // userEdit = _.partial(renderLocalData(_, 'user_info', 'user_edit.ejs', null, "$('#user_info_save').on('click',  userSave);"));
+        // userPhotoShow = renderLocalData(data, 'user_photo', 'user_photo.ejs', null, "$('#user_photo_edit').on('click', userPhotoEdit);");
+        // userPhotoEdit = renderLocalData(data, 'user_photo', 'user_photo_edit.ejs', null, "$('#user_photo_save').on('click', userPhotoSave);");
+        // userSave = postJson('/userController/save', 'form#user_info', userShow);
 
-    // 编辑用户信息
-    //
-    // - 年级信息 '/userController/grades'
-    // - 头像信息'/userController/photos'
-    // - jquery命令 http://api.jquery.com/jQuery.when/
-    YD.userEdit = function () {
-      $.when($.ajax("/userController/grades"), $.ajax("/userController/photos")).done(function (a1, a2) {
-        // a1 and a2 are arguments resolved for the page1 and page2 ajax requests, respectively.
-        // Each argument is an array with the following structure: [ data, statusText, jqXHR ]
-        var data = _.extend(a1[0], a2[0], YD.userInfo);
-        note(data);
-        renderLocalData(data, 'user_info', 'user_edit.ejs', true, null, "$('#user_info_save').on('click', YD.userSave);");
+        $.when($.ajax('/userController/show/loginUser'),
+          $.ajax("/userController/grades"),
+          $.ajax("/userController/photos")).done(function (a, b, c) {
+            // a1 and a2 are arguments resolved for the page1 and page2 ajax requests, respectively.
+            // Each argument is an array with the following structure: [ data, statusText, jqXHR ]
+            var data;
+            data = _.extend(a[0], b[0], c[0]);
+            note(data);
+            //(new EJS({url: 'tpl/user_show.ejs'}).update('user_info'))(data);
+            //userShow()(data);
 
-      });
-    };
-
-    // 显示用户头像
-    YD.userPhotoShow = function () {
-      userPageInStack2('user_photo.ejs', null, "$('#user_photo_edit').on('click', YD.userPhotoEdit);");
-    };
-
-    // 编辑用户头像
-    YD.userPhotoEdit = function () {
-      renderData('/userController/photos', 'user_photo_edit.ejs', 'user_photo', null, "$('#user_photo_save').on('click', YD.userPhotoSave);");
-    };
-
-
-    // 保存用户信息
-    YD.userSave = function () {
-      postJson('/userController/save', 'form#user_info', YD.userShow);
-    };
-
-    // 保存用户头像
-    YD.userPhotoSave = function () {
-      postJson('/userController/save', 'form#user_photo', YD.userPhotoShow);
-    };
+        });
+    }
 
   }());
 
-  //$('#user_info_save').on('click', YD.userSave);
   // ## start.html 生成页面的主函数
   // 每隔一段时间时间查看一下数据源并重新刷新页面
 
