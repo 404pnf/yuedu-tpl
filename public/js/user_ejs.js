@@ -121,9 +121,9 @@ var YD = YD || {};
     var cb = callback || _.identity;
     new EJS({url: 'tpl/' + tpl}).update(cssID, cb(data));
     if (eventListener) {
-      return eval(eventListener);
+      eval(eventListener);
     } else {
-      return undefined;
+      undefined;
     }
   };
 
