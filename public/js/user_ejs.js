@@ -154,25 +154,31 @@ var YD = YD || {};
 
           // note(canTakeExam);
           // 当前考试区块
-          var oo = _.clone(examInfo.currentExam);
 
-          oo = _.extend(oo, {button: '开始考试'});
-
-          if (haslatestExamResult) {
-            oo = _.extend(oo, {title: '再测一次看看自己有没有进步'});
-          } else if (TookNoExam) {
-            oo = _.extend(oo, {title: '你还没有测试。来测一下'});
-          } else {
-            oo = _.extend(oo, {title: '你有测试尚未完成，可继续测试'});
-          }
           //note(oo);
           examCurrent = doWhen(canTakeExam,
-            renderLocalData(oo, 'stack2', 'start_current.ejs'));
+            renderLocalData(examInfo, 'stack2', 'start_current.ejs', function (d) {
+              var oo = _.clone(examInfo.currentExam);
+              oo = _.extend(oo, {button: '开始考试'});
+
+
+              if (haslatestExamResult) {
+                oo = _.extend(oo, {title: '再测一次看看自己有没有进步'});
+              } else if (TookNoExam) {
+                oo = _.extend(oo, {title: '你还没有测试。来测一下'});
+              } else {
+                oo = _.extend(oo, {title: '你有测试尚未完成，可继续测试'});
+              }
+              return oo;
+            }
+          ));
 
           //note(hasUpcomingExam);
 
           //考试预告区块
-          var o = _.map(examInfo.upcomingExam, function (e) {
+          examUpcoming = doWhen(hasUpcomingExam,
+            renderLocalData(examInfo, 'stack2', 'start_upcoming.ejs', function (d) {
+              var o = _.map(examInfo.upcomingExam, function (e) {
                 if (e.isTodayExam) {
                   e.endTime = '';
                   e.isTodayExam = '今天';
@@ -181,10 +187,8 @@ var YD = YD || {};
                 }
                 return e;
               });
-          examUpcoming = doWhen(hasUpcomingExam,
-            renderLocalData({upcomingExam: o}, 'stack2', 'start_upcoming.ejs'));
-
-
+              return o;
+            }));
 
           // 考试成绩区块
           examScores = doWhen(haslatestExamResult,
