@@ -13,13 +13,9 @@ var YD = YD || {};
 
   var showStatusMsg,
     doWhen,
-    //renderData,
     postJson,
     renderLocalData,
-    //redirectToUrl,
-    // fail,
-    // warn,
-    //error,
+    redirectToUrl,
     note;
 
 
@@ -35,20 +31,13 @@ var YD = YD || {};
     });
   };
 
-  // wrap action in _.constant to delay execution
+  // 模仿if (predict) {}，
+  // 或者说模仿scheme中的when。
+  // action必须是一个返回函数的函数，这样才能延迟执行
   doWhen = function (predict, action) {
     if (predict) {
       return action();
     }
-  };
-
-  // redirectToUrl = function (url) {
-  //   window.location.replace(url);
-  // };
-
-  note = function (msg) {
-    console.log("NOTE: ");
-    console.log(msg);
   };
 
   // ## 提交表单内容到后台
@@ -63,16 +52,37 @@ var YD = YD || {};
     var form_data = $(cssID).serializeJSON();
     $.post(url, form_data)
       .done(function (data) {
-        if (data.success && callbackOnSuccess) {
+        if (_.has(data, 'success') && callbackOnSuccess) {
           callbackOnSuccess();
         }
         showStatusMsg(data);
       })
-      .fail(function (data) {
+      .fail(function (data, status, xhr) {
         console.log(data);
-        $('#msg').text(data).slideDown('slow');
+        $('#msg').text(data, status, xhr).slideDown('slow');
       });
   };
+
+
+  renderLocalData = function (data, cssID, tpl, callback) {
+    return function () {
+      var cb = callback || _.identity;
+      new EJS({url: 'tpl/' + tpl}).update(cssID, cb(data));
+    }
+  };
+
+
+  redirectToUrl = function (url) {
+    window.location.replace(url);
+  };
+
+  note = function (msg) {
+    console.log("NOTE: ");
+    console.log(msg);
+  };
+
+
+  // ##  user.html 页面
 
   var getUserDataAndCallback = function (tpl, cssID, event) {
     $.when($.ajax('/userController/show/loginUser'),
@@ -88,8 +98,6 @@ var YD = YD || {};
         }
     })
   };
-
-  // ##  user.html 页面
 
   YD.userShow = function () {
     getUserDataAndCallback('user_show.ejs', 'user_info', "$('#user_info_edit').on('click', YD.userEdit);")
@@ -123,33 +131,28 @@ var YD = YD || {};
     var repeat = function () {
       $.get('/examController/studentLogin')
         .done(function (data) {
-          // - 一些判定
-          // - 判定时要注意，如果某objec他没有那个键名，我们去取值了，会报 Uncaught ReferenceError: latestExamResult is not defined
-          // - 这是ejs报的错
+
+          // 将判定抽象为函数
           var examInfo = data, // - bind data to local variable
             canTakeExam = _.has(examInfo, 'currentExam'),
             TookNoExam = canTakeExam && examInfo.currentExam.userExamState === '0',
             hasUpcomingExam = _.has(examInfo, 'upcomingExam'),
             haslatestExamResult = _.has(examInfo, 'latestExamResult'),
-            showExamSimulating = !haslatestExamResult,
-            examCurrent,
+            showExamSimulating = !haslatestExamResult;
+
+          // 生成页面的函数
+          var examCurrent,
             examSimulating,
             examUpcoming,
             examScores,
             renderPage;
-
-          var renderLocalData = function (data, cssID, tpl) {
-            return function () {
-              new EJS({url: 'tpl/' + tpl}).update(cssID, data);
-            }
-          };
 
 
           // 模拟考试区块
           examSimulating = doWhen(showExamSimulating,
             renderLocalData(examInfo, 'stack1', 'start_simulating.ejs'));
 
-          note(canTakeExam);
+          // note(canTakeExam);
           // 当前考试区块
           var oo = _.clone(examInfo.currentExam);
 
