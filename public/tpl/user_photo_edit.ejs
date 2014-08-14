@@ -1,8 +1,8 @@
 <h2>编辑头像<h2>
 <form id='user_photo'>
 <% _.each(photos, function(e) { %>
-  <input type="radio" name='photo_id' value='<%=_.keys(e)[0] %>'
-    <% if (e.key === YD.userInfo.photo.key) { %>
+  <input type="radio" name='photo_id' value='<%= e.key %>'
+    <% if (e.key === photo.key) { %>
       checked
     <% } %>
     ><img src=<%= e.value %>><br>

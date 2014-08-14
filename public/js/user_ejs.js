@@ -45,44 +45,6 @@ var YD = YD || {};
   //   window.location.replace(url);
   // };
 
-
-    // ## 获取后台数据，绑定到模版并显示在html中
-    //
-    // 此函数只有副作用。
-    //
-    // - @url : 从url去json数据
-    // - @tpl : 模版文件的izhi
-    // - @cssID : 数据绑定模版后应该显示在html中的哪个cssID区块
-    // - @callback :
-    //    - 在使用前可处理从后台获得的数据
-    //    - 执行一些有副作用的函数，如保存后台json到某全局变量
-    //    - 不过是否处理后台数据，都需要显性的返回数据，即，最后一样必须是 return data;
-
-  // renderData = function (url, tpl, cssID, callback, eventListener) {
-  //   $.get(url)
-  //     .done(function (data) {
-  //       var cb = callback || _.identity;
-  //       new EJS({url: 'tpl/' + tpl}).update(cssID, cb(data));
-  //       if (eventListener) {
-  //         eval(eventListener);
-  //       } else {
-  //         undefined;
-  //       }
-  //     })
-  //     .fail(function (data, status, xhr) {
-  //       $('#msg').text(data, status, xhr).slideDown('slow');
-  //     });
-  // };
-
-  // 报告错误的帮助函数
-  // fail = function (msg) {
-  //   throw new Error(msg);
-  // };
-
-  // warn = function (msg) {
-  //   console.log(["WARNING: ", msg].join(''));
-  // };
-
   note = function (msg) {
     console.log("NOTE: ");
     console.log(msg);
@@ -111,52 +73,45 @@ var YD = YD || {};
       });
   };
 
-  // ## 从局部变量中获取数据，绑定到模版并显示在html中
-  // 除了变量来源不同，其它和renderData一样
-  renderLocalData = _.constant(function (cssID, tpl, callback, eventListener) {
-    var cb = callback || _.identity;
-
-    // f = new EJS({url: '/mytemplate.ejs'}).update('my_element')
-    new EJS({url: 'tpl/' + tpl}).update(cssID, cb(data));
-    if (eventListener) {
-      eval(eventListener);
-    }
-  });
-
-  var f = function (ejsFn) {
-    return function (data) {
-      ejsFn(data);
-      // if (event) {
-      //   eval(event);
-      // }
-    }
-  }
-
-
-  var getUserDataAndCallback = function (callback) {
+  var getUserDataAndCallback = function (tpl, cssID, event) {
     $.when($.ajax('/userController/show/loginUser'),
       $.ajax("/userController/grades"),
       $.ajax("/userController/photos")).done(function (a, b, c) {
         // a1 and a2 are arguments resolved for the page1 and page2 ajax requests, respectively.
         // Each argument is an array with the following structure: [ data, statusText, jqXHR ]
-        var o = (_.extend(a[0], b[0], c[0]));
-        callback(o);
+        var data = (_.extend(a[0], b[0], c[0]));
+        note(data);
+        new EJS({url: 'tpl/' + tpl}).update(cssID, data);
+        if (event) {
+          eval(event);
+        }
     })
   }
   // ##  user.html 页面
 
+    YD.userShow = function () {
+      getUserDataAndCallback('user_show.ejs', 'user_info', "$('#user_info_edit').on('click', YD.userEdit);")
+    }
 
-    YD.userPhotoShow = getUserDataAndCallback((new EJS({url: 'tpl/user_photo.ejs'}).update('user_photo')));
-    YD.userShow = getUserDataAndCallback((new EJS({url: 'tpl/user_show.ejs'}).update('user_info')));
+    YD.userPhotoShow = function () {
+      getUserDataAndCallback('user_photo.ejs', 'user_photo', "$('#user_photo_edit').on('click', YD.userPhotoEdit);")
+    }
 
-    note(YD.userShow);
-        //userShow = f(_.constant((new EJS({url: 'tpl/user_show.ejs'}).update('user_info'))));
-        //userEdit = f((new EJS({url: 'tpl/user_edit.ejs'}).update('user_info')));
-        // userShow = _.partial(renderLocalData(_, 'user_info', 'user_show.ejs', null, "$('#user_info_edit').on('click', userEdit);"));
-        // userEdit = _.partial(renderLocalData(_, 'user_info', 'user_edit.ejs', null, "$('#user_info_save').on('click',  userSave);"));
-        // userPhotoShow = renderLocalData(data, 'user_photo', 'user_photo.ejs', null, "$('#user_photo_edit').on('click', userPhotoEdit);");
-        // userPhotoEdit = renderLocalData(data, 'user_photo', 'user_photo_edit.ejs', null, "$('#user_photo_save').on('click', userPhotoSave);");
-        // userSave = postJson('/userController/save', 'form#user_info', userShow);
+    YD.userEdit = function () {
+      getUserDataAndCallback('user_edit.ejs', 'user_info', "$('#user_info_save').on('click', YD.userSave);");
+    }
+
+    YD.userPhotoEdit = function () {
+      getUserDataAndCallback('user_photo_edit.ejs', 'user_photo', "$('#user_photo_save').on('click', YD.userPhotoSave);");
+    }
+
+    YD.userSave = function () {
+      postJson('/userController/save', 'form#user_info', YD.userShow);
+    }
+
+    YD.userPhotoSave = function () {
+      postJson('/userController/save', 'form#user_info', YD.userPhotoShow);
+    }
 
 
   // ## start.html 生成页面的主函数
