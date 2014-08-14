@@ -184,6 +184,8 @@ var YD = YD || {};
           //考试预告区块
           examUpcoming = doWhen(hasUpcomingExam,
             renderLocalData(examInfo, 'stack2', 'start_upcoming.ejs', function (d) {
+              // TODO: 这里修改了examInfo。很不好，万一后面有人想用upcomingExam的老数据呢。
+              // _.clone是浅拷贝。可考虑_.snapshot，深拷贝，在 underscore-contrib 中。
               var o = _.map(d.upcomingExam, function (e) {
                 if (e.isTodayExam) {
                   e.endTime = '';
