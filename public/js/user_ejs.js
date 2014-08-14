@@ -132,8 +132,6 @@ var YD = YD || {};
             hasUpcomingExam = _.has(examInfo, 'upcomingExam'),
             haslatestExamResult = _.has(examInfo, 'latestExamResult'),
             showExamSimulating = !haslatestExamResult,
-            startPageInStack1,
-            startPageInStack2,
             examCurrent,
             examSimulating,
             examUpcoming,
@@ -141,15 +139,17 @@ var YD = YD || {};
             renderPage;
 
           var renderLocalData = function (data, cssID, tpl) {
-            new EJS({url: 'tpl/' + tpl}).update(cssID, data);
+            return function () {
+              new EJS({url: 'tpl/' + tpl}).update(cssID, data);
+            }
           };
 
 
           // 模拟考试区块
           examSimulating = doWhen(showExamSimulating,
-            _.constant(renderLocalData(examInfo, 'stack1', 'start_simulating.ejs')));
+            renderLocalData(examInfo, 'stack1', 'start_simulating.ejs'));
 
-          //note(canTakeExam);
+          note(canTakeExam);
           // 当前考试区块
           var oo = _.clone(examInfo.currentExam);
 
@@ -162,10 +162,11 @@ var YD = YD || {};
           } else {
             oo = _.extend(oo, {title: '你有测试尚未完成，可继续测试'});
           }
+          note(oo);
           examCurrent = doWhen(canTakeExam,
-            _.constant(renderLocalData(oo, 'stack2', 'start_current.ejs')));
+            renderLocalData(oo, 'stack2', 'start_current.ejs'));
 
-          note(hasUpcomingExam);
+          //note(hasUpcomingExam);
 
           //考试预告区块
           var o = _.map(examInfo.upcomingExam, function (e) {
@@ -178,13 +179,13 @@ var YD = YD || {};
                 return e;
               });
           examUpcoming = doWhen(hasUpcomingExam,
-            _.constant(renderLocalData({upcomingExam: o}, 'stack2', 'start_upcoming.ejs')));
+            renderLocalData({upcomingExam: o}, 'stack2', 'start_upcoming.ejs'));
 
 
 
           // 考试成绩区块
           examScores = doWhen(haslatestExamResult,
-            _.constant(renderLocalData(examInfo, 'stack1', 'start_scores.ejs')));
+            renderLocalData(examInfo, 'stack1', 'start_scores.ejs'));
 
 
           // 渲染页面的主函数
