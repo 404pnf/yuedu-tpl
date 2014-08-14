@@ -187,7 +187,7 @@ var YD = YD || {};
                 }
                 return e;
               });
-              return o;
+              return {upcomingExam: o};
             }));
 
           // 考试成绩区块
