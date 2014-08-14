@@ -162,7 +162,7 @@ var YD = YD || {};
           } else {
             oo = _.extend(oo, {title: '你有测试尚未完成，可继续测试'});
           }
-          note(oo);
+          //note(oo);
           examCurrent = doWhen(canTakeExam,
             renderLocalData(oo, 'stack2', 'start_current.ejs'));
 
