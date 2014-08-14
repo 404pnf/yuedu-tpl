@@ -18,7 +18,6 @@ var YD = YD || {};
     redirectToUrl,
     note;
 
-
   //
   // ## 工具函数
   //
@@ -47,7 +46,6 @@ var YD = YD || {};
   // 3. 提交json给后台api
   // 4. 显示错误信息到html，此函数写死在.done里面
   // 5. 如果成功，后台会返回带有'success'键名的对象，此时执行成功时的回调函数
-
   postJson = function (url, cssID, callbackOnSuccess) {
     var form_data = $(cssID).serializeJSON();
     $.post(url, form_data)
@@ -63,7 +61,8 @@ var YD = YD || {};
       });
   };
 
-
+  // 从局部变量获得数据，绑定模版，插入到html页面中。
+  // 可以在使用数据前通过callback修饰数据。
   renderLocalData = function (data, cssID, tpl, callback) {
     return function () {
       var cb = callback || _.identity;
@@ -71,19 +70,29 @@ var YD = YD || {};
     }
   };
 
-
+  // 将用户重定向到某页面的正确方式
   redirectToUrl = function (url) {
     window.location.replace(url);
   };
 
+  // 开发时方便发现错误。封装console.log是为了可在需要时候直接用alert替换console.log。
+  // 或者加入其它修饰。
+  // 这就是function as abstract behavior unit。
   note = function (msg) {
     console.log("NOTE: ");
     console.log(msg);
   };
 
-
+  //
   // ##  user.html 页面
+  //
+  // TODO: 没有再用partial函数。这样虽然有很多重复。
+  // 但我发现其他同事更好理解。
+  // 暂时先这样。
 
+  // 取得用户数据，绑定到模版，显示到html中，再加入需要监听的事件。
+  // 因为监听事件的cssID在分开的模版中，开始加载页面的时候去监听是什么都监听不到的。
+  // TODO: 这里用了eval。是的， eval is evil 。但我暂时不会其它方法。
   var getUserDataAndCallback = function (tpl, cssID, event) {
     $.when($.ajax('/userController/show/loginUser'),
       $.ajax("/userController/grades"),
@@ -123,10 +132,10 @@ var YD = YD || {};
     postJson('/userController/save', 'form#user_info', YD.userPhotoShow);
   }
 
-
+  //
   // ## start.html 生成页面的主函数
-  // 每隔一段时间时间查看一下数据源并重新刷新页面
-
+  //
+  // 每隔一段时间时间查看一下数据源并重新刷新页面。
   YD.startDispache = function () {
     var repeat = function () {
       $.get('/examController/studentLogin')
@@ -194,8 +203,8 @@ var YD = YD || {};
           examScores = doWhen(haslatestExamResult,
             renderLocalData(examInfo, 'stack1', 'start_scores.ejs'));
 
-
-          // 渲染页面的主函数
+          // 渲染页面的主函数。
+          // 对每个函数执行_identity就等于执行了它们。
           renderPage = function () {
             _.map(
               [
@@ -208,10 +217,6 @@ var YD = YD || {};
             );
           };
 
-          // 需要先执行渲染页面的函数，
-          // 然后再每隔一段时间刷新。
-          // 直接调用每隔一段时间刷新的函数，会先等待一段时间才第一次渲染页面。
-          renderPage();
           note('又看到我啦。证明页面刷新啦。');
         })
         .fail(function (data, status, xhr) {
