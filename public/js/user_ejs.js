@@ -133,13 +133,23 @@ var YD = YD || {};
   }
 
 
+  var getUserDataAndCallback = function (callback) {
+    $.when($.ajax('/userController/show/loginUser'),
+      $.ajax("/userController/grades"),
+      $.ajax("/userController/photos")).done(function (a, b, c) {
+        // a1 and a2 are arguments resolved for the page1 and page2 ajax requests, respectively.
+        // Each argument is an array with the following structure: [ data, statusText, jqXHR ]
+        var o = (_.extend(a[0], b[0], c[0]));
+        callback(o);
+    })
+  }
   // ##  user.html 页面
 
-  (function () {
 
-    YD.userPage = function () {
-        var userShow, userEdit, userPhotoShow, userPhotoEdit, userSave, userPhotoSave;
+    YD.userPhotoShow = getUserDataAndCallback((new EJS({url: 'tpl/user_photo.ejs'}).update('user_photo')));
+    YD.userShow = getUserDataAndCallback((new EJS({url: 'tpl/user_show.ejs'}).update('user_info')));
 
+    note(YD.userShow);
         //userShow = f(_.constant((new EJS({url: 'tpl/user_show.ejs'}).update('user_info'))));
         //userEdit = f((new EJS({url: 'tpl/user_edit.ejs'}).update('user_info')));
         // userShow = _.partial(renderLocalData(_, 'user_info', 'user_show.ejs', null, "$('#user_info_edit').on('click', userEdit);"));
@@ -148,21 +158,6 @@ var YD = YD || {};
         // userPhotoEdit = renderLocalData(data, 'user_photo', 'user_photo_edit.ejs', null, "$('#user_photo_save').on('click', userPhotoSave);");
         // userSave = postJson('/userController/save', 'form#user_info', userShow);
 
-        $.when($.ajax('/userController/show/loginUser'),
-          $.ajax("/userController/grades"),
-          $.ajax("/userController/photos")).done(function (a, b, c) {
-            // a1 and a2 are arguments resolved for the page1 and page2 ajax requests, respectively.
-            // Each argument is an array with the following structure: [ data, statusText, jqXHR ]
-            var data;
-            data = _.extend(a[0], b[0], c[0]);
-            note(data);
-            //(new EJS({url: 'tpl/user_show.ejs'}).update('user_info'))(data);
-            //userShow()(data);
-
-        });
-    }
-
-  }());
 
   // ## start.html 生成页面的主函数
   // 每隔一段时间时间查看一下数据源并重新刷新页面
