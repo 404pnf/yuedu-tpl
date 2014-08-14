@@ -35,6 +35,7 @@ var YD = YD || {};
     });
   };
 
+  // wrap action in _.constant to delay execution
   doWhen = function (predict, action) {
     if (predict) {
       return action();
@@ -86,32 +87,33 @@ var YD = YD || {};
           eval(event);
         }
     })
-  }
+  };
+
   // ##  user.html 页面
 
-    YD.userShow = function () {
-      getUserDataAndCallback('user_show.ejs', 'user_info', "$('#user_info_edit').on('click', YD.userEdit);")
-    }
+  YD.userShow = function () {
+    getUserDataAndCallback('user_show.ejs', 'user_info', "$('#user_info_edit').on('click', YD.userEdit);")
+  }
 
-    YD.userPhotoShow = function () {
-      getUserDataAndCallback('user_photo.ejs', 'user_photo', "$('#user_photo_edit').on('click', YD.userPhotoEdit);")
-    }
+  YD.userPhotoShow = function () {
+    getUserDataAndCallback('user_photo.ejs', 'user_photo', "$('#user_photo_edit').on('click', YD.userPhotoEdit);")
+  }
 
-    YD.userEdit = function () {
-      getUserDataAndCallback('user_edit.ejs', 'user_info', "$('#user_info_save').on('click', YD.userSave);");
-    }
+  YD.userEdit = function () {
+    getUserDataAndCallback('user_edit.ejs', 'user_info', "$('#user_info_save').on('click', YD.userSave);");
+  }
 
-    YD.userPhotoEdit = function () {
-      getUserDataAndCallback('user_photo_edit.ejs', 'user_photo', "$('#user_photo_save').on('click', YD.userPhotoSave);");
-    }
+  YD.userPhotoEdit = function () {
+    getUserDataAndCallback('user_photo_edit.ejs', 'user_photo', "$('#user_photo_save').on('click', YD.userPhotoSave);");
+  }
 
-    YD.userSave = function () {
-      postJson('/userController/save', 'form#user_info', YD.userShow);
-    }
+  YD.userSave = function () {
+    postJson('/userController/save', 'form#user_info', YD.userShow);
+  }
 
-    YD.userPhotoSave = function () {
-      postJson('/userController/save', 'form#user_info', YD.userPhotoShow);
-    }
+  YD.userPhotoSave = function () {
+    postJson('/userController/save', 'form#user_info', YD.userPhotoShow);
+  }
 
 
   // ## start.html 生成页面的主函数
@@ -125,10 +127,10 @@ var YD = YD || {};
           // - 判定时要注意，如果某objec他没有那个键名，我们去取值了，会报 Uncaught ReferenceError: latestExamResult is not defined
           // - 这是ejs报的错
           var examInfo = data, // - bind data to local variable
-            canTakeExam = !!examInfo.currentExam,
+            canTakeExam = _.has(examInfo, 'currentExam'),
             TookNoExam = canTakeExam && examInfo.currentExam.userExamState === '0',
-            hasUpcomingExam = !!examInfo.upcomingExam,
-            haslatestExamResult = !!examInfo.latestExamResult,
+            hasUpcomingExam = _.has(examInfo, 'upcomingExam'),
+            haslatestExamResult = _.has(examInfo, 'latestExamResult'),
             showExamSimulating = !haslatestExamResult,
             startPageInStack1,
             startPageInStack2,
@@ -138,55 +140,52 @@ var YD = YD || {};
             examScores,
             renderPage;
 
+          var renderLocalData = function (data, cssID, tpl) {
+            new EJS({url: 'tpl/' + tpl}).update(cssID, data);
+          };
 
-          // 用 partial application 固定一些参数
-          startPageInStack1 = _.partial(renderLocalData, examInfo, 'stack1');
-          startPageInStack2 = _.partial(renderLocalData, examInfo, 'stack2');
 
-          note(canTakeExam);
+          // 模拟考试区块
+          examSimulating = doWhen(showExamSimulating,
+            _.constant(renderLocalData(examInfo, 'stack1', 'start_simulating.ejs')));
+
+          //note(canTakeExam);
           // 当前考试区块
-          examCurrent = doWhen(startPageInStack2('start_current.ejs', function (d) {
-            var o = _.clone(d.currentExam);
+          var oo = _.clone(examInfo.currentExam);
 
-            o = _.extend(o, {button: '开始考试'});
+          oo = _.extend(oo, {button: '开始考试'});
 
-            if (haslatestExamResult) {
-              o = _.extend(o, {title: '再测一次看看自己有没有进步'});
-            } else if (TookNoExam) {
-              o = _.extend(o, {title: '你还没有测试。来测一下'});
-            } else {
-              o = _.extend(o, {title: '你有测试尚未完成，可继续测试'});
-            }
-
-            return o;
-          }), canTakeExam);
-
+          if (haslatestExamResult) {
+            oo = _.extend(oo, {title: '再测一次看看自己有没有进步'});
+          } else if (TookNoExam) {
+            oo = _.extend(oo, {title: '你还没有测试。来测一下'});
+          } else {
+            oo = _.extend(oo, {title: '你有测试尚未完成，可继续测试'});
+          }
+          examCurrent = doWhen(canTakeExam,
+            _.constant(renderLocalData(oo, 'stack2', 'start_current.ejs')));
 
           note(hasUpcomingExam);
 
-          // 模拟考试区块
-          examSimulating = doWhen(startPageInStack1('start_simulating.ejs'), showExamSimulating);
-
           //考试预告区块
-          examUpcoming = doWhen(startPageInStack2('start_upcoming.ejs', function (d) {
-            var o = _.map(d.upcomingExam, function (e) {
-              if (e.isTodayExam) {
-                e.endTime = '';
-                e.isTodayExam = '今天';
-              } else {
-                e.isTodayExam = '';
-              }
-              return e;
-            });
-            return {upcomingExam: o};
-          }), hasUpcomingExam);
+          var o = _.map(examInfo.upcomingExam, function (e) {
+                if (e.isTodayExam) {
+                  e.endTime = '';
+                  e.isTodayExam = '今天';
+                } else {
+                  e.isTodayExam = '';
+                }
+                return e;
+              });
+          examUpcoming = doWhen(hasUpcomingExam,
+            _.constant(renderLocalData({upcomingExam: o}, 'stack2', 'start_upcoming.ejs')));
 
 
 
-          //note(haslatestExamResult);
-          //note(showExamSimulating);
           // 考试成绩区块
-          examScores = doWhen(startPageInStack1('start_scores.ejs'), haslatestExamResult);
+          examScores = doWhen(haslatestExamResult,
+            _.constant(renderLocalData(examInfo, 'stack1', 'start_scores.ejs')));
+
 
           // 渲染页面的主函数
           renderPage = function () {
