@@ -173,6 +173,7 @@ var YD = YD || {};
           // 当前考试区块
           examCurrent = doWhen(canTakeExam,
             renderLocalData(examInfo, 'stack2', 'start_current.ejs', function (d) {
+              // _.clone 是浅拷贝。没什么用。
               var oo = _.clone(d.currentExam);
 
               oo = _.extend(oo, {button: '开始考试'});
