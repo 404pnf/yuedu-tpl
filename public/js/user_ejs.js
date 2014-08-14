@@ -104,6 +104,12 @@ var YD = YD || {};
       // a1 and a2 are arguments resolved for the page1 and page2 ajax requests, respectively.
       // Each argument is an array with the following structure: [ data, statusText, jqXHR ]
       var data = (_.extend(a[0], b[0], c[0]));
+      // TODO: 在这里对 YD.user = data 赋值不会起作用。
+      // 在函数外 YD.user 仍是 undefined.
+      // 让我捉摸不透。我想是因为 .when 是一个defered object,
+      // 此函数先返回了。之后拿到所有数据再执行.done 。
+      // 这时外面的 note(YD.user) 已经执行完了。它执行的时候， YD.user 还没有赋值呢。
+      // 如何解决这个问题呢？我想将取回的数据绑定在局部变量中。
       note(data);
       new EJS({url: 'tpl/' + tpl}).update(cssID, data);
       if (event) {
