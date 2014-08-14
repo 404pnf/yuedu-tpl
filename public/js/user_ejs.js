@@ -3,7 +3,8 @@
 /*jslint browser: true , nomen: true, indent: 2*/
 /*global $, jQuer, EJS, _ */
 
-// ## 唯一暴露出来的全局变量。也是程序的命名空间
+
+  // ## 唯一暴露出来的全局变量。也是程序的命名空间
 var YD = YD || {};
 
 // ## 用匿名函数做为 let scope
@@ -15,6 +16,7 @@ var YD = YD || {};
     doWhen,
     postJson,
     renderLocalData,
+    getUserDataAndCallback,
     redirectToUrl,
     note;
 
@@ -67,7 +69,7 @@ var YD = YD || {};
     return function () {
       var cb = callback || _.identity;
       new EJS({url: 'tpl/' + tpl}).update(cssID, cb(data));
-    }
+    };
   };
 
   // 将用户重定向到某页面的正确方式
@@ -93,44 +95,46 @@ var YD = YD || {};
   // 取得用户数据，绑定到模版，显示到html中，再加入需要监听的事件。
   // 因为监听事件的cssID在分开的模版中，开始加载页面的时候去监听是什么都监听不到的。
   // TODO: 这里用了eval。是的， eval is evil 。但我暂时不会其它方法。
-  var getUserDataAndCallback = function (tpl, cssID, event) {
-    $.when($.ajax('/userController/show/loginUser'),
-      $.ajax("/userController/grades"),
-      $.ajax("/userController/photos")).done(function (a, b, c) {
-        // a1 and a2 are arguments resolved for the page1 and page2 ajax requests, respectively.
-        // Each argument is an array with the following structure: [ data, statusText, jqXHR ]
-        var data = (_.extend(a[0], b[0], c[0]));
-        note(data);
-        new EJS({url: 'tpl/' + tpl}).update(cssID, data);
-        if (event) {
-          eval(event);
-        }
-    })
+  getUserDataAndCallback = function (tpl, cssID, event) {
+    var userinfo = '/userController/show/loginUser',
+      grades = '/userController/grades',
+      photos = '/userController/photos';
+
+    $.when($.ajax(userinfo), $.ajax(grades), $.ajax(photos)).done(function (a, b, c) {
+      // a1 and a2 are arguments resolved for the page1 and page2 ajax requests, respectively.
+      // Each argument is an array with the following structure: [ data, statusText, jqXHR ]
+      var data = (_.extend(a[0], b[0], c[0]));
+      note(data);
+      new EJS({url: 'tpl/' + tpl}).update(cssID, data);
+      if (event) {
+        eval(event);
+      }
+    });
   };
 
   YD.userShow = function () {
-    getUserDataAndCallback('user_show.ejs', 'user_info', "$('#user_info_edit').on('click', YD.userEdit);")
-  }
+    getUserDataAndCallback('user_show.ejs', 'user_info', "$('#user_info_edit').on('click', YD.userEdit);");
+  };
 
   YD.userPhotoShow = function () {
-    getUserDataAndCallback('user_photo.ejs', 'user_photo', "$('#user_photo_edit').on('click', YD.userPhotoEdit);")
-  }
+    getUserDataAndCallback('user_photo.ejs', 'user_photo', "$('#user_photo_edit').on('click', YD.userPhotoEdit);");
+  };
 
   YD.userEdit = function () {
     getUserDataAndCallback('user_edit.ejs', 'user_info', "$('#user_info_save').on('click', YD.userSave);");
-  }
+  };
 
   YD.userPhotoEdit = function () {
     getUserDataAndCallback('user_photo_edit.ejs', 'user_photo', "$('#user_photo_save').on('click', YD.userPhotoSave);");
-  }
+  };
 
   YD.userSave = function () {
     postJson('/userController/save', 'form#user_info', YD.userShow);
-  }
+  };
 
   YD.userPhotoSave = function () {
     postJson('/userController/save', 'form#user_info', YD.userPhotoShow);
-  }
+  };
 
   //
   // ## start.html 生成页面的主函数
@@ -147,14 +151,13 @@ var YD = YD || {};
             TookNoExam = canTakeExam && examInfo.currentExam.userExamState === '0',
             hasUpcomingExam = _.has(examInfo, 'upcomingExam'),
             haslatestExamResult = _.has(examInfo, 'latestExamResult'),
-            showExamSimulating = !haslatestExamResult;
+            showExamSimulating = !haslatestExamResult,
 
           // 生成页面的函数
-          var examCurrent,
+            examCurrent,
             examSimulating,
             examUpcoming,
-            examScores,
-            renderPage;
+            examScores;
 
 
           // 模拟考试区块
@@ -167,7 +170,7 @@ var YD = YD || {};
           //note(oo);
           examCurrent = doWhen(canTakeExam,
             renderLocalData(examInfo, 'stack2', 'start_current.ejs', function (d) {
-              var oo = _.clone(examInfo.currentExam);
+              var oo = _.clone(d.currentExam);
               oo = _.extend(oo, {button: '开始考试'});
 
 
@@ -179,15 +182,14 @@ var YD = YD || {};
                 oo = _.extend(oo, {title: '你有测试尚未完成，可继续测试'});
               }
               return oo;
-            }
-          ));
+            }));
 
           //note(hasUpcomingExam);
 
           //考试预告区块
           examUpcoming = doWhen(hasUpcomingExam,
             renderLocalData(examInfo, 'stack2', 'start_upcoming.ejs', function (d) {
-              var o = _.map(examInfo.upcomingExam, function (e) {
+              var o = _.map(d.upcomingExam, function (e) {
                 if (e.isTodayExam) {
                   e.endTime = '';
                   e.isTodayExam = '今天';
@@ -205,17 +207,15 @@ var YD = YD || {};
 
           // 渲染页面的主函数。
           // 对每个函数执行_identity就等于执行了它们。
-          renderPage = function () {
-            _.map(
-              [
-                examSimulating,
-                examCurrent,
-                examUpcoming,
-                examScores
-              ],
-              _.identity
-            );
-          };
+          _.map(
+            [
+              examSimulating,
+              examCurrent,
+              examUpcoming,
+              examScores
+            ],
+            _.identity
+          );
 
           note('又看到我啦。证明页面刷新啦。');
         })
