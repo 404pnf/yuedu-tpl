@@ -36,9 +36,7 @@ var YD = YD || {};
   // 或者说模仿scheme中的when。
   // action必须是一个返回函数的函数，这样才能延迟执行
   doWhen = function (predict, action) {
-    if (predict) {
-      return action();
-    }
+    predict && action();
   };
 
   // ## 提交表单内容到后台
@@ -109,12 +107,11 @@ var YD = YD || {};
       // 让我捉摸不透。我想是因为 .when 是一个defered object,
       // 此函数先返回了。之后拿到所有数据再执行.done 。
       // 这时外面的 note(YD.user) 已经执行完了。它执行的时候， YD.user 还没有赋值呢。
-      // 如何解决这个问题呢？我想将取回的数据绑定在局部变量中。
+      // 如何解决这个问题呢？
+      // 我想将取回的数据绑定在局部变量中。
       note(data);
       new EJS({url: 'tpl/' + tpl}).update(cssID, data);
-      if (event) {
-        eval(event);
-      }
+      event && eval(event);
     });
   };
 
