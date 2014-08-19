@@ -63,10 +63,14 @@ var YD = YD || {};
 
   // 从局部变量获得数据，绑定模版，插入到html页面中。
   // 可以在使用数据前通过callback修饰数据。
+  // callback中修改的是数据的深拷贝。使用jquery的 $.clone(true, dst, src) 。
+  // 因此不会影响原始数据。
+  // 这里遵守不是自己创建的数据就不应该修改的原则。
   renderLocalData = function (data, cssID, tpl, callback) {
     return function () {
-      var cb = callback || _.identity;
-      new EJS({url: 'tpl/' + tpl}).update(cssID, cb(data));
+      var cb = callback || _.identity,
+        clonedData = _.snapshot(data);
+      new EJS({url: 'tpl/' + tpl}).update(cssID, cb(clonedData));
     };
   };
 
@@ -170,10 +174,7 @@ var YD = YD || {};
           // 当前考试区块
           examCurrent = doWhen(canTakeExam,
             renderLocalData(examInfo, 'stack2', 'start_current.ejs', function (d) {
-              // _.clone 是浅拷贝。没什么用。
-              var oo = _.clone(d.currentExam);
-
-              oo = _.extend(oo, {button: '开始考试'});
+              var oo = _.extend(d.currentExam, {button: '开始考试'});
 
               if (haslatestExamResult) {
                 oo = _.extend(oo, {title: '再测一次看看自己有没有进步'});
@@ -185,11 +186,12 @@ var YD = YD || {};
               return oo;
             }));
 
-          //考试预告区块
+          // 考试预告区块
           examUpcoming = doWhen(hasUpcomingExam,
             renderLocalData(examInfo, 'stack2', 'start_upcoming.ejs', function (d) {
-              // TODO: 这里修改了examInfo。很不好，万一后面有人想用upcomingExam的老数据呢。
-              // _.clone是浅拷贝。可考虑_.snapshot，深拷贝，在 underscore-contrib 中。
+              // 可以直接修改examInfo。因为得到的数据是原始数据的深拷贝副本。
+              // 因此不会影响原始数据。
+              // 见 renderLocalData 函数。
               var o = _.map(d.upcomingExam, function (e) {
                 if (e.isTodayExam) {
                   e.endTime = '';
