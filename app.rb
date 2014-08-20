@@ -12,7 +12,7 @@ before do
 end
 
 get '/' do
-  '<a href=/user.html>user.html</a><br><a href=/start.html>start.html</a><br><a href=/login.html>login.html</a>'
+  '<a href=/user.html>user.html</a><br><a href=/start.html>start.html</a><br><a href=/login.html>login.html</a><br><a href=/chart.html>chart.html</a>'
 end
 
 get '/userController/photos' do
