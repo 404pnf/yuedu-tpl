@@ -61,25 +61,25 @@
         <ul>
           <li class="">
             <label for="username">
-              <span class="required" aria-required="true">yong'hu'mi</span>
+              <span class="required" aria-required="true">用户名</span>
             </label>
-            <input id="email" name="email" class="text required email valid" type="text" aria-required="true" aria-invalid="false">
-            <label for="email" class="error" style="display: none;"></label>
+            <input id="username" name="username" class="text required valid" type="text" aria-required="true" aria-invalid="false">
+            <label for="username" class="error" style="display: none;"></label>
           </li>
           <li class="">
             <label for="password">
-              <span class="required" aria-required="true">Password</span>
+              <span class="required" aria-required="true">密码</span>
             </label>
-            <input name="password" type="password" class="text valid required" id="password" minlength="4" maxlength="20" aria-required="true" aria-invalid="false">
+            <input name="password" type="password" class="text valid required" id="password" minlength="1" maxlength="20" aria-required="true" aria-invalid="false">
           </li>
           <li>
-            <label class="centered info"><a id="forgotpassword" href="#">Email my password...</a>
+            <label class="centered info"><a id="forgotpassword" href="#">忘记密码</a>
             </label>
           </li>
         </ul>
       </fieldset>
       <fieldset class="submit">
-        <input type="submit" class="button" value="Login...">
+        <input type="submit" class="button" value="登陆">
       </fieldset>
       <div class="clear"></div>
     </form>
