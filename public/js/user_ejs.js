@@ -228,9 +228,14 @@ var YD = YD || {};
     }());
   }; // end YD.startDispache
 
+  //
+  //
   // 修改该 jquery validation 插件的报错信息到中文
+  //
   // 如需要修改，可在js代码中加入：
   // http://www.open-open.com/lib/view/open1342179346214.html
+  //
+  //
   jQuery.extend(jQuery.validator.messages, {
     required: "必选字段",
     remote: "请修正该字段",
@@ -249,13 +254,11 @@ var YD = YD || {};
     range: jQuery.validator.format("请输入一个介于 {0} 和 {1} 之间的值"),
     max: jQuery.validator.format("请输入一个最大为 {0} 的值"),
     min: jQuery.validator.format("请输入一个最小为 {0} 的值")
-    });
+  });
 
   //
   // ## 登陆页面
   //
-
-  // 包裹在jQuery中因此在html不需要.ready啦。
   YD.userLogin = function () {
     // highlight
     var elements = $("input[type!='submit'], textarea, select");
@@ -277,11 +280,9 @@ var YD = YD || {};
 
     // 提交表单信息给后台
     $('form').submit(function (event) {
-      note('提交表单啦');
       postJson('/userController/save', 'form#login');
     })
   }; // end YD.userLogin
-
 
 
 }()); // end of let scope
