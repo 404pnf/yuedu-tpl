@@ -256,7 +256,7 @@ var YD = YD || {};
   //
 
   // 包裹在jQuery中因此在html不需要.ready啦。
-  YD.userLogin = $(function () {
+  YD.userLogin = function () {
     // highlight
     var elements = $("input[type!='submit'], textarea, select");
     elements.focus(function () {
@@ -275,15 +275,13 @@ var YD = YD || {};
 
     $("#login").validate();
 
-    // 登陆逻辑包括信息显示似乎用jsp更合适；
+    // 提交表单信息给后台
+    $('form').submit(function (event) {
+      note('提交表单啦');
+      postJson('/userController/save', 'form#login');
+    })
+  }; // end YD.userLogin
 
-    // // ajax提交给后台的数据
-    // 不对。 通过 form#login 拿不到表单的数据，是因为内嵌太深么？
-    // $('#user_login').on('click', function () {
-    //   postJson('/userController/save', 'form#login');
-    //   console.log('post form to backend');
-    // });
-  }); // end YD.userLogin
 
 
 }()); // end of let scope

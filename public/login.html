@@ -8,6 +8,7 @@
   <div id="header">
     <h1>登陆</h1>
   </div>
+  <div id="msg"></div>
   <div id="content">
     <p id="status"></p>
     <form action="" id="login" novalidate="novalidate">
@@ -36,16 +37,21 @@
       <fieldset class="submit">
         <input type="submit" class="button" id="user_login1" value="登陆">
       </fieldset>
-      <button id = "user_login">ajax提交</button>
       <div class="clear"></div>
     </form>
   </div>
 </div>
 
-  <script src="js/jquery.js"></script>
-  <script src="js/jquery.validate.min.js"></script>
-  <script src="js/user_ejs.js"></script>
-  <script>
-    YD.userLogin();
-  </script>
+    <script src="js/jquery.js"></script>
+    <script src="js/ejs.js"></script>
+    <script src="js/jquery.serialize-object.js"></script>
+    <script src="js/underscore-min.js"></script>
+    <script src="js/underscore.object.builders.js"></script>
+    <script src="js/jquery.validate.min.js"></script>
+    <script src="js/user_ejs.js"></script>
+    <script>
+      $(document).ready(function () {
+        YD.userLogin();
+      });
+    </script>
 </body></html>
