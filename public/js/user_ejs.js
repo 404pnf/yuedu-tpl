@@ -1,7 +1,7 @@
 
 // ## jslint配置
 /*jslint browser: true , nomen: true, indent: 2*/
-/*global $, jQuer, EJS, _ */
+/*global $, jQuery, EJS, _ */
 
 
 // ## 唯一暴露出来的全局变量。也是程序的命名空间
@@ -256,17 +256,17 @@ var YD = YD || {};
   //
 
   // 包裹在jQuery中因此在html不需要.ready啦。
-  YD.userLogin = $(function() {
+  YD.userLogin = $(function () {
     // highlight
     var elements = $("input[type!='submit'], textarea, select");
-    elements.focus(function() {
+    elements.focus(function () {
       $(this).parents('li').addClass('highlight');
     });
-    elements.blur(function() {
+    elements.blur(function () {
       $(this).parents('li').removeClass('highlight');
     });
 
-    $("#forgotpassword").click(function() {
+    $("#forgotpassword").click(function () {
       $("#password").removeClass("required");
       $("#login").submit();
       $("#password").addClass("required");
