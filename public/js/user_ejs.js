@@ -1,7 +1,7 @@
 
 // ## jslint配置
 /*jslint browser: true , nomen: true, indent: 2*/
-/*global $, jQuer, EJS, _ */
+/*global $, jQuery, EJS, _ */
 
 
 // ## 唯一暴露出来的全局变量。也是程序的命名空间
@@ -256,17 +256,17 @@ var YD = YD || {};
   //
 
   // 包裹在jQuery中因此在html不需要.ready啦。
-  YD.userLogin = $(function() {
+  YD.userLogin = function () {
     // highlight
     var elements = $("input[type!='submit'], textarea, select");
-    elements.focus(function() {
+    elements.focus(function () {
       $(this).parents('li').addClass('highlight');
     });
-    elements.blur(function() {
+    elements.blur(function () {
       $(this).parents('li').removeClass('highlight');
     });
 
-    $("#forgotpassword").click(function() {
+    $("#forgotpassword").click(function () {
       $("#password").removeClass("required");
       $("#login").submit();
       $("#password").addClass("required");
@@ -275,15 +275,13 @@ var YD = YD || {};
 
     $("#login").validate();
 
-    // 登陆逻辑包括信息显示似乎用jsp更合适；
+    // 提交表单信息给后台
+    $('form').submit(function (event) {
+      note('提交表单啦');
+      postJson('/userController/save', 'form#login');
+    })
+  }; // end YD.userLogin
 
-    // // ajax提交给后台的数据
-    // 不对。 通过 form#login 拿不到表单的数据，是因为内嵌太深么？
-    // $('#user_login').on('click', function () {
-    //   postJson('/userController/save', 'form#login');
-    //   console.log('post form to backend');
-    // });
-  }); // end YD.userLogin
 
 
 }()); // end of let scope
