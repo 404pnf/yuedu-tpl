@@ -29,12 +29,15 @@
 
 					var value = Math.round(Math.random() * (100 + i)) + 100 + i;
 
-					var level = _.sample(['3a', '3b', '3c', '4a', '4b', '4c', '5a', '5b', '5c'])
+					var level = _.sample(['3a', '3b', '3c', '4a', '4b', '4c', '5a', '5b', '5c']);
+
+					var url = _.sample(['/user.html', '/start.html', 'examid/2.html', 'exmaid/3.html', 'examid/4']);
 
 					chartData.push({
 						date: newDate,
 						value: value,
-						level: level
+						level: level,
+						url: url
 					});
 				}
 			}
@@ -53,6 +56,9 @@
 				}, {
 					fromField: "level",
 					toField: "level"
+				}, {
+					fromField: "url",
+					toField: "url"
 				}];
 				dataSet.dataProvider = chartData;
 				dataSet.categoryField = "date";
@@ -70,6 +76,7 @@
 				var graph = new AmCharts.StockGraph();
 				graph.valueField = "value";
 				graph.levelField = "level";
+				graph.urlField = "url";
 				graph.bullet = "round";
 				graph.bulletColor = "#FFFFFF";
 				graph.bulletBorderColor = "#00BBCC";
@@ -78,7 +85,7 @@
 				graph.bulletSize = 17;
 				graph.lineThickness = 2;
 				graph.lineColor = "#00BBCC";
-				graph.balloonText = "score:<b>[[value]]</b><br>level:<b>[[level]]</b>";
+				graph.balloonText = "score:<b>[[value]]</b><br>level:<b>[[level]]</b><br>点击查看详细报告<br>";
 				graph.useDataSetColors = false;
 				stockPanel.addStockGraph(graph);
 
