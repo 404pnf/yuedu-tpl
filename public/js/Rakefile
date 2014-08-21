@@ -1,4 +1,5 @@
 desc "concat third party js to a single file"
 task :concat do
-  system('cat jquery.js jquery.serialize-object.js  jquery.validate.min.js underscore-min.js ejs.js underscore.object.builders.js > lib.all.js')
+  Dir.chdir('lib') { system('cat jquery.js jquery.serialize-object.js  jquery.validate.min.js underscore-min.js ejs.js underscore.object.builders.js > ../lib.all.js') }
+  #system('mv lib/lib.all.js .')
 end
