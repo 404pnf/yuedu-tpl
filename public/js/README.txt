@@ -13,6 +13,17 @@
 ## 使用 google closure/traceur compiler
 
 http://closure-compiler.appspot.com/home
+https://developers.google.com/closure/compiler/docs/gettingstarted_app
+
+本地运行需要安装 jdk7。 oracle的网站上我没找到下载链接。在某stackoverflow上直接点了个去oracle下载的链接。
+
+下载 google closure compiler
+
+运行
+
+    java -jar compiler.jar --js hello.js --js_output_file hello-compiled.js
+
+本文件夹的Rakefile写了如何自动压缩。
 
 ## 如何在js中重定向用户到某url
 
