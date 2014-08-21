@@ -73,10 +73,11 @@
 				stockPanel.addLabel(0, 100, "好好学习，天天向上中 :) ", "center", 26);
 
 				// 参考 stockAddRemovePanel.html 例子
+				// 参考 http://docs.amcharts.com/3/javascriptcharts/AmGraph
 				var graph = new AmCharts.StockGraph();
 				graph.valueField = "value";
 				graph.levelField = "level";
-				graph.urlField = "url";
+				graph.urlField = "url";  //urlField这个属性名是内置属性
 				graph.bullet = "round";
 				graph.bulletColor = "#FFFFFF";
 				graph.bulletBorderColor = "#00BBCC";
