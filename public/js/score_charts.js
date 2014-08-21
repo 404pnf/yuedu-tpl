@@ -71,7 +71,7 @@ AmCharts.ready(function () {
         graph.bulletBorderAlpha = 1;
         graph.bulletBorderThickness = 2;
         graph.bulletSize = 17;
-        graph.lineThickness = 2;
+        graph.lineThickness = 6;
         graph.lineColor = "#00BBCC";
         graph.balloonText = "score:<b>[[value]]</b><br>level:<b>[[level]]</b><br>点击查看详细报告<br>";
         graph.useDataSetColors = false;
