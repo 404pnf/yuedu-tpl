@@ -3,3 +3,8 @@ task :concat do
   Dir.chdir('lib') { system('cat jquery.js jquery.serialize-object.js  jquery.validate.min.js underscore-min.js ejs.js underscore.object.builders.js > ../lib.all.js') }
   Dir.chdir('lib') { system('cat amcharts.js serial.js amstock.js > ../amcharts.all.js') }
 end
+
+desc "compile local js"
+task :compile do
+  system('java -jar ~/gogole-closure-compiler/compiler.jar --js yd.js > yd.min.js')
+end
