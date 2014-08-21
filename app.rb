@@ -17,29 +17,29 @@ end
 
 get '/userController/photos' do
   photos = {
-            photos: [
-                      { key: 'a', value: '/img/kitten2.jpg' },
-                      { key: 'b', value: '/img/kitten2.jpg' },
-                      { key: 'c', value: '/img/kitten2.jpg' },
-                      { key: 'd', value: '/img/kitten2.jpg' },
-                      { key: 'e', value: '/img/kitten2.jpg' },
-                      { key: 'f', value: '/img/kitten2.jpg' },
-                      { key: 'g', value: '/img/kitten2.jpg' }
-                    ]
-           }
+    photos: [
+      { key: 'a', value: '/img/kitten2.jpg' },
+      { key: 'b', value: '/img/kitten2.jpg' },
+      { key: 'c', value: '/img/kitten2.jpg' },
+      { key: 'd', value: '/img/kitten2.jpg' },
+      { key: 'e', value: '/img/kitten2.jpg' },
+      { key: 'f', value: '/img/kitten2.jpg' },
+      { key: 'g', value: '/img/kitten2.jpg' }
+    ]
+  }
   JSONP photos
 end
 get '/userController/grades' do
   grades = {
-            grades: [
-                      { key: 'a', value: '小学一年级' },
-                      { key: 'b', value: '小学二年级' },
-                      { key: 'c', value: '小学三年级' },
-                      { key: 'd', value: '小学四年级' },
-                      { key: 'e', value: '小学五年级' },
-                      { key: 'f', value: '小学刘年级' }
-                    ]
-            }
+    grades: [
+      { key: 'a', value: '小学一年级' },
+      { key: 'b', value: '小学二年级' },
+      { key: 'c', value: '小学三年级' },
+      { key: 'd', value: '小学四年级' },
+      { key: 'e', value: '小学五年级' },
+      { key: 'f', value: '小学刘年级' }
+    ]
+  }
   JSONP grades
 end
 get '/userController/show/loginUser' do
@@ -59,10 +59,10 @@ get '/userController/show/loginUser' do
 end
 
 post '/userController/save' do
-  #logger.info 'in /user/save '
+  # logger.info 'in /user/save '
   status = {
     success: '成功啦',
-    error: '错误',
+    error: '错误'
   }
   JSONP status
 end
@@ -70,36 +70,35 @@ end
 get '/examController/studentLogin' do
   # userExamState:'0|1', //用户考试状态（0：未开始 1：开始 2：结束 3：弃考）
   r = {
-        currentExam: {
-                    endTime: '2014-05-26 15:20',
-                    name: '2014秋季测试',
-                    id: 'exam_id',
-                    userExamState: '0'
-                  },
+    currentExam: {
+      endTime: '2014-05-26 15:20',
+      name: '2014秋季测试',
+      id: 'exam_id',
+      userExamState: '0'
+    },
 
-        # upcomingExam: [
-        #              {
-        #                 name: '2014秋季测试',
-        #                 startTime: '2014-03-26 15:20',
-        #                 endTime: '2014-03-26 15:20',
-        #                 isTodayExam: true
-        #               },
-        #              {
-        #                 name: '2014秋季测试',
-        #                 startTime: '2014-03-26 15:20',
-        #                 endTime: '2014-03-26 15:20',
-        #                 isTodayExam: false
-        #               },
-        #             ],
+    # upcomingExam: [
+    #              {
+    #                 name: '2014秋季测试',
+    #                 startTime: '2014-03-26 15:20',
+    #                 endTime: '2014-03-26 15:20',
+    #                 isTodayExam: true
+    #               },
+    #              {
+    #                 name: '2014秋季测试',
+    #                 startTime: '2014-03-26 15:20',
+    #                 endTime: '2014-03-26 15:20',
+    #                 isTodayExam: false
+    #               },
+    #             ],
 
-        latestExamResult: {
-                  examGradeResult: '4级，还不错',
-                  vocabularySize: '22000',
-                  personalEndTime: '2014-03-26',
-                  id: 'exam_result_id'
-                }
+    latestExamResult: {
+      examGradeResult: '4级，还不错',
+      vocabularySize: '22000',
+      personalEndTime: '2014-03-26',
+      id: 'exam_result_id'
+    }
 
-        }
+  }
   JSONP r
 end
-
