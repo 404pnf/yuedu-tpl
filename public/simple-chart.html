@@ -13,41 +13,41 @@
 
             var chartData = [
                 {
-                    "year": "2014-06-14",
+                    "date": "2014-06-14",
                     "value": 307,
                     "url": "/results/exam/321",
                     "level": "20a"
 
                 },
                 {
-                    "year": "2014-07-14",
+                    "date": "2014-07-14",
                     "value": 168,
                     "url": "/results/exam/321",
                     "level": "15b"
                 },
                 {
-                    "year": "2014-08-14",
+                    "date": "2014-08-14",
                     "value": 73,
                     "url": "/results/exam/321",
                     "level": "3c"
 
                 },
                 {
-                    "year": "2014-08-17",
+                    "date": "2014-08-17",
                     "value": 173,
                     "url": "/results/exam/321",
                     "level": "16c"
 
                 },
                 {
-                    "year": "2014-08-24",
+                    "date": "2014-08-24",
                     "value": 273,
                     "url": "/results/exam/321",
                     "level": "8a"
 
                 },
                 {
-                    "year": "2014-09-14",
+                    "date": "2014-09-14",
                     "value": 227,
                     "url": "/results/exam/321",
                     "level": "1b"
@@ -61,7 +61,7 @@
                 chart.pathToImages = "../amcharts/images/";
                 chart.dataProvider = chartData;
                 chart.marginLeft = 10;
-                chart.categoryField = "year";
+                chart.categoryField = "date";
                 chart.dataDateFormat = "YYYY-MM-DD";
 
                 // listen for "dataUpdated" event (fired when chart is inited) and call zoomChart method when it happens
