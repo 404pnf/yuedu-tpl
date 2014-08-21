@@ -90,10 +90,6 @@ var YD = YD || {};
   //
   // ##  user.html 页面
   //
-  // TODO: 没有再用partial函数。这样虽然有很多重复。
-  // 但我发现其他同事更好理解。
-  // 暂时先这样。
-
   getUserDataAndCallback = function (tpl, cssID) {
     var userinfo = '/userController/show/loginUser',
       grades = '/userController/grades',
@@ -262,7 +258,7 @@ var YD = YD || {};
     $("#login").validate();
 
     // 提交表单信息给后台
-    $('form').submit(function (event) {
+    $('form').submit(function () {
       postJson('/userController/save', 'form#login');
     });
 
