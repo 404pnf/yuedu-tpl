@@ -143,23 +143,24 @@ var YD = YD || {};
     };
 
 
-    // 直接显示用户信息和头像
-    userShow();
-    userPhotoShow();
+    return (function () {
+      // 直接显示用户信息和头像
+      userShow();
+      userPhotoShow();
 
-    //
-    // 通过jQuery的delegate监听尚未出现在页面的元素
-    //
+      //
+      // 通过jQuery的delegate监听尚未出现在页面的元素
+      //
 
-    // 编辑用户
-    $('#user_info').delegate('#user_info_edit', 'click', userEdit);
-    // 编辑头像
-    $('#user_photo').delegate('#user_photo_edit', 'click', userPhotoEdit);
-    // 保存用户
-    $('#user_info').delegate('#user_info_save', 'click', userSave);
-    // 保存头像
-    $('#user_photo').delegate('#user_photo_save', 'click', userPhotoSave);
-
+      // 编辑用户
+      $('#user_info').delegate('#user_info_edit', 'click', userEdit);
+      // 编辑头像
+      $('#user_photo').delegate('#user_photo_edit', 'click', userPhotoEdit);
+      // 保存用户
+      $('#user_info').delegate('#user_info_save', 'click', userSave);
+      // 保存头像
+      $('#user_photo').delegate('#user_photo_save', 'click', userPhotoSave);
+    }());
   };
   //
   // ## start.html 生成页面的主函数
