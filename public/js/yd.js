@@ -134,7 +134,7 @@ var YD = YD || {};
   };
 
   YD.userPhotoSave = function () {
-    postJson('/userController/save', 'form#user_info', redirectToUrl('/user.html'));
+    postJson('/userController/save', 'form#user_photo', redirectToUrl('/user.html'));
   };
 
   //
