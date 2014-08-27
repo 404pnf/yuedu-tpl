@@ -1,8 +1,6 @@
-
-// ## jslint配置
+// ## jslint配置 不要删除
 /*jslint browser: true , nomen: true, indent: 2*/
 /*global $, jQuery, EJS, _ */
-
 
 // ## 唯一暴露出来的全局变量。也是程序的命名空间
 var YD = YD || {};
@@ -16,7 +14,6 @@ var YD = YD || {};
     doWhen,
     postJson,
     renderLocalData,
-    getUserDataAndCallback,
     redirectToUrl,
     note;
 
@@ -34,9 +31,11 @@ var YD = YD || {};
 
   // 模仿if (predict) {}，
   // 或者说模仿scheme中的when。
-  // action必须是一个返回函数的函数，这样才能延迟执行
+  // **注意：action必须是一个返回函数的函数，这样才能延迟执行**
   doWhen = function (predict, action) {
-    predict && action();
+    if (predict) {
+      action();
+    }
   };
 
   // ## 提交表单内容到后台
@@ -46,6 +45,12 @@ var YD = YD || {};
   // 3. 提交json给后台api
   // 4. 显示错误信息到html，此函数写死在.done里面
   // 5. 如果成功，后台会返回带有'success'键名的对象，此时执行成功时的回调函数
+  //
+  // TODO
+  // 我尝试把这个函数改为 1 使用 promise 2 callback直接用 redirectToUrl 方法定向会用户页面
+  // 因为用户页面的默认逻辑就是显示信息
+  // 但如果这样，重定向后的页面无法获得post提交后服务器返回的信息，也就无法显示
+  // 这是用现在这种纯手工活js而不用框架的限制。
   postJson = function (url, cssID, callbackOnSuccess) {
     var form_data = $(cssID).serializeJSON();
     $.post(url, form_data)
@@ -90,150 +95,179 @@ var YD = YD || {};
   //
   // ##  user.html 页面
   //
-  getUserDataAndCallback = function (tpl, cssID) {
-    var userinfo = '/userController/show/loginUser',
-      grades = '/userController/grades',
-      photos = '/userController/photos';
+  YD.user = function () {
+    var getUserDataAndCallback,
+      userShow,
+      userPhotoShow,
+      userEdit,
+      userPhotoEdit,
+      userSave,
+      userPhotoSave;
 
-    $.when($.ajax(userinfo), $.ajax(grades), $.ajax(photos)).done(function (a, b, c) {
-      // a1 and a2 are arguments resolved for the page1 and page2 ajax requests, respectively.
-      // Each argument is an array with the following structure: [ data, statusText, jqXHR ]
-      var data = (_.extend(a[0], b[0], c[0]));
-      note(data);
-      new EJS({url: 'tpl/' + tpl}).update(cssID, data);
-    });
+    getUserDataAndCallback = function (tpl, cssID) {
+      var userinfo = '/userController/show/loginUser',
+        grades = '/userController/grades',
+        photos = '/userController/photos';
+
+      $.when($.ajax(userinfo), $.ajax(grades), $.ajax(photos)).done(function (a, b, c) {
+        // a1 and a2 are arguments resolved for the page1 and page2 ajax requests, respectively.
+        // Each argument is an array with the following structure: [ data, statusText, jqXHR ]
+        var data = (_.extend(a[0], b[0], c[0]));
+        note(data);
+        new EJS({url: 'tpl/' + tpl}).update(cssID, data);
+      });
+    };
+
+    userShow = function () {
+      getUserDataAndCallback('user_show.ejs', 'user_info');
+    };
+
+    userPhotoShow = function () {
+      getUserDataAndCallback('user_photo.ejs', 'user_photo');
+    };
+
+    userEdit = function () {
+      getUserDataAndCallback('user_edit.ejs', 'user_info');
+    };
+
+    userPhotoEdit = function () {
+      getUserDataAndCallback('user_photo_edit.ejs', 'user_photo');
+    };
+
+    userSave = function () {
+      postJson('/userController/save', 'form#user_info', userShow());
+    };
+
+    userPhotoSave = function () {
+      postJson('/userController/save', 'form#user_photo', userPhotoShow());
+    };
+
+
+    // 直接显示用户信息和头像
+    userShow();
+    userPhotoShow();
+
+    //
+    // 通过jQuery的delegate监听尚未出现在页面的元素
+    //
+
+    // 编辑用户
+    $('#user_info').delegate('#user_info_edit', 'click', userEdit);
+    // 编辑头像
+    $('#user_photo').delegate('#user_photo_edit', 'click', userPhotoEdit);
+    // 保存用户
+    $('#user_info').delegate('#user_info_save', 'click', userSave);
+    // 保存头像
+    $('#user_photo').delegate('#user_photo_save', 'click', userPhotoSave);
+
   };
-
-  YD.userShow = function () {
-    getUserDataAndCallback('user_show.ejs', 'user_info');
-  };
-
-  YD.userPhotoShow = function () {
-    getUserDataAndCallback('user_photo.ejs', 'user_photo');
-  };
-
-  YD.userEdit = function () {
-    getUserDataAndCallback('user_edit.ejs', 'user_info');
-  };
-
-  YD.userPhotoEdit = function () {
-    getUserDataAndCallback('user_photo_edit.ejs', 'user_photo');
-  };
-
-  YD.userSave = function () {
-    postJson('/userController/save', 'form#user_info', YD.userShow);
-  };
-
-  YD.userPhotoSave = function () {
-    postJson('/userController/save', 'form#user_info', YD.userPhotoShow);
-  };
-
-  //
-  // 通过jQuery的delegate监听尚未出现在页面的元素
-  //
-
-  // 编辑用户
-  $('#user_info').delegate('#user_info_edit', 'click', YD.userEdit);
-  // 编辑头像
-  $('#user_photo').delegate('#user_photo_edit', 'click', YD.userPhotoEdit);
-  // 保存用户
-  $('#user_info').delegate('#user_info_save', 'click', YD.userSave);
-  // 保存头像
-  $('#user_photo').delegate('#user_photo_save', 'click', YD.userPhotoSave);
-
   //
   // ## start.html 生成页面的主函数
   //
   // 每隔一段时间时间查看一下数据源并重新刷新页面。
   YD.startDispache = function () {
-    var repeat = function () {
-      $.get('/examController/studentLogin')
-        .done(function (data) {
 
-          // 将判定抽象为函数
-          var examInfo = data, // - bind data to local variable
-            canTakeExam = _.has(examInfo, 'currentExam'),
-            TookNoExam = canTakeExam && examInfo.currentExam.userExamState === '0',
-            hasUpcomingExam = _.has(examInfo, 'upcomingExam'),
-            haslatestExamResult = _.has(examInfo, 'latestExamResult'),
-            showExamSimulating = !haslatestExamResult,
-
-          // 生成页面的函数
-            examCurrent,
-            examSimulating,
-            examUpcoming,
-            examScores;
+    var ajaxInfo =  $.get('/examController/studentLogin'),
+      successCallback,
+      failureCallback,
+      repeatCallback;
 
 
-          // 模拟考试区块
-          examSimulating = doWhen(showExamSimulating,
-            renderLocalData(examInfo, 'stack1', 'start_simulating.ejs'));
+    successCallback = function (data) {
 
-          // 当前考试区块
-          examCurrent = doWhen(canTakeExam,
-            renderLocalData(examInfo, 'stack2', 'start_current.ejs', function (d) {
-              var oo = _.extend(d.currentExam, {button: '开始考试'});
+      // 将判定抽象为函数
+      var examInfo = _.snapshot(data), // - bind data to local variable
+        canTakeExam = _.has(examInfo, 'currentExam'),
+        TookNoExam = canTakeExam && examInfo.currentExam.userExamState === '0',
+        hasUpcomingExam = _.has(examInfo, 'upcomingExam'),
+        haslatestExamResult = _.has(examInfo, 'latestExamResult'),
+        showExamSimulating = !haslatestExamResult,
 
-              if (haslatestExamResult) {
-                oo = _.extend(oo, {title: '再测一次看看自己有没有进步'});
-              } else if (TookNoExam) {
-                oo = _.extend(oo, {title: '你还没有测试。来测一下'});
-              } else {
-                oo = _.extend(oo, {title: '你有测试尚未完成，可继续测试'});
-              }
-              return oo;
-            }));
+      // 生成页面的函数
+        examCurrent,
+        examSimulating,
+        examUpcoming,
+        examScores;
 
-          // 考试预告区块
-          examUpcoming = doWhen(hasUpcomingExam,
-            renderLocalData(examInfo, 'stack2', 'start_upcoming.ejs', function (d) {
-              // 可以直接修改examInfo。因为得到的数据是原始数据的深拷贝副本。
-              // 因此不会影响原始数据。
-              // 见 renderLocalData 函数。
-              var o = _.map(d.upcomingExam, function (e) {
-                if (e.isTodayExam) {
-                  e.endTime = '';
-                  e.isTodayExam = '今天';
-                } else {
-                  e.isTodayExam = '';
-                }
-                return e;
-              });
-              return {upcomingExam: o};
-            }));
 
-          // 考试成绩区块
-          examScores = doWhen(haslatestExamResult,
-            renderLocalData(examInfo, 'stack1', 'start_scores.ejs'));
+      // 模拟考试区块
+      examSimulating = doWhen(showExamSimulating,
+        renderLocalData(examInfo, 'stack1', 'start_simulating.ejs'));
 
-          // 渲染整个页面。
-          // 对每个函数执行_identity就等于执行了它们。
-          _.map(
-            [
-              examSimulating,
-              examCurrent,
-              examUpcoming,
-              examScores
-            ],
-            _.identity
-          );
+      // 当前考试区块
+      examCurrent = doWhen(canTakeExam,
+        renderLocalData(examInfo, 'stack2', 'start_current.ejs', function (d) {
+          var oo = _.extend(d.currentExam, {button: '开始考试'});
 
-          note('又看到我啦。证明页面刷新啦。');
-        })
-        .fail(function (data, status, xhr) {
-          $('#msg').text(data, status, xhr).slideDown('slow');
-        });
+          if (haslatestExamResult) {
+            oo = _.extend(oo, {title: '再测一次看看自己有没有进步'});
+          } else if (TookNoExam) {
+            oo = _.extend(oo, {title: '你还没有测试。来测一下'});
+          } else {
+            oo = _.extend(oo, {title: '你有测试尚未完成，可继续测试'});
+          }
+          return oo;
+        }));
+
+      // 考试预告区块
+      examUpcoming = doWhen(hasUpcomingExam,
+        renderLocalData(examInfo, 'stack2', 'start_upcoming.ejs', function (d) {
+          // 可以直接修改examInfo。因为得到的数据是原始数据的深拷贝副本。
+          // 因此不会影响原始数据。
+          // 见 renderLocalData 函数。
+          var o = _.map(d.upcomingExam, function (e) {
+            if (e.isTodayExam) {
+              e.endTime = '';
+              e.isTodayExam = '今天';
+            } else {
+              e.isTodayExam = '';
+            }
+            return e;
+          });
+          return {upcomingExam: o};
+        }));
+
+      // 考试成绩区块
+      examScores = doWhen(haslatestExamResult,
+        renderLocalData(examInfo, 'stack1', 'start_scores.ejs'));
+
+      // 渲染整个页面。
+      // 对每个函数执行_identity就等于执行了它们。
+      _.map(
+        [
+          examSimulating,
+          examCurrent,
+          examUpcoming,
+          examScores
+        ],
+        _.identity
+      );
+
+      note('又看到我啦。证明页面刷新啦。');
     };
 
-    // 整个函数的返回值，暴露出来的唯一东西，就是这个匿名函数。哈哈。
-    // 处理这个页面的代码还算过得去。
+    failureCallback = function (data, status, xhr) {
+      $('#msg').text(data, status, xhr).slideDown('slow');
+    };
+
+    repeatCallback = function () {
+      ajaxInfo.done(successCallback).fail(failureCallback);
+    };
+
+    // TODO
+    // self-recursion async call
+    // 不是一种好方法，原因见 trevor 的async新书
+    // 但暂时不改造，还没有掌握更好的方式
     return (function () {
-      repeat();
-      setInterval(repeat, 12000);
+      repeatCallback();
+      // 坑
+      // setInterval不接受 repeatCallback()
+      // 只能用字符串或变量名
+      // 也就是说，其内部用了eval
+      // 具体是不是这样需要查书
+      setInterval(repeatCallback, 2000);
     }());
   }; // end YD.startDispache
-
-
 
   //
   // ## 登陆页面
@@ -241,6 +275,7 @@ var YD = YD || {};
   YD.userLogin = function () {
     // highlight
     var elements = $("input[type!='submit'], textarea, select");
+
     elements.focus(function () {
       $(this).parents('li').addClass('highlight');
     });
@@ -290,6 +325,5 @@ var YD = YD || {};
     });
 
   }; // end YD.userLogin
-
 
 }()); // end of let scope
