@@ -33,7 +33,9 @@ var YD = YD || {};
   // 或者说模仿scheme中的when。
   // **注意：action必须是一个返回函数的函数，这样才能延迟执行**
   doWhen = function (predict, action) {
-    predict && action();
+    if (predict) {
+      action();
+    }
   };
 
   // ## 提交表单内容到后台
@@ -144,7 +146,7 @@ var YD = YD || {};
     // 直接显示用户信息和头像
     userShow();
     userPhotoShow();
-    
+
     //
     // 通过jQuery的delegate监听尚未出现在页面的元素
     //
