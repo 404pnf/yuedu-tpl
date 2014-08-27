@@ -168,12 +168,12 @@ var YD = YD || {};
   YD.startDispache = function () {
 
     var ajaxInfo =  $.get('/examController/studentLogin'),
-      successCallback,
-      failureCallback,
-      repeatCallback;
+      onSuccess,
+      onFailure,
+      repeat;
 
 
-    successCallback = function (data) {
+    onSuccess = function (data) {
 
       // 将判定抽象为函数
       var examInfo = _.snapshot(data), // - bind data to local variable
@@ -246,12 +246,12 @@ var YD = YD || {};
       note('又看到我啦。证明页面刷新啦。');
     };
 
-    failureCallback = function (data, status, xhr) {
+    onFailure = function (data, status, xhr) {
       $('#msg').text(data, status, xhr).slideDown('slow');
     };
 
-    repeatCallback = function () {
-      ajaxInfo.done(successCallback).fail(failureCallback);
+    repeat = function () {
+      ajaxInfo.done(onSuccess).fail(onFailure);
     };
 
     // TODO
@@ -259,13 +259,13 @@ var YD = YD || {};
     // 不是一种好方法，原因见 trevor 的async新书
     // 但暂时不改造，还没有掌握更好的方式
     return (function () {
-      repeatCallback();
+      repeat();
       // 坑
       // setInterval不接受 repeatCallback()
       // 只能用字符串或变量名
       // 也就是说，其内部用了eval
       // 具体是不是这样需要查书
-      setInterval(repeatCallback, 2000);
+      setInterval(repeat, 2000);
     }());
   }; // end YD.startDispache
 
