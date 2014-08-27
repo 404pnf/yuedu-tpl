@@ -45,31 +45,18 @@ var YD = YD || {};
   // 4. 显示错误信息到html，此函数写死在.done里面
   // 5. 如果成功，后台会返回带有'success'键名的对象，此时执行成功时的回调函数
   postJson = function (url, cssID, callbackOnSuccess) {
-    var form_data,
-      onSuccess,
-      onFailure,
-      promise;
-
-    form_data = $(cssID).serializeJSON();
-
-    onSuccess = function (data) {
-      note(data);
-      if (_.has(data, 'success') && callbackOnSuccess) {
-        callbackOnSuccess();
-      }
-      // showStatusMsg(data);
-    };
-
-    onFailure = function (data, status, xhr) {
-      console.log(data);
-      $('#msg').text(data, status, xhr).slideDown('slow');
-    };
-
-    promise = $.post(url, form_data);
-
-    promise.done(onSuccess, showStatusMsg(data));
-    promise.fail(onFailure());
-
+    var form_data = $(cssID).serializeJSON();
+    $.post(url, form_data)
+      .done(function (data) {
+        if (_.has(data, 'success') && callbackOnSuccess) {
+          callbackOnSuccess();
+        }
+        showStatusMsg(data);
+      })
+      .fail(function (data, status, xhr) {
+        console.log(data);
+        $('#msg').text(data, status, xhr).slideDown('slow');
+      });
   };
 
   // 从局部变量获得数据，绑定模版，插入到html页面中。
