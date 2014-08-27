@@ -1,8 +1,6 @@
-
-// ## jslint配置
+// ## jslint配置 不要删除
 /*jslint browser: true , nomen: true, indent: 2*/
 /*global $, jQuery, EJS, _ */
-
 
 // ## 唯一暴露出来的全局变量。也是程序的命名空间
 var YD = YD || {};
@@ -34,7 +32,7 @@ var YD = YD || {};
 
   // 模仿if (predict) {}，
   // 或者说模仿scheme中的when。
-  // action必须是一个返回函数的函数，这样才能延迟执行
+  // **注意：action必须是一个返回函数的函数，这样才能延迟执行**
   doWhen = function (predict, action) {
     predict && action();
   };
@@ -47,18 +45,29 @@ var YD = YD || {};
   // 4. 显示错误信息到html，此函数写死在.done里面
   // 5. 如果成功，后台会返回带有'success'键名的对象，此时执行成功时的回调函数
   postJson = function (url, cssID, callbackOnSuccess) {
-    var form_data = $(cssID).serializeJSON();
-    $.post(url, form_data)
-      .done(function (data) {
-        if (_.has(data, 'success') && callbackOnSuccess) {
-          callbackOnSuccess();
-        }
-        showStatusMsg(data);
-      })
-      .fail(function (data, status, xhr) {
-        console.log(data);
-        $('#msg').text(data, status, xhr).slideDown('slow');
-      });
+    var form_data,
+      onSuccess,
+      onFailure;
+
+    form_data = $(cssID).serializeJSON();
+
+    onSuccess = function (data) {
+      if (_.has(data, 'success') && callbackOnSuccess) {
+        callbackOnSuccess();
+      }
+      showStatusMsg(data);
+    };
+
+    onFailure = function (data, status, xhr) {
+      console.log(data);
+      $('#msg').text(data, status, xhr).slideDown('slow');
+    };
+
+    promise = $.post(url, form_data)
+
+    promise.done(onSuccess());
+    promise.fail(onFailure());
+
   };
 
   // 从局部变量获得数据，绑定模版，插入到html页面中。
@@ -146,90 +155,106 @@ var YD = YD || {};
   //
   // 每隔一段时间时间查看一下数据源并重新刷新页面。
   YD.startDispache = function () {
-    var repeat = function () {
-      $.get('/examController/studentLogin')
-        .done(function (data) {
 
-          // 将判定抽象为函数
-          var examInfo = data, // - bind data to local variable
-            canTakeExam = _.has(examInfo, 'currentExam'),
-            TookNoExam = canTakeExam && examInfo.currentExam.userExamState === '0',
-            hasUpcomingExam = _.has(examInfo, 'upcomingExam'),
-            haslatestExamResult = _.has(examInfo, 'latestExamResult'),
-            showExamSimulating = !haslatestExamResult,
-
-          // 生成页面的函数
-            examCurrent,
-            examSimulating,
-            examUpcoming,
-            examScores;
+    var ajaxInfo =  $.get('/examController/studentLogin'),
+      successCallback,
+      failureCallback,
+      repeatCallback;
 
 
-          // 模拟考试区块
-          examSimulating = doWhen(showExamSimulating,
-            renderLocalData(examInfo, 'stack1', 'start_simulating.ejs'));
+    successCallback = function (data) {
 
-          // 当前考试区块
-          examCurrent = doWhen(canTakeExam,
-            renderLocalData(examInfo, 'stack2', 'start_current.ejs', function (d) {
-              var oo = _.extend(d.currentExam, {button: '开始考试'});
+      // 将判定抽象为函数
+      var examInfo = _.snapshot(data), // - bind data to local variable
+        canTakeExam = _.has(examInfo, 'currentExam'),
+        TookNoExam = canTakeExam && examInfo.currentExam.userExamState === '0',
+        hasUpcomingExam = _.has(examInfo, 'upcomingExam'),
+        haslatestExamResult = _.has(examInfo, 'latestExamResult'),
+        showExamSimulating = !haslatestExamResult,
 
-              if (haslatestExamResult) {
-                oo = _.extend(oo, {title: '再测一次看看自己有没有进步'});
-              } else if (TookNoExam) {
-                oo = _.extend(oo, {title: '你还没有测试。来测一下'});
-              } else {
-                oo = _.extend(oo, {title: '你有测试尚未完成，可继续测试'});
-              }
-              return oo;
-            }));
+      // 生成页面的函数
+        examCurrent,
+        examSimulating,
+        examUpcoming,
+        examScores;
 
-          // 考试预告区块
-          examUpcoming = doWhen(hasUpcomingExam,
-            renderLocalData(examInfo, 'stack2', 'start_upcoming.ejs', function (d) {
-              // 可以直接修改examInfo。因为得到的数据是原始数据的深拷贝副本。
-              // 因此不会影响原始数据。
-              // 见 renderLocalData 函数。
-              var o = _.map(d.upcomingExam, function (e) {
-                if (e.isTodayExam) {
-                  e.endTime = '';
-                  e.isTodayExam = '今天';
-                } else {
-                  e.isTodayExam = '';
-                }
-                return e;
-              });
-              return {upcomingExam: o};
-            }));
 
-          // 考试成绩区块
-          examScores = doWhen(haslatestExamResult,
-            renderLocalData(examInfo, 'stack1', 'start_scores.ejs'));
+      // 模拟考试区块
+      examSimulating = doWhen(showExamSimulating,
+        renderLocalData(examInfo, 'stack1', 'start_simulating.ejs'));
 
-          // 渲染整个页面。
-          // 对每个函数执行_identity就等于执行了它们。
-          _.map(
-            [
-              examSimulating,
-              examCurrent,
-              examUpcoming,
-              examScores
-            ],
-            _.identity
-          );
+      // 当前考试区块
+      examCurrent = doWhen(canTakeExam,
+        renderLocalData(examInfo, 'stack2', 'start_current.ejs', function (d) {
+          var oo = _.extend(d.currentExam, {button: '开始考试'});
 
-          note('又看到我啦。证明页面刷新啦。');
-        })
-        .fail(function (data, status, xhr) {
-          $('#msg').text(data, status, xhr).slideDown('slow');
-        });
+          if (haslatestExamResult) {
+            oo = _.extend(oo, {title: '再测一次看看自己有没有进步'});
+          } else if (TookNoExam) {
+            oo = _.extend(oo, {title: '你还没有测试。来测一下'});
+          } else {
+            oo = _.extend(oo, {title: '你有测试尚未完成，可继续测试'});
+          }
+          return oo;
+        }));
+
+      // 考试预告区块
+      examUpcoming = doWhen(hasUpcomingExam,
+        renderLocalData(examInfo, 'stack2', 'start_upcoming.ejs', function (d) {
+          // 可以直接修改examInfo。因为得到的数据是原始数据的深拷贝副本。
+          // 因此不会影响原始数据。
+          // 见 renderLocalData 函数。
+          var o = _.map(d.upcomingExam, function (e) {
+            if (e.isTodayExam) {
+              e.endTime = '';
+              e.isTodayExam = '今天';
+            } else {
+              e.isTodayExam = '';
+            }
+            return e;
+          });
+          return {upcomingExam: o};
+        }));
+
+      // 考试成绩区块
+      examScores = doWhen(haslatestExamResult,
+        renderLocalData(examInfo, 'stack1', 'start_scores.ejs'));
+
+      // 渲染整个页面。
+      // 对每个函数执行_identity就等于执行了它们。
+      _.map(
+        [
+          examSimulating,
+          examCurrent,
+          examUpcoming,
+          examScores
+        ],
+        _.identity
+      );
+
+      note('又看到我啦。证明页面刷新啦。');
     };
 
-    // 整个函数的返回值，暴露出来的唯一东西，就是这个匿名函数。哈哈。
-    // 处理这个页面的代码还算过得去。
+    failureCallback = function (data, status, xhr) {
+      $('#msg').text(data, status, xhr).slideDown('slow');
+    };
+
+    repeatCallback = function () {
+      ajaxInfo.done(successCallback).fail(failureCallback);
+    };
+
+    // TODO
+    // self-recursion async call
+    // 不是一种好方法，原因见 trevor 的async新书
+    // 但暂时不改造，还没有掌握更好的方式
     return (function () {
-      repeat();
-      setInterval(repeat, 12000);
+      repeatCallback();
+      // 坑
+      // setInterval不接受 repeatCallback()
+      // 只能用字符串或变量名
+      // 也就是说，其内部用了eval
+      // 需要查书
+      setInterval(repeatCallback, 2000);
     }());
   }; // end YD.startDispache
 
@@ -241,6 +266,7 @@ var YD = YD || {};
   YD.userLogin = function () {
     // highlight
     var elements = $("input[type!='submit'], textarea, select");
+
     elements.focus(function () {
       $(this).parents('li').addClass('highlight');
     });
