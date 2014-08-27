@@ -14,7 +14,6 @@ var YD = YD || {};
     doWhen,
     postJson,
     renderLocalData,
-    getUserDataAndCallback,
     redirectToUrl,
     note;
 
@@ -94,57 +93,72 @@ var YD = YD || {};
   //
   // ##  user.html 页面
   //
-  getUserDataAndCallback = function (tpl, cssID) {
-    var userinfo = '/userController/show/loginUser',
-      grades = '/userController/grades',
-      photos = '/userController/photos';
+  YD.user = function () {
+    var getUserDataAndCallback,
+      userShow,
+      userPhotoShow,
+      userEdit,
+      userPhotoEdit,
+      userSave,
+      userPhotoSave;
 
-    $.when($.ajax(userinfo), $.ajax(grades), $.ajax(photos)).done(function (a, b, c) {
-      // a1 and a2 are arguments resolved for the page1 and page2 ajax requests, respectively.
-      // Each argument is an array with the following structure: [ data, statusText, jqXHR ]
-      var data = (_.extend(a[0], b[0], c[0]));
-      note(data);
-      new EJS({url: 'tpl/' + tpl}).update(cssID, data);
-    });
+    getUserDataAndCallback = function (tpl, cssID) {
+      var userinfo = '/userController/show/loginUser',
+        grades = '/userController/grades',
+        photos = '/userController/photos';
+
+      $.when($.ajax(userinfo), $.ajax(grades), $.ajax(photos)).done(function (a, b, c) {
+        // a1 and a2 are arguments resolved for the page1 and page2 ajax requests, respectively.
+        // Each argument is an array with the following structure: [ data, statusText, jqXHR ]
+        var data = (_.extend(a[0], b[0], c[0]));
+        note(data);
+        new EJS({url: 'tpl/' + tpl}).update(cssID, data);
+      });
+    };
+
+    userShow = function () {
+      getUserDataAndCallback('user_show.ejs', 'user_info');
+    };
+
+    userPhotoShow = function () {
+      getUserDataAndCallback('user_photo.ejs', 'user_photo');
+    };
+
+    userEdit = function () {
+      getUserDataAndCallback('user_edit.ejs', 'user_info');
+    };
+
+    userPhotoEdit = function () {
+      getUserDataAndCallback('user_photo_edit.ejs', 'user_photo');
+    };
+
+    userSave = function () {
+      postJson('/userController/save', 'form#user_info', userShow());
+    };
+
+    userPhotoSave = function () {
+      postJson('/userController/save', 'form#user_photo', userPhotoShow());
+    };
+
+
+    // 直接显示用户信息和头像
+    userShow();
+    userPhotoShow();
+    
+    //
+    // 通过jQuery的delegate监听尚未出现在页面的元素
+    //
+
+    // 编辑用户
+    $('#user_info').delegate('#user_info_edit', 'click', userEdit);
+    // 编辑头像
+    $('#user_photo').delegate('#user_photo_edit', 'click', userPhotoEdit);
+    // 保存用户
+    $('#user_info').delegate('#user_info_save', 'click', userSave);
+    // 保存头像
+    $('#user_photo').delegate('#user_photo_save', 'click', userPhotoSave);
+
   };
-
-  YD.userShow = function () {
-    getUserDataAndCallback('user_show.ejs', 'user_info');
-  };
-
-  YD.userPhotoShow = function () {
-    getUserDataAndCallback('user_photo.ejs', 'user_photo');
-  };
-
-  YD.userEdit = function () {
-    getUserDataAndCallback('user_edit.ejs', 'user_info');
-  };
-
-  YD.userPhotoEdit = function () {
-    getUserDataAndCallback('user_photo_edit.ejs', 'user_photo');
-  };
-
-  YD.userSave = function () {
-    postJson('/userController/save', 'form#user_info', YD.userShow());
-  };
-
-  YD.userPhotoSave = function () {
-    postJson('/userController/save', 'form#user_photo', YD.userPhotoShow());
-  };
-
-  //
-  // 通过jQuery的delegate监听尚未出现在页面的元素
-  //
-
-  // 编辑用户
-  $('#user_info').delegate('#user_info_edit', 'click', YD.userEdit);
-  // 编辑头像
-  $('#user_photo').delegate('#user_photo_edit', 'click', YD.userPhotoEdit);
-  // 保存用户
-  $('#user_info').delegate('#user_info_save', 'click', YD.userSave);
-  // 保存头像
-  $('#user_photo').delegate('#user_photo_save', 'click', YD.userPhotoSave);
-
   //
   // ## start.html 生成页面的主函数
   //
