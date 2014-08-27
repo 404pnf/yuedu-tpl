@@ -44,6 +44,12 @@ var YD = YD || {};
   // 3. 提交json给后台api
   // 4. 显示错误信息到html，此函数写死在.done里面
   // 5. 如果成功，后台会返回带有'success'键名的对象，此时执行成功时的回调函数
+  //
+  // TODO
+  // 我尝试把这个函数改为 1 使用 promise 2 callback直接用 redirectToUrl 方法定向会用户页面
+  // 因为用户页面的默认逻辑就是显示信息
+  // 但如果这样，重定向后的页面无法获得post提交后服务器返回的信息，也就无法显示
+  // 这是用现在这种纯手工活js而不用框架的限制。
   postJson = function (url, cssID, callbackOnSuccess) {
     var form_data = $(cssID).serializeJSON();
     $.post(url, form_data)
