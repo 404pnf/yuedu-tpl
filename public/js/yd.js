@@ -102,13 +102,12 @@ var YD = YD || {};
       userEdit,
       userPhotoEdit,
       userSave,
-      userPhotoSave;
+      userPhotoSave,
+      userinfo = '/userController/show/loginUser',
+      grades = '/userController/grades',
+      photos = '/userController/photos';
 
     getUserDataAndCallback = function (tpl, cssID) {
-      var userinfo = '/userController/show/loginUser',
-        grades = '/userController/grades',
-        photos = '/userController/photos';
-
       $.when($.ajax(userinfo), $.ajax(grades), $.ajax(photos)).done(function (a, b, c) {
         // a1 and a2 are arguments resolved for the page1 and page2 ajax requests, respectively.
         // Each argument is an array with the following structure: [ data, statusText, jqXHR ]
@@ -118,12 +117,17 @@ var YD = YD || {};
       });
     };
 
+
     userShow = function () {
-      getUserDataAndCallback('user_show.ejs', 'user_info');
+      $.get(userinfo).done(function (data) {
+        new EJS({url: 'tpl/' + 'user_show.ejs'}).update('user_info', data);
+      });
     };
 
     userPhotoShow = function () {
-      getUserDataAndCallback('user_photo.ejs', 'user_photo');
+      $.get(userinfo).done(function (data) {
+        new EJS({url: 'tpl/' + 'user_photo.ejs'}).update('user_photo', data);
+      });
     };
 
     userEdit = function () {
