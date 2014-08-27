@@ -264,12 +264,10 @@ var YD = YD || {};
       // setInterval不接受 repeatCallback()
       // 只能用字符串或变量名
       // 也就是说，其内部用了eval
-      // 需要查书
+      // 具体是不是这样需要查书
       setInterval(repeatCallback, 2000);
     }());
   }; // end YD.startDispache
-
-
 
   //
   // ## 登陆页面
@@ -327,6 +325,5 @@ var YD = YD || {};
     });
 
   }; // end YD.userLogin
-
 
 }()); // end of let scope
