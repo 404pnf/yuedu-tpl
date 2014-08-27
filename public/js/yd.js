@@ -121,11 +121,11 @@ var YD = YD || {};
   };
 
   YD.userSave = function () {
-    postJson('/userController/save', 'form#user_info', YD.userShow);
+    postJson('/userController/save', 'form#user_info', redirectToUrl('/user.html'));
   };
 
   YD.userPhotoSave = function () {
-    postJson('/userController/save', 'form#user_info', YD.userPhotoShow);
+    postJson('/userController/save', 'form#user_info', redirectToUrl('/user.html'));
   };
 
   //
