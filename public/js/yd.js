@@ -10,8 +10,7 @@ var YD = YD || {};
 (function () {
   "use strict";
 
-  var cssIDmsg = "#msg",
-    showStatusMsg,
+  var showStatusMsg,
     doWhen,
     postJson,
     renderLocalData,
@@ -25,9 +24,9 @@ var YD = YD || {};
 
   // 先清除之前的msg内容
   showStatusMsg = function (data) {
-    $(cssIDmsg).empty();
+    $('#msg').empty();
     _.each(data, function (v, k) {
-      $(cssIDmsg).append(['<div class=', k, '>', v, '</div>'].join(''));
+      $('#msg').append(['<div class=', k, '>', v, '</div>'].join(''));
     });
   };
 
@@ -45,28 +44,26 @@ var YD = YD || {};
   // 3. 提交json给后台api
   // 4. 显示错误信息到html，此函数写死在.done里面
   // 5. 如果成功，后台会返回带有'success'键名的对象，此时执行成功时的回调函数
-  postJson = function (url, cssID, callback) {
+  postJson = function (url, cssID, callbackOnSuccess) {
     var form_data,
-      promise,
       onSuccess,
       onFailure;
 
     form_data = $(cssID).serializeJSON();
-    promise = $.post(url, form_data);
 
-    // ajax post 方法提交后的帮助函数
     onSuccess = function (data) {
-      note(data);
-      // if (_.has(data, 'success') && callback) {
-      //   callback();
-      // }
-      // showStatusMsg(data);
+      if (_.has(data, 'success') && callbackOnSuccess) {
+        callbackOnSuccess();
+      }
+      showStatusMsg(data);
     };
-    note("in postjson");
+
     onFailure = function (data, status, xhr) {
       console.log(data);
       $('#msg').text(data, status, xhr).slideDown('slow');
     };
+
+    promise = $.post(url, form_data)
 
     promise.done(onSuccess());
     promise.fail(onFailure());
@@ -133,7 +130,7 @@ var YD = YD || {};
   };
 
   YD.userSave = function () {
-    postJson('/userController/save', 'form#user_info', YD.userShow);
+    postJson('/userController/save', 'form#user_info', redirectToUrl('/user.html'));
   };
 
   YD.userPhotoSave = function () {
