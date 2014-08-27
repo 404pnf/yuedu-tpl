@@ -134,6 +134,7 @@ var YD = YD || {};
       getUserDataAndCallback('user_edit.ejs', 'user_info');
     };
 
+    // 这里不能简化，因为这里不但需要知道总共有多少图片可选还需知道用户当前选的是哪个
     userPhotoEdit = function () {
       getUserDataAndCallback('user_photo_edit.ejs', 'user_photo');
     };
