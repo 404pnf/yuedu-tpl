@@ -47,15 +47,17 @@ var YD = YD || {};
   postJson = function (url, cssID, callbackOnSuccess) {
     var form_data,
       onSuccess,
-      onFailure;
+      onFailure,
+      promise;
 
     form_data = $(cssID).serializeJSON();
 
     onSuccess = function (data) {
+      note(data);
       if (_.has(data, 'success') && callbackOnSuccess) {
         callbackOnSuccess();
       }
-      showStatusMsg(data);
+      // showStatusMsg(data);
     };
 
     onFailure = function (data, status, xhr) {
@@ -63,9 +65,9 @@ var YD = YD || {};
       $('#msg').text(data, status, xhr).slideDown('slow');
     };
 
-    promise = $.post(url, form_data)
+    promise = $.post(url, form_data);
 
-    promise.done(onSuccess());
+    promise.done(onSuccess, showStatusMsg(data));
     promise.fail(onFailure());
 
   };
@@ -130,11 +132,11 @@ var YD = YD || {};
   };
 
   YD.userSave = function () {
-    postJson('/userController/save', 'form#user_info', redirectToUrl('/user.html'));
+    postJson('/userController/save', 'form#user_info', YD.userShow());
   };
 
   YD.userPhotoSave = function () {
-    postJson('/userController/save', 'form#user_photo', redirectToUrl('/user.html'));
+    postJson('/userController/save', 'form#user_photo', YD.userPhotoShow());
   };
 
   //
