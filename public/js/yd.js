@@ -107,7 +107,8 @@ var YD = YD || {};
       grades = '/userController/grades',
       photos = '/userController/photos',
       userInfoAndPhoto,
-      userBarShow;
+      userBarShow,
+      userInfoAll;
 
     getUserDataAndCallback = function (tpl, cssID) {
       $.when($.ajax(userinfo), $.ajax(grades), $.ajax(photos)).done(function (a, b, c) {
@@ -121,8 +122,17 @@ var YD = YD || {};
 
     userInfoAndPhoto = $.when($.ajax(userinfo), $.ajax(photos)).then(function (a, b) {
       var data = (_.extend(a[0], b[0]));
-      return data
+      return data;
     });
+
+    userInfoAll = function (tpl, cssID) {
+      $.when($.ajax(userinfo), $.ajax(grades), $.ajax(photos)).done(function (a, b, c) {
+        // a1 and a2 are arguments resolved for the page1 and page2 ajax requests, respectively.
+        // Each argument is an array with the following structure: [ data, statusText, jqXHR ]
+        var data = (_.extend(a[0], b[0], c[0]));
+        return data;
+      });
+    };
 
     userShow = function () {
       userInfoAndPhoto.then(function (data) {
