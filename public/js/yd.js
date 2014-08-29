@@ -267,9 +267,9 @@ var YD = YD || {};
         [
           userBarShow,
           examSimulating,
-          examCurrent,
+          //examCurrent,
           examUpcoming,
-          examScores
+          //examScores
         ],
         _.identity
       );
