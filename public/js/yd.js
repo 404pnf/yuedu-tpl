@@ -110,29 +110,27 @@ var YD = YD || {};
       userBarShow,
       userInfoAll;
 
-    getUserDataAndCallback = function (tpl, cssID) {
-      $.when($.ajax(userinfo), $.ajax(grades), $.ajax(photos)).done(function (a, b, c) {
-        // a1 and a2 are arguments resolved for the page1 and page2 ajax requests, respectively.
-        // Each argument is an array with the following structure: [ data, statusText, jqXHR ]
-        var data = (_.extend(a[0], b[0], c[0]));
-        note(data);
-        new EJS({url: 'tpl/' + tpl}).update(cssID, data);
-      });
-    };
+    // getUserDataAndCallback = function (tpl, cssID) {
+    //   $.when($.ajax(userinfo), $.ajax(grades), $.ajax(photos)).done(function (a, b, c) {
+    //     // a1 and a2 are arguments resolved for the page1 and page2 ajax requests, respectively.
+    //     // Each argument is an array with the following structure: [ data, statusText, jqXHR ]
+    //     var data = (_.extend(a[0], b[0], c[0]));
+    //     note(data);
+    //     new EJS({url: 'tpl/' + tpl}).update(cssID, data);
+    //   });
+    // };
 
     userInfoAndPhoto = $.when($.ajax(userinfo), $.ajax(photos)).then(function (a, b) {
       var data = (_.extend(a[0], b[0]));
       return data;
     });
 
-    userInfoAll = function (tpl, cssID) {
-      $.when($.ajax(userinfo), $.ajax(grades), $.ajax(photos)).done(function (a, b, c) {
+    userInfoAll = $.when($.ajax(userinfo), $.ajax(grades), $.ajax(photos)).then(function (a, b, c) {
         // a1 and a2 are arguments resolved for the page1 and page2 ajax requests, respectively.
         // Each argument is an array with the following structure: [ data, statusText, jqXHR ]
         var data = (_.extend(a[0], b[0], c[0]));
         return data;
       });
-    };
 
     userShow = function () {
       userInfoAndPhoto.then(function (data) {
@@ -143,11 +141,14 @@ var YD = YD || {};
     userBarShow = function () {
       userInfoAndPhoto.then(function (data) {
         new EJS({url: 'tpl/' + 'user_bar.ejs'}).update('user_bar', data);
-      })
+      });
     };
 
     userEdit = function () {
-      getUserDataAndCallback('user_edit.ejs', 'user_info');
+      userInfoAll.then(function (data) {
+        new EJS({url: 'tpl/' + 'user_edit.ejs'}).update('user_info', data);
+      });
+      // getUserDataAndCallback('user_edit.ejs', 'user_info');
     };
 
     // 这里不能简化，因为这里不但需要知道总共有多少图片可选还需知道用户当前选的是哪个
