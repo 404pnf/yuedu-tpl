@@ -18,6 +18,7 @@ get '/' do
     <a href=/login.html>login.html</a><br>
     <a href=/chart.html>chart.html</a><br>
     <a href=/personal_info.html>personal_info.html</a><br>
+    <a href=/front.html>front.html</a><br>
   }
   text
 end
