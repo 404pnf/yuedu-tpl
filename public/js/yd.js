@@ -205,14 +205,14 @@ var YD = YD || {};
 
       // 生成页面的函数
         examCurrent,
-        examSimulating,
+        // examSimulating,
         examUpcoming,
         examScores;
 
 
       // 模拟考试区块
-      examSimulating = doWhen(showExamSimulating,
-        renderLocalData(examInfo, 'front_content', 'start_simulating.ejs'));
+      // examSimulating = doWhen(showExamSimulating,
+      //   renderLocalData(examInfo, 'front_content', 'start_simulating.ejs'));
 
       // 当前考试区块
       examCurrent = doWhen(canTakeExam,
@@ -266,10 +266,10 @@ var YD = YD || {};
       _.map(
         [
           userBarShow,
-          examSimulating,
+          // examSimulating,
           //examCurrent,
           examUpcoming,
-          //examScores
+          examScores
         ],
         _.identity
       );
