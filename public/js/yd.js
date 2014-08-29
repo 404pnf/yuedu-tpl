@@ -196,54 +196,38 @@ var YD = YD || {};
         userBarShow,
 
       // 将判定抽象为函数
-        examInfo = _.snapshot(data), // - bind data to local variable
+        examInfo = _.snapshot(data), // - data 是 onSuccess 的参数； bind data to local variable
         canTakeExam = _.has(examInfo, 'currentExam'),
         TookNoExam = canTakeExam && examInfo.currentExam.userExamState === '0',
         hasUpcomingExam = _.has(examInfo, 'upcomingExam'),
         haslatestExamResult = _.has(examInfo, 'latestExamResult'),
-        showExamSimulating = !haslatestExamResult,
+        // showExamSimulating = !haslatestExamResult,
 
       // 生成页面的函数
         examCurrent,
-        // examSimulating,
         examUpcoming,
         examCurrent_continue,
         examScores;
 
-
-      // 模拟考试区块
-      // examSimulating = doWhen(showExamSimulating,
-      //   renderLocalData(examInfo, 'front_content', 'start_simulating.ejs'));
-
       // 有之前未完成考试
-      examCurrent_continue = doWhen(canTakeExam,
-        renderLocalData(examInfo, 'front_content', 'start_current.ejs', function (d) {
-          var oo = _.extend(d.currentExam, {button: '开始考试'});
+      // examCurrent_continue = doWhen(canTakeExam,
+      //   renderLocalData(examInfo, 'front_content', 'start_current_continue.ejs', function (d) {
+      //     var oo = _.extend(d.currentExam, {button: '开始考试'});
+      //
+      //     if (haslatestExamResult) {
+      //       oo = _.extend(oo, {title: '再测一次看看自己有没有进步'});
+      //     } else if (TookNoExam) {
+      //       oo = _.extend(oo, {title: '你还没有测试。来测一下'});
+      //     } else {
+      //       oo = _.extend(oo, {title: '你有测试尚未完成，可继续测试'});
+      //     }
+      //     return oo;
+      //   }));
 
-          if (haslatestExamResult) {
-            oo = _.extend(oo, {title: '再测一次看看自己有没有进步'});
-          } else if (TookNoExam) {
-            oo = _.extend(oo, {title: '你还没有测试。来测一下'});
-          } else {
-            oo = _.extend(oo, {title: '你有测试尚未完成，可继续测试'});
-          }
-          return oo;
-        }));
-
-      // 有新考试可靠
+      // 有新考试可考
       examCurrent = doWhen(TookNoExam,
-        renderLocalData(examInfo, 'front_content', 'start_current.ejs', function (d) {
-          var oo = _.extend(d.currentExam, {button: '开始考试'});
+        renderLocalData(examInfo, 'front_content', 'start_current.ejs'));
 
-          if (haslatestExamResult) {
-            oo = _.extend(oo, {title: '再测一次看看自己有没有进步'});
-          } else if (TookNoExam) {
-            oo = _.extend(oo, {title: '你还没有测试。来测一下'});
-          } else {
-            oo = _.extend(oo, {title: '你有测试尚未完成，可继续测试'});
-          }
-          return oo;
-        }));
       // 考试预告区块
       examUpcoming = doWhen(hasUpcomingExam,
         renderLocalData(examInfo, 'front_content', 'start_upcoming.ejs', function (d) {
@@ -283,7 +267,7 @@ var YD = YD || {};
           userBarShow,
           // examSimulating,
           examCurrent,
-          examCurrent_continue,
+          // examCurrent_continue,
           examUpcoming,
           examScores
         ],
