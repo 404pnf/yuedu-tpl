@@ -125,22 +125,10 @@ var YD = YD || {};
     });
 
     userShow = function () {
-      // $.get(userinfo).done(function (data) {
-      //   new EJS({url: 'tpl/' + 'user_show.ejs'}).update('user_info', data);
-      // });
       userInfoAndPhoto.then(function (data) {
         new EJS({url: 'tpl/' + 'user_show.ejs'}).update('user_info', data);
       });
     };
-
-    // userPhotoShow = function () {
-    //   // $.get(userinfo).done(function (data) {
-    //   //   new EJS({url: 'tpl/' + 'user_photo.ejs'}).update('user_photo', data);
-    //   // });
-    //   userInfoAndPhoto.then(function (data) {
-    //     new EJS({url: 'tpl/' + 'user_photo.ejs'}).update('user_photo', data);
-    //   })
-    // };
 
     userBarShow = function () {
       userInfoAndPhoto.then(function (data) {
@@ -169,7 +157,6 @@ var YD = YD || {};
     return (function () {
       // 直接显示用户信息和头像
       userShow();
-      // userPhotoShow();
       userBarShow();
 
       //
@@ -196,7 +183,6 @@ var YD = YD || {};
       onSuccess,
       onFailure,
       repeat;
-
 
     onSuccess = function (data) {
 
