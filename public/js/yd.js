@@ -105,38 +105,55 @@ var YD = YD || {};
       userPhotoSave,
       userinfo = '/userController/show/loginUser',
       grades = '/userController/grades',
-      photos = '/userController/photos';
+      photos = '/userController/photos',
+      userInfoAndPhoto,
+      userBarShow,
+      userInfoAll;
 
-    getUserDataAndCallback = function (tpl, cssID) {
-      $.when($.ajax(userinfo), $.ajax(grades), $.ajax(photos)).done(function (a, b, c) {
+    // getUserDataAndCallback = function (tpl, cssID) {
+    //   $.when($.ajax(userinfo), $.ajax(grades), $.ajax(photos)).done(function (a, b, c) {
+    //     // a1 and a2 are arguments resolved for the page1 and page2 ajax requests, respectively.
+    //     // Each argument is an array with the following structure: [ data, statusText, jqXHR ]
+    //     var data = (_.extend(a[0], b[0], c[0]));
+    //     note(data);
+    //     new EJS({url: 'tpl/' + tpl}).update(cssID, data);
+    //   });
+    // };
+
+    userInfoAndPhoto = $.when($.ajax(userinfo), $.ajax(photos)).then(function (a, b) {
+      var data = (_.extend(a[0], b[0]));
+      return data;
+    });
+
+    userInfoAll = $.when($.ajax(userinfo), $.ajax(grades), $.ajax(photos)).then(function (a, b, c) {
         // a1 and a2 are arguments resolved for the page1 and page2 ajax requests, respectively.
         // Each argument is an array with the following structure: [ data, statusText, jqXHR ]
         var data = (_.extend(a[0], b[0], c[0]));
-        note(data);
-        new EJS({url: 'tpl/' + tpl}).update(cssID, data);
+        return data;
       });
-    };
-
 
     userShow = function () {
-      $.get(userinfo).done(function (data) {
+      userInfoAndPhoto.then(function (data) {
         new EJS({url: 'tpl/' + 'user_show.ejs'}).update('user_info', data);
       });
     };
 
-    userPhotoShow = function () {
-      $.get(userinfo).done(function (data) {
-        new EJS({url: 'tpl/' + 'user_photo.ejs'}).update('user_photo', data);
+    userBarShow = function () {
+      userInfoAndPhoto.then(function (data) {
+        new EJS({url: 'tpl/' + 'user_bar.ejs'}).update('user_bar', data);
       });
     };
 
     userEdit = function () {
-      getUserDataAndCallback('user_edit.ejs', 'user_info');
+      userInfoAll.then(function (data) {
+        new EJS({url: 'tpl/' + 'user_edit.ejs'}).update('user_info', data);
+      });
+      // getUserDataAndCallback('user_edit.ejs', 'user_info');
     };
 
     // 这里不能简化，因为这里不但需要知道总共有多少图片可选还需知道用户当前选的是哪个
     userPhotoEdit = function () {
-      getUserDataAndCallback('user_photo_edit.ejs', 'user_photo');
+      getUserDataAndCallback('user_photo_edit.ejs', 'user_info');
     };
 
     userSave = function () {
@@ -144,14 +161,14 @@ var YD = YD || {};
     };
 
     userPhotoSave = function () {
-      postJson('/userController/save', 'form#user_photo', userPhotoShow());
+      postJson('/userController/save', 'form#user_info', userShow());
     };
 
 
     return (function () {
       // 直接显示用户信息和头像
       userShow();
-      userPhotoShow();
+      userBarShow();
 
       //
       // 通过jQuery的delegate监听尚未出现在页面的元素
@@ -160,11 +177,11 @@ var YD = YD || {};
       // 编辑用户
       $('#user_info').delegate('#user_info_edit', 'click', userEdit);
       // 编辑头像
-      $('#user_photo').delegate('#user_photo_edit', 'click', userPhotoEdit);
+      $('#user_info').delegate('#user_photo_edit', 'click', userPhotoEdit);
       // 保存用户
       $('#user_info').delegate('#user_info_save', 'click', userSave);
       // 保存头像
-      $('#user_photo').delegate('#user_photo_save', 'click', userPhotoSave);
+      $('#user_info').delegate('#user_photo_save', 'click', userPhotoSave);
     }());
   };
   //
@@ -177,7 +194,6 @@ var YD = YD || {};
       onSuccess,
       onFailure,
       repeat;
-
 
     onSuccess = function (data) {
 
