@@ -197,7 +197,7 @@ var YD = YD || {};
 
       // 将判定抽象为函数
         examInfo = _.snapshot(data), // - data 是 onSuccess 的参数； bind data to local variable
-        canTakeExam = _.has(examInfo, 'currentExam'),
+        canTakeExam = _.has(examInfo, 'currentExam') && examInfo.currentExam.userExamState !== '0',
         TookNoExam = canTakeExam && examInfo.currentExam.userExamState === '0',
         hasUpcomingExam = _.has(examInfo, 'upcomingExam'),
         haslatestExamResult = _.has(examInfo, 'latestExamResult'),
@@ -210,19 +210,8 @@ var YD = YD || {};
         examScores;
 
       // 有之前未完成考试
-      // examCurrent_continue = doWhen(canTakeExam,
-      //   renderLocalData(examInfo, 'front_content', 'start_current_continue.ejs', function (d) {
-      //     var oo = _.extend(d.currentExam, {button: '开始考试'});
-      //
-      //     if (haslatestExamResult) {
-      //       oo = _.extend(oo, {title: '再测一次看看自己有没有进步'});
-      //     } else if (TookNoExam) {
-      //       oo = _.extend(oo, {title: '你还没有测试。来测一下'});
-      //     } else {
-      //       oo = _.extend(oo, {title: '你有测试尚未完成，可继续测试'});
-      //     }
-      //     return oo;
-      //   }));
+      examCurrent_continue = doWhen(canTakeExam,
+        renderLocalData(examInfo, 'front_content', 'start_current_continue.ejs'));
 
       // 有新考试可考
       examCurrent = doWhen(TookNoExam,
