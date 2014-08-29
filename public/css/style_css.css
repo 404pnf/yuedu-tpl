@@ -1,0 +1,105 @@
+@charset "utf-8";
+/*全局控制*/
+body{margin:0; padding:0; font-size:16px; font-family:'微软雅黑'; background:#bee7f0;}
+a{ text-decoration:none;}
+.fl{ float:left}
+.fr{ float:right}
+.oh{ overflow:hidden}
+.clear{ clear:both}
+.wryh{ font-family:'微软雅黑'}
+.Arial{ font-family:Arial, Helvetica, sans-serif}
+/*清除浏览器默认样式*/
+h1,h2,h3,h4,h5,ul,li,dl,dt,dd,p,img,table,tr,td{margin:0; padding:0; list-style:none; border:none;}
+
+/*common*/
+.wrapper{ width:100%; background:url(../images/wrapper_bg.jpg) repeat-x bottom #bee7f0;}
+.no_scollw{ width:1000px; margin:0 auto;}
+.pos_rel{position:relative}
+
+/*exam*/
+.exam_top{ height:169px; margin:0 auto; background:url(../images/exam_top.jpg) center top no-repeat;}
+.exam_center{ margin:0 auto; background:url(../images/exam_center.jpg) repeat-y center;}
+.exam_bottom{ width:100%; background:url(../images/exam_bottom.jpg) no-repeat bottom; min-height:561px; padding-bottom:70px;}
+.exam_name{ color:#ffffff; font-size:20px; width:87px; font-weight:bold; margin:34px 260px 0 106px; height:44px; line-height:44px; text-align:center}
+.exam_time{ font-size:20px; color:#ffffff; margin:34px 22px 0 0;}
+.exam_time span{ font-size:26px; margin-left:10px;}
+.exam_progress{ width:212px; height:22px; margin:42px 74px 0 0;}
+.progress_bar{ background:url(../images/program_bar.png) no-repeat; height:22px;}
+.exam_pause{ color:#ffffff; font-size:20px; width:68px; margin-top:30px; display:inline-block;height: 44px;line-height: 44px; padding:3px 0 0 22px;}
+a.exam_pause:hover{ background:url(../images/btn_bg.png) no-repeat 0 -150px}
+
+/*btn*/
+.btn{background:url(../images/btn_bg.png) no-repeat; width:126px; height:49px; line-height:43px; text-align:center; color:#FFF; font-size:18px;display: inline-block;}
+.btn:hover{ background:url(../images/btn_bg.png) no-repeat 0 -100px}
+.next_btn,.next_unbtn{ position:absolute; bottom:90px; right:60px; background:url(../images/btn_bg.png) no-repeat; width:126px; height:49px; line-height:43px; text-align:center; color:#FFF; font-size:18px;}
+.next_unbtn{  background:url(../images/btn_bg.png) no-repeat 0 -50px!important;}
+a.next_btn:hover{ background:url(../images/btn_bg.png) no-repeat 0 -100px}
+
+/*web界面*/
+@font-face {
+	font-family: '迷你简卡通';
+	/*src: url('../fonts/huakangW12.eot');  IE9 Compat Modes */
+	src: /*url('../fonts/huakangW12.eot?#iefix') format('embedded-opentype'),  IE6-IE8 */
+         url('../fonts/minijiankatong.TTF')  format('truetype') /* Safari, Android, iOS */
+   }
+.main_bg{ background:url(../images/main_bg.png) no-repeat center 81px; height:810px;}
+.web_tit{ width:935px; height:73px; background:url(../images/web_tit_bg.png) no-repeat; margin:22px auto 15px auto; font-family:"迷你简卡通"; font-size:40px; color:#FFF; font-weight:bold; line-height:73px; padding-left:65px; letter-spacing:-2px;}
+/*nav*/
+.web_nav{ width:845px; margin:0 auto;}
+.web_first{ margin:56px 0 0 20px;}
+.nav{width:106px; height:76px; background-image:url(../images/web_nav.png); background-repeat:no-repeat; display: inline-block; margin-left:6px;}
+.nav_home{ background-position:0 0;}
+.nav_home:hover{ background-position:0 5px;}
+.nav_mexam{ background-position:-112px 0;}
+.nav_mexam:hover{ background-position:-112px 5px;}
+.nav_pw{ background-position:-226px 0;}
+.nav_pw:hover{ background-position:-226px 5px;}
+.nav_exit{ background:url(../images/exit.png) no-repeat bottom; width:294px; height:133px; display:inline-block;}
+.nav_exit:hover{ background:url(../images/exit_h.png) no-repeat bottom;}
+.nav_head{ position:absolute; z-index:1000; width:121px; height:97px; text-align:center; padding-top:36px;}
+.nav_head img{ display:block; margin:0 auto 8px auto;}
+.nav_head span{ font-size:18px; color:#FFF;}
+.nav_last{ position:relative;}
+
+/*main*/
+.web_main{ width:800px; height:330px; margin: 44px auto 0 auto;}
+.main_left{ width:300px; margin-right:50px;margin-top: 26px;}
+.main_right{ width:423px; padding-top:20px;margin-top: 26px;}
+	/*person_info*/
+.head_box{ margin-bottom:25px;}
+.head_box img{ float:left; margin:0 42px 0 30px;}
+.head_box a{}
+.form_one{ background:#d1e2e7; border-radius:5px; line-height:44px; height:44px; margin-bottom:20px; display:inline-block;}
+.form_one label{ background:#3d9ee1; color:#ffffff; font-size:18px; display:inline-block; width:102px; text-align:center;border-radius:5px 0 0 5px; height:44px;}
+.form_one .span1{ width:172px; display:inline-block; padding-left:20px;}
+.form_one .span2{ width:300px; display:inline-block; padding-left:20px;}
+	/*index*/
+/*1*/
+.mexam_tip{ background:url(../images/mexam_tip_bg.jpg) no-repeat; height:36px; width:514px; font-size:16px; font-weight:bold; color:#01729c; margin-left:120px; padding-top:30px; text-align:center}
+.exam_name_1{ color:#074f81; font-size:36px; font-weight:bold; text-align:center; margin:26px 0 36px 0;}
+.exam_setout{ background:url(../images/start_bg.jpg) no-repeat top; width:400px; height:45px; font-size:16px; color:#074f81;font-weight:bold; padding:98px 0 0 90px;}
+.exam_setout_margin1{ margin-left:90px;}
+.btn_start{ display:block; background:url(../images/btn_star_bg.jpg) no-repeat top; width:118px; height:145px; line-height:137px; font-size:36px; font-weight:bold; color:#FFF; padding-left:26px; }
+.btn_start:hover{ background:url(../images/btn_star_bg.jpg) 0 -145px;}
+/*2*/
+.noexam{ background:url(../images/no_exam.jpg) no-repeat center; height:144px; }
+.noexam2{margin-top:20px;}
+.next_exam{ margin:26px 0 0 120px;}
+.next_exam h4,.next_exam4 h4{ line-height:180%}
+.next_exam ul li,.next_exam4 ul li{ color:#838383; line-height:180%; list-style:inside;}
+/*3*/
+.btn_goon{display:block; background:url(../images/btn_goon_bg.jpg) no-repeat top left; width:118px; height:176px; line-height:137px; font-size:36px; font-weight:bold; color:#FFF; padding-left:26px; }
+.btn_goon:hover{ background:url(../images/btn_goon_bg.jpg) 0 -176px;}
+/*4*/
+.main_left_4{ width:340px; margin-right:20px;margin-top: 46px;}
+.main_right_4{ width:440px; padding-top:20px;margin-top: 26px;}
+.next_exam4{margin:26px 0 0 60px;}
+.ckrep h3{ color:#074f81; font-size:28px; line-height:190%; margin-left:10px;}
+.ckrep div{ color:#434343; line-height:190%; margin-left:10px;}
+.ckrep span{ margin-left:20px;}
+.ckrep_btn{ margin-left:0!important}
+.ckrep_btn a{ margin:20px 20px 0 0;}
+.ckrep4{ margin:30px 0 0 40px;}
+/*5*/
+.ckrep5{margin: 10px 0 30px 90px;}
+.again{ width:316px; height:194px; background:url(../images/again.jpg) no-repeat 0 73px; margin:0 0 0 56px}
