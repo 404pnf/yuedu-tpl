@@ -207,6 +207,7 @@ var YD = YD || {};
         examCurrent,
         // examSimulating,
         examUpcoming,
+        examCurrent_continue,
         examScores;
 
 
@@ -214,8 +215,8 @@ var YD = YD || {};
       // examSimulating = doWhen(showExamSimulating,
       //   renderLocalData(examInfo, 'front_content', 'start_simulating.ejs'));
 
-      // 当前考试区块
-      examCurrent = doWhen(canTakeExam,
+      // 有之前未完成考试
+      examCurrent_continue = doWhen(canTakeExam,
         renderLocalData(examInfo, 'front_content', 'start_current.ejs', function (d) {
           var oo = _.extend(d.currentExam, {button: '开始考试'});
 
@@ -229,6 +230,20 @@ var YD = YD || {};
           return oo;
         }));
 
+      // 有新考试可靠
+      examCurrent = doWhen(TookNoExam,
+        renderLocalData(examInfo, 'front_content', 'start_current.ejs', function (d) {
+          var oo = _.extend(d.currentExam, {button: '开始考试'});
+
+          if (haslatestExamResult) {
+            oo = _.extend(oo, {title: '再测一次看看自己有没有进步'});
+          } else if (TookNoExam) {
+            oo = _.extend(oo, {title: '你还没有测试。来测一下'});
+          } else {
+            oo = _.extend(oo, {title: '你有测试尚未完成，可继续测试'});
+          }
+          return oo;
+        }));
       // 考试预告区块
       examUpcoming = doWhen(hasUpcomingExam,
         renderLocalData(examInfo, 'front_content', 'start_upcoming.ejs', function (d) {
@@ -267,7 +282,8 @@ var YD = YD || {};
         [
           userBarShow,
           // examSimulating,
-          //examCurrent,
+          examCurrent,
+          examCurrent_continue,
           examUpcoming,
           examScores
         ],
