@@ -20,17 +20,12 @@
             <a href="#none" class="nav nav_mexam"></a>
             <a href="#none" class="nav nav_pw"></a>
         </div>
-        <div class="nav_last fr">
-            <a href="#none" class="nav_head">
-                <img src="images/head.png" />
-                <span>王小军啊</span>
-            </a>
-            <a href="#none" class="nav_exit"></a>
+        <div id="user_bar">
         </div>
     </div>
     <!--/.web_nav-->
     <!--.web_main-->
-    <div class="web_main">
+    <div class="web_main" id="front_content">
     	<!--.mexam_tip-->
     	<div class="mexam_tip">模拟考试了解考试过程，玩一下。结果不影响考试成绩。</div>
         <div class="exam_name_1">2014秋季测试</div>
@@ -41,5 +36,12 @@
     <!--/.web_main-->
   </div>
 </div>
+<script src="js/lib.all.js"></script>
+<script src="js/yd.js"></script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    YD.startDispache();
+});
+</script>
 </body>
 </html>

@@ -12,14 +12,14 @@ before do
 end
 
 get '/' do
-  text = %q{
+  text = %q(
     <a href=/user.html>user.html</a><br>
     <a href=/start.html>start.html</a><br>
     <a href=/login.html>login.html</a><br>
     <a href=/chart.html>chart.html</a><br>
     <a href=/personal_info.html>personal_info.html</a><br>
     <a href=/front.html>front.html</a><br>
-  }
+  )
   text
 end
 
@@ -79,33 +79,40 @@ get '/examController/studentLogin' do
   # userExamState:'0|1', //用户考试状态（0：未开始 1：开始 2：结束 3：弃考）
   r = {
     currentExam: {
-      endTime: '2014-05-26 15:20',
+      endTime: '2014-05-16 15:20',
       name: '2014秋季测试',
       id: 'exam_id',
       userExamState: '0'
     },
 
     # upcomingExam: [
-    #              {
-    #                 name: '2014秋季测试',
-    #                 startTime: '2014-03-26 15:20',
-    #                 endTime: '2014-03-26 15:20',
-    #                 isTodayExam: true
-    #               },
-    #              {
-    #                 name: '2014秋季测试',
-    #                 startTime: '2014-03-26 15:20',
-    #                 endTime: '2014-03-26 15:20',
-    #                 isTodayExam: false
-    #               },
-    #             ],
+    #   {
+    #     name: '2014秋季测试',
+    #     startTime: '2014-03-26 15:20',
+    #     endTime: '2014-03-26 15:20',
+    #     isTodayExam: true
+    #   },
+    #   {
+    #     name: '2014秋季测试',
+    #     startTime: '2014-04-26 15:20',
+    #     endTime: '2014-04-26 15:20',
+    #     isTodayExam: false
+    #   },
+    #   {
+    #     name: '2014秋季测试',
+    #     startTime: '2014-04-29 15:20',
+    #     endTime: '2014-04-29 15:20',
+    #     isTodayExam: false
+    #   }
+    # ],
 
-    latestExamResult: {
-      examGradeResult: '4级，还不错',
-      vocabularySize: '22000',
-      personalEndTime: '2014-03-26',
-      id: 'exam_result_id'
-    }
+    # latestExamResult: {
+    #   examGradeResult: '4级，还不错',
+    #   vocabularySize: '22000',
+    #   personalEndTime: '2014-05-26',
+    #   duration: '15', # 分钟
+    #   id: 'exam_result_id'
+    # }
 
   }
   JSONP r

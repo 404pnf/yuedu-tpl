@@ -14,7 +14,7 @@ var YD = YD || {};
     doWhen,
     postJson,
     renderLocalData,
-    redirectToUrl,
+    // redirectToUrl,
     note;
 
   //
@@ -80,9 +80,9 @@ var YD = YD || {};
   };
 
   // 将用户重定向到某页面的正确方式
-  redirectToUrl = function (url) {
-    window.location.replace(url);
-  };
+  // redirectToUrl = function (url) {
+  //   window.location.replace(url);
+  // };
 
   // 开发时方便发现错误。封装console.log是为了可在需要时候直接用alert替换console.log。
   // 或者加入其它修饰。
@@ -92,13 +92,12 @@ var YD = YD || {};
     console.log(msg);
   };
 
+
   //
   // ##  user.html 页面
   //
   YD.user = function () {
-    var getUserDataAndCallback,
-      userShow,
-      userPhotoShow,
+    var userShow,
       userEdit,
       userPhotoEdit,
       userSave,
@@ -110,27 +109,17 @@ var YD = YD || {};
       userBarShow,
       userInfoAll;
 
-    // getUserDataAndCallback = function (tpl, cssID) {
-    //   $.when($.ajax(userinfo), $.ajax(grades), $.ajax(photos)).done(function (a, b, c) {
-    //     // a1 and a2 are arguments resolved for the page1 and page2 ajax requests, respectively.
-    //     // Each argument is an array with the following structure: [ data, statusText, jqXHR ]
-    //     var data = (_.extend(a[0], b[0], c[0]));
-    //     note(data);
-    //     new EJS({url: 'tpl/' + tpl}).update(cssID, data);
-    //   });
-    // };
-
     userInfoAndPhoto = $.when($.ajax(userinfo), $.ajax(photos)).then(function (a, b) {
       var data = (_.extend(a[0], b[0]));
       return data;
     });
 
     userInfoAll = $.when($.ajax(userinfo), $.ajax(grades), $.ajax(photos)).then(function (a, b, c) {
-        // a1 and a2 are arguments resolved for the page1 and page2 ajax requests, respectively.
-        // Each argument is an array with the following structure: [ data, statusText, jqXHR ]
-        var data = (_.extend(a[0], b[0], c[0]));
-        return data;
-      });
+      // a1 and a2 are arguments resolved for the page1 and page2 ajax requests, respectively.
+      // Each argument is an array with the following structure: [ data, statusText, jqXHR ]
+      var data = (_.extend(a[0], b[0], c[0]));
+      return data;
+    });
 
     userShow = function () {
       userInfoAndPhoto.then(function (data) {
@@ -144,6 +133,9 @@ var YD = YD || {};
       });
     };
 
+    // 为了让其它页面也能直接调页面通用的用户信息条
+    YD.userBarShow = userBarShow;
+
     userEdit = function () {
       userInfoAll.then(function (data) {
         new EJS({url: 'tpl/' + 'user_edit.ejs'}).update('user_info', data);
@@ -153,7 +145,9 @@ var YD = YD || {};
 
     // 这里不能简化，因为这里不但需要知道总共有多少图片可选还需知道用户当前选的是哪个
     userPhotoEdit = function () {
-      getUserDataAndCallback('user_photo_edit.ejs', 'user_info');
+      userInfoAndPhoto.then(function (data) {
+        new EJS({url: 'tpl/' + 'user_photo_edit.ejs'}).update('user_info', data);
+      });
     };
 
     userSave = function () {
@@ -196,44 +190,36 @@ var YD = YD || {};
       repeat;
 
     onSuccess = function (data) {
+      var userinfo = '/userController/show/loginUser',
+        photos = '/userController/photos',
+        userInfoAndPhoto,
+        userBarShow,
 
       // 将判定抽象为函数
-      var examInfo = _.snapshot(data), // - bind data to local variable
-        canTakeExam = _.has(examInfo, 'currentExam'),
+        examInfo = _.snapshot(data), // - data 是 onSuccess 的参数； bind data to local variable
+        canTakeExam = _.has(examInfo, 'currentExam') && examInfo.currentExam.userExamState !== '0',
         TookNoExam = canTakeExam && examInfo.currentExam.userExamState === '0',
         hasUpcomingExam = _.has(examInfo, 'upcomingExam'),
         haslatestExamResult = _.has(examInfo, 'latestExamResult'),
-        showExamSimulating = !haslatestExamResult,
+        // showExamSimulating = !haslatestExamResult,
 
       // 生成页面的函数
         examCurrent,
-        examSimulating,
         examUpcoming,
+        examCurrent_continue,
         examScores;
 
+      // 有之前未完成考试
+      examCurrent_continue = doWhen(canTakeExam,
+        renderLocalData(examInfo, 'front_content', 'start_current_continue.ejs'));
 
-      // 模拟考试区块
-      examSimulating = doWhen(showExamSimulating,
-        renderLocalData(examInfo, 'stack1', 'start_simulating.ejs'));
-
-      // 当前考试区块
-      examCurrent = doWhen(canTakeExam,
-        renderLocalData(examInfo, 'stack2', 'start_current.ejs', function (d) {
-          var oo = _.extend(d.currentExam, {button: '开始考试'});
-
-          if (haslatestExamResult) {
-            oo = _.extend(oo, {title: '再测一次看看自己有没有进步'});
-          } else if (TookNoExam) {
-            oo = _.extend(oo, {title: '你还没有测试。来测一下'});
-          } else {
-            oo = _.extend(oo, {title: '你有测试尚未完成，可继续测试'});
-          }
-          return oo;
-        }));
+      // 有新考试可考
+      examCurrent = doWhen(TookNoExam,
+        renderLocalData(examInfo, 'front_content', 'start_current.ejs'));
 
       // 考试预告区块
       examUpcoming = doWhen(hasUpcomingExam,
-        renderLocalData(examInfo, 'stack2', 'start_upcoming.ejs', function (d) {
+        renderLocalData(examInfo, 'front_content', 'start_upcoming.ejs', function (d) {
           // 可以直接修改examInfo。因为得到的数据是原始数据的深拷贝副本。
           // 因此不会影响原始数据。
           // 见 renderLocalData 函数。
@@ -251,14 +237,26 @@ var YD = YD || {};
 
       // 考试成绩区块
       examScores = doWhen(haslatestExamResult,
-        renderLocalData(examInfo, 'stack1', 'start_scores.ejs'));
+        renderLocalData(examInfo, 'front_content', 'start_scores.ejs'));
+
+      // 用户条
+      userInfoAndPhoto = $.when($.ajax(userinfo), $.ajax(photos)).then(function (a, b) {
+        var d = (_.extend(a[0], b[0])); // 这里如果也用data，会shadow函数onSuccess的输入，虽然不是错误，但避免吧
+        return d;
+      });
+
+      userBarShow = userInfoAndPhoto.then(function (data) {
+        new EJS({url: 'tpl/' + 'user_bar.ejs'}).update('user_bar', data);
+      });
 
       // 渲染整个页面。
       // 对每个函数执行_identity就等于执行了它们。
       _.map(
         [
-          examSimulating,
+          userBarShow,
+          // examSimulating,
           examCurrent,
+          // examCurrent_continue,
           examUpcoming,
           examScores
         ],
@@ -324,7 +322,6 @@ var YD = YD || {};
     //
     // 如需要修改，可在js代码中加入：
     // http://www.open-open.com/lib/view/open1342179346214.html
-    //
     //
     jQuery.extend(jQuery.validator.messages, {
       required: "必选字段",

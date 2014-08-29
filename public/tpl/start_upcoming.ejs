@@ -1,11 +1,25 @@
-下次测试预告：
-<ul>
-<% _.each(upcomingExam, function (e) { %>
-  <li>
-    <%= e.name %> <%= e.startTime %>  <%= e.endTime %> <%= e.isTodayExam %>
-  </li>
-<% }) %>
-</ul>
+<!-- 有upcoming就显示本页 -->
+<!--.web_main-->
+<div class="web_main">
+  <!--.mexam_tip-->
+  <div class="mexam_tip">
+    模拟考试了解考试过程，玩一下。结果不影响考试成绩。
+  </div>   <!--/.mexam_tip-->
 
+  <!--.noexam-->
+  <div class="noexam noexam2">
 
+  </div>  <!--/. next test-->
 
+  <div class="next_exam">
+    <h4>下次测试预告</h4>
+    <ul>
+      <% _.each(upcomingExam, function (e) { %>
+        <li>
+          <%= e.name %> <%= e.startTime %>  <%= e.endTime %> <%= e.isTodayExam %>
+        </li>
+      <% }) %>
+    </ul>
+  </div>  <!--. next test-->
+
+</div> <!--/.web_main-->
