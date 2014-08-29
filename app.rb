@@ -51,11 +51,11 @@ get '/userController/grades' do
 end
 get '/userController/show/loginUser' do
   user = {
-    userName: '王大军',
+    userName: '田金慧',
     gender: { key: 'male', value: '男' },
     age: 12,
     dob: '2004-07-26 11:37:53 +0800',
-    photo: { key: 'e', value: '/img/kitten2.jpg' },
+    photo: { key: 'e', value: '/images/head.png' },
     grade: { key: 'd', value: '小学四年级' },
     school: '史家胡同小学',
     email: 'ererer@fltrp.com',

@@ -168,8 +168,9 @@ var YD = YD || {};
 
     return (function () {
       // 直接显示用户信息和头像
-      userShow();
-      userPhotoShow();
+      // userShow();
+      // userPhotoShow();
+      userBarShow();
 
       //
       // 通过jQuery的delegate监听尚未出现在页面的元素
