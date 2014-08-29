@@ -82,7 +82,7 @@ get '/examController/studentLogin' do
       endTime: '2014-05-16 15:20',
       name: '2014秋季测试',
       id: 'exam_id',
-      userExamState: '1'
+      userExamState: '0'
     },
 
     # upcomingExam: [
