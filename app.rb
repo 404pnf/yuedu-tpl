@@ -25,13 +25,13 @@ end
 get '/userController/photos' do
   photos = {
     photos: [
-      { key: 'a', value: '/img/kitten2.jpg' },
-      { key: 'b', value: '/img/kitten2.jpg' },
-      { key: 'c', value: '/img/kitten2.jpg' },
-      { key: 'd', value: '/img/kitten2.jpg' },
-      { key: 'e', value: '/img/kitten2.jpg' },
-      { key: 'f', value: '/img/kitten2.jpg' },
-      { key: 'g', value: '/img/kitten2.jpg' }
+      { key: 'a', value: '/images/head.png' },
+      { key: 'b', value: '/images/head.png' },
+      { key: 'c', value: '/images/head.png' },
+      { key: 'd', value: '/images/head.png' },
+      { key: 'e', value: '/images/head.png' },
+      { key: 'f', value: '/images/head.png' },
+      { key: 'g', value: '/images/head.png' }
     ]
   }
   JSONP photos

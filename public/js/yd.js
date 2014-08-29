@@ -133,14 +133,14 @@ var YD = YD || {};
       });
     };
 
-    userPhotoShow = function () {
-      // $.get(userinfo).done(function (data) {
-      //   new EJS({url: 'tpl/' + 'user_photo.ejs'}).update('user_photo', data);
-      // });
-      userInfoAndPhoto.then(function (data) {
-        new EJS({url: 'tpl/' + 'user_photo.ejs'}).update('user_photo', data);
-      })
-    };
+    // userPhotoShow = function () {
+    //   // $.get(userinfo).done(function (data) {
+    //   //   new EJS({url: 'tpl/' + 'user_photo.ejs'}).update('user_photo', data);
+    //   // });
+    //   userInfoAndPhoto.then(function (data) {
+    //     new EJS({url: 'tpl/' + 'user_photo.ejs'}).update('user_photo', data);
+    //   })
+    // };
 
     userBarShow = function () {
       userInfoAndPhoto.then(function (data) {
@@ -154,7 +154,7 @@ var YD = YD || {};
 
     // 这里不能简化，因为这里不但需要知道总共有多少图片可选还需知道用户当前选的是哪个
     userPhotoEdit = function () {
-      getUserDataAndCallback('user_photo_edit.ejs', 'user_photo');
+      getUserDataAndCallback('user_photo_edit.ejs', 'user_info');
     };
 
     userSave = function () {
@@ -162,13 +162,13 @@ var YD = YD || {};
     };
 
     userPhotoSave = function () {
-      postJson('/userController/save', 'form#user_photo', userPhotoShow());
+      postJson('/userController/save', 'form#user_info', userShow());
     };
 
 
     return (function () {
       // 直接显示用户信息和头像
-      // userShow();
+      userShow();
       // userPhotoShow();
       userBarShow();
 
@@ -179,11 +179,11 @@ var YD = YD || {};
       // 编辑用户
       $('#user_info').delegate('#user_info_edit', 'click', userEdit);
       // 编辑头像
-      $('#user_photo').delegate('#user_photo_edit', 'click', userPhotoEdit);
+      $('#user_info').delegate('#user_photo_edit', 'click', userPhotoEdit);
       // 保存用户
       $('#user_info').delegate('#user_info_save', 'click', userSave);
       // 保存头像
-      $('#user_photo').delegate('#user_photo_save', 'click', userPhotoSave);
+      $('#user_info').delegate('#user_photo_save', 'click', userPhotoSave);
     }());
   };
   //

@@ -1,16 +1,23 @@
+<!--.main_left-->
+<div class="main_left fl">
+  <div class="head_box">
+    <img src= '<%= photo.value %> ' />
+    <a href="#none" class="btn" id="user_photo_edit">更换头像</a>
+  </div>
 
-<h2>用户信息</h2>
-登录名：<%= loginName %> <br>
-姓名: <%= userName %> <br>
-<!-- 出生日期：<%= dob %>  <br> -->
-性别： <%= gender.value %>  <br>
-年龄：<%= age %>  <br>
-年级：<%= grade.value %>  <br>
-学校：<%= school %>  <br>
-邮箱：<%= email %>  <br>
-<button type="buttom" id="user_info_edit")'>修改用户信息</button>
+  <div class="form_one"><label>姓　名</label><span class="span1"><%= userName %></span></div>
+  <div class="form_one"><label>用户名</label><span class="span1"><%= loginName %></span></div>
+  <div class="form_one"><label>性　别</label><span class="span1"><%= gender.value %></span></div>
+  <div class="form_one"><label>年　龄</label><span class="span1"><%= age %></span></div>
+  </div>
+<!--/.main_left-->
 
-
-
-
+<!--.main_right-->
+<div class="main_right fl">
+  <div class="form_one"><label>年　级</label><span class="span1"><%= grade.value %></span></div>
+  <div class="form_one"><label>学校</label><span class="span2"><%= school %></span></div>
+  <div class="form_one"><label>电子邮件</label><span class="span2"><%= email %></span></div>
+  <a href="#none" class="btn" id="user_info_edit">修改信息</a>
+</div>
+<!--/.main_right-->
 
