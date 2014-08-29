@@ -105,7 +105,9 @@ var YD = YD || {};
       userPhotoSave,
       userinfo = '/userController/show/loginUser',
       grades = '/userController/grades',
-      photos = '/userController/photos';
+      photos = '/userController/photos',
+      userInfoAndPhoto,
+      userBarShow;
 
     getUserDataAndCallback = function (tpl, cssID) {
       $.when($.ajax(userinfo), $.ajax(grades), $.ajax(photos)).done(function (a, b, c) {
@@ -117,17 +119,33 @@ var YD = YD || {};
       });
     };
 
+    userInfoAndPhoto = $.when($.ajax(userinfo), $.ajax(photos)).then(function (a, b) {
+      var data = (_.extend(a[0], b[0]));
+      return data
+    });
 
     userShow = function () {
-      $.get(userinfo).done(function (data) {
+      // $.get(userinfo).done(function (data) {
+      //   new EJS({url: 'tpl/' + 'user_show.ejs'}).update('user_info', data);
+      // });
+      userInfoAndPhoto.then(function (data) {
         new EJS({url: 'tpl/' + 'user_show.ejs'}).update('user_info', data);
       });
     };
 
     userPhotoShow = function () {
-      $.get(userinfo).done(function (data) {
+      // $.get(userinfo).done(function (data) {
+      //   new EJS({url: 'tpl/' + 'user_photo.ejs'}).update('user_photo', data);
+      // });
+      userInfoAndPhoto.then(function (data) {
         new EJS({url: 'tpl/' + 'user_photo.ejs'}).update('user_photo', data);
-      });
+      })
+    };
+
+    userBarShow = function () {
+      userInfoAndPhoto.then(function (data) {
+        new EJS({url: 'tpl/' + 'user_bar.ejs'}).update('user_bar', data);
+      })
     };
 
     userEdit = function () {
