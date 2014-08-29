@@ -1,0 +1,33 @@
+@charset "utf-8";
+*{ margin:0; padding:0}
+.fl{ float:left}
+.clear{ clear:both}
+ul li{ list-style:none}
+.hidden{ display:none}
+
+/*单选&填空*/
+.input_text{ line-height:200%;margin-left: 10px;width: 200px;}
+
+.one_que{ font-family:Arial, Helvetica, sans-serif; width:884px; margin:0 auto;}
+.one_que div{ line-height:200%;}
+.one_que p{ font-size:16px; color:#333333; line-height:170%;}
+.explain{ font-size:20px; color:#af1e23; font-weight:bold; line-height:300%;}
+.one_que .que_tit{ font-size:18px; font-weight:bold; line-height:40px;margin-top: 5px;}
+.con_text{ margin-bottom:40px;}
+.dan_selected{ background-color:#ffcc00; border-radius: 20px; display:inline-block; padding:10px 15px;}
+.dan_unselected{  border-radius: 20px; padding:10px 15px;}
+
+/*词汇探测题*/
+.que_wrapper{ width:700px;}
+.tct_one{ margin-left:50px; overflow:hidden;font-family:Arial, Helvetica, sans-serif; margin-top:30px; width:300px;}
+.tct_t li{ line-height:300%; width:200px;}
+.tct_a{ margin-left:20px}
+.tct_a li{ line-height:150%}
+
+/*配对题*/
+.pd_box{ border:1px dotted #666}
+.pd_text_box{ width:200px; height:40px;}
+.draggable{ overflow:hidden; width:700px;}
+.draggable li{ float:left; margin-right:10px; border:1px solid #999; padding:10px;}
+.droppable{ clear:both; margin-top:20px; width:700px;}
+.droppable li{ float:left; margin:0 10px 10px 0;}
