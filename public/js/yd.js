@@ -24,9 +24,8 @@ var YD = YD || {};
   // 先清除之前的msg内容
   showStatusMsg = function (data) {
     $('#msg').empty();
-    _.each(data, function (v, k) {
-      $('#msg').append(['<div class=', k, '>', v, '</div>'].join(''));
-    });
+    // 错误就是一个字符串，获取方法是读取 data.error 的值
+    alert(data.error);
   };
 
   // 模仿if (predict) {}，
