@@ -13,12 +13,10 @@ end
 
 get '/' do
   text = %q(
-    <a href=/user.html>user.html</a><br>
-    <a href=/start.html>start.html</a><br>
-    <a href=/login.html>login.html</a><br>
     <a href=/chart.html>chart.html</a><br>
     <a href=/personal_info.html>personal_info.html</a><br>
     <a href=/front.html>front.html</a><br>
+    <a href=/login.html>login.html</a><br>
   )
   text
 end
@@ -115,4 +113,36 @@ get '/examController/studentLogin' do
 
   }
   JSONP r
+end
+
+get '/resultsController/loginUser' do
+  chart_data = [
+      {
+          date: "214-08-14",
+          value: 10,
+          url: "321"
+      },
+                      {
+          date: "214-08-15",
+          value: 12,
+          url: "212"
+      },
+                      {
+          date: "214-08-18",
+          value: 15,
+          url: "4321"
+      },
+                      {
+          date: "214-08-18",
+          value: 8,
+          url: "352"
+      },
+                      {
+          date: "214-09-24",
+          value: 19,
+          url: "73"
+      }
+  ]
+
+  JSONP chart_data
 end

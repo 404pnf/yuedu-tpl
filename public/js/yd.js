@@ -1,5 +1,5 @@
 // ## jslint配置 不要删除
-/*jslint browser: true , nomen: true, indent: 2*/
+/*jslint browser: true , devel: true, nomen: true, indent: 2*/
 /*global $, jQuery, EJS, _ */
 
 // ## 唯一暴露出来的全局变量。也是程序的命名空间
@@ -24,9 +24,8 @@ var YD = YD || {};
   // 先清除之前的msg内容
   showStatusMsg = function (data) {
     $('#msg').empty();
-    _.each(data, function (v, k) {
-      $('#msg').append(['<div class=', k, '>', v, '</div>'].join(''));
-    });
+    // 错误就是一个字符串，获取方法是读取 data.error 的值
+    alert(data.error);
   };
 
   // 模仿if (predict) {}，
