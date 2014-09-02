@@ -1,5 +1,5 @@
 // ## jslint配置 不要删除
-/*jslint browser: true , nomen: true, indent: 2*/
+/*jslint browser: true , devel: true, nomen: true, indent: 2*/
 /*global $, jQuery, EJS, _ */
 
 // ## 唯一暴露出来的全局变量。也是程序的命名空间
