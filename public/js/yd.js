@@ -208,7 +208,10 @@ var YD = YD || {};
         examUpcoming,
         examCurrent_continue,
         examScores,
-        examScoresCantRetake;
+        examScoresCantRetake,
+
+        // 帮助函数
+        updateDateText;
 
       // 有之前未完成考试
       examCurrent_continue = doWhen(canTakeExam,
@@ -218,22 +221,38 @@ var YD = YD || {};
       examCurrent = doWhen(TookNoExam,
         renderLocalData(examInfo, 'front_content', 'start_current.ejs'));
 
+      updateDateText = function (d) {
+        var o = _.map(d.upcomingExam, function (e) {
+          if (e.isTodayExam) {
+            e.endTime = '';
+            e.isTodayExam = '今天';
+          } else {
+            e.isTodayExam = '';
+          }
+          return e;
+        });
+
+        return {upcomingExam: o};
+      };
+
       // 考试预告区块
       examUpcoming = doWhen(hasUpcomingExam,
         renderLocalData(examInfo, 'front_content', 'start_upcoming.ejs', function (d) {
           // 可以直接修改examInfo。因为得到的数据是原始数据的深拷贝副本。
           // 因此不会影响原始数据。
           // 见 renderLocalData 函数。
-          var o = _.map(d.upcomingExam, function (e) {
-            if (e.isTodayExam) {
-              e.endTime = '';
-              e.isTodayExam = '今天';
-            } else {
-              e.isTodayExam = '';
-            }
-            return e;
-          });
-          return {upcomingExam: o};
+          // var o = _.map(d.upcomingExam, function (e) {
+          //   if (e.isTodayExam) {
+          //     e.endTime = '';
+          //     e.isTodayExam = '今天';
+          //   } else {
+          //     e.isTodayExam = '';
+          //   }
+          //   return e;
+          // });
+          // return {upcomingExam: o};
+          //
+          return updateDateText(d);
         }));
 
       // 考试成绩区块
@@ -243,20 +262,21 @@ var YD = YD || {};
       // 有成绩，但无currentExam，可能有upcommings，可能没有
       examScoresCantRetake = doWhen(hasResultCanNotRetake,
         renderLocalData(examInfo, 'front_content', 'start_scores_cant_retake_exam.ejs', function (d) {
-          var hasUpcoming = _.has(examInfo, 'upcomingExam'),
-            o;
-          if (hasUpcoming) {
-            o = _.map(d.upcomingExam, function (e) {
-              if (e.isTodayExam) {
-                e.endTime = '';
-                e.isTodayExam = '今天';
-              } else {
-                e.isTodayExam = '';
-              }
-              return e;
-            });
-          }
-          return _.merge(d, {hasUpcoming: hasUpcoming}, {upcomingExam: o}); // 告诉模版没有upcomingExam区块
+          var hasUpcoming = _.has(examInfo, 'upcomingExam');
+          //  o;
+          // if (hasUpcoming) {
+          //   // o = _.map(d.upcomingExam, function (e) {
+          //   //   if (e.isTodayExam) {
+          //   //     e.endTime = '';
+          //   //     e.isTodayExam = '今天';
+          //   //   } else {
+          //   //     e.isTodayExam = '';
+          //   //   }
+          //   //   return e;
+          //   // });
+          //   updateDateText(d)
+          // }
+          return _.merge(d, {hasUpcoming: hasUpcoming}, updateDateText(d)); // 告诉模版没有upcomingExam区块
         }));
 
       // 用户条
