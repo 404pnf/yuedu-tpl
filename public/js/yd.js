@@ -237,23 +237,7 @@ var YD = YD || {};
 
       // 考试预告区块
       examUpcoming = doWhen(hasUpcomingExam,
-        renderLocalData(examInfo, 'front_content', 'start_upcoming.ejs', function (d) {
-          // 可以直接修改examInfo。因为得到的数据是原始数据的深拷贝副本。
-          // 因此不会影响原始数据。
-          // 见 renderLocalData 函数。
-          // var o = _.map(d.upcomingExam, function (e) {
-          //   if (e.isTodayExam) {
-          //     e.endTime = '';
-          //     e.isTodayExam = '今天';
-          //   } else {
-          //     e.isTodayExam = '';
-          //   }
-          //   return e;
-          // });
-          // return {upcomingExam: o};
-          //
-          return updateDateText(d);
-        }));
+        renderLocalData(examInfo, 'front_content', 'start_upcoming.ejs', updateDateText));
 
       // 考试成绩区块
       examScores = doWhen(hasResultCanRetake,
@@ -263,19 +247,6 @@ var YD = YD || {};
       examScoresCantRetake = doWhen(hasResultCanNotRetake,
         renderLocalData(examInfo, 'front_content', 'start_scores_cant_retake_exam.ejs', function (d) {
           var hasUpcoming = _.has(examInfo, 'upcomingExam');
-          //  o;
-          // if (hasUpcoming) {
-          //   // o = _.map(d.upcomingExam, function (e) {
-          //   //   if (e.isTodayExam) {
-          //   //     e.endTime = '';
-          //   //     e.isTodayExam = '今天';
-          //   //   } else {
-          //   //     e.isTodayExam = '';
-          //   //   }
-          //   //   return e;
-          //   // });
-          //   updateDateText(d)
-          // }
           return _.merge(d, {hasUpcoming: hasUpcoming}, updateDateText(d)); // 告诉模版没有upcomingExam区块
         }));
 
@@ -304,8 +275,7 @@ var YD = YD || {};
       );
 
       note('又看到我啦。证明页面刷新啦。');
-      note(hasResultCanNotRetake, hasResultCanRetake);
-      note('能考么' + hasResultCanNotRetake);
+
     };
 
     onFailure = function (data, status, xhr) {
