@@ -2,19 +2,21 @@
   <meta charset="utf-8">
   <head></head>
  <body>
-    <div id="status"></div>
+    <div id="msg"></div>
 
-    <div id="user_show"></div>
-    <div id="user_edit"></div>
-    <div id="user_photo"></div>
-    <div id="user_photo_edit"></div>
+    <div id="user_info">laoding</div>
 
-    <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
-    <script src="js/mustache.js"></script>
-    <script src="js/jquery.serialize-object.js"></script>
-    <script src="js/user.js"></script>
+    <hr>
+    <div id="user_photo">laoding</div>
+
+    <script src="js/lib.all.js"></script>
+    <script src="js/yd.js"></script>
     <script type="text/javascript">
-
+      $(document).ready(function() {
+        YD.user();
+        // YD.userShow();
+        // YD.userPhotoShow();
+    });
     </script>
   </body>
 </html>
