@@ -1,0 +1,31 @@
+<!--.main_left-->
+<div class="main_left_4 fl">
+  <!--.ckrep-->
+  <div class="ckrep ckrep4">
+    <h3><%= latestExamResult.name %></h3>
+    <div>英语阅读能力等级：<%= latestExamResult.examGradeResult %></div>
+    <div>测试时间：<%= latestExamResult.personalEndTime %><span>用时：<%= latestExamResult.duration %></span>分钟</div>
+    <div class="ckrep_btn"><a href="#none" class="btn">查看报告</a><a href="#none" class="btn">我的成长</a></div>
+  </div>
+  <!--/.ckrep-->
+</div>
+<!--/.main_left-->
+
+<!--.main_right-->
+<div class="main_right_4 fl">
+
+  <!--.noexam-->
+  <div class="noexam"></div>
+
+  <!--/. next test-->
+  <div class="next_exam4">
+  <h4>下次测试预告</h4>
+    <ul>
+      <% _.each(upcomingExam, function (e) { %>
+        <li>
+          <%= e.name %> <%= e.startTime %>  <%= e.endTime %> <%= e.isTodayExam %>
+        </li>
+      <% }) %>
+    </ul>
+  </div> <!--. next test-->
+</div> <!--/.main_right-->

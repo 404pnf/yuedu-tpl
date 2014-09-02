@@ -199,15 +199,16 @@ var YD = YD || {};
         examInfo = _.snapshot(data), // - data 是 onSuccess 的参数； bind data to local variable
         canTakeExam = _.has(examInfo, 'currentExam') && examInfo.currentExam.userExamState !== '0',
         TookNoExam = canTakeExam && examInfo.currentExam.userExamState === '0',
-        hasUpcomingExam = _.has(examInfo, 'upcomingExam'),
-        haslatestExamResult = _.has(examInfo, 'latestExamResult'),
-        // showExamSimulating = !haslatestExamResult,
+        hasUpcomingExam = _.has(examInfo, 'upcomingExam') && !_.has(examInfo, 'latestExamResult'),
+        hasResultCanRetake = _.has(examInfo, 'latestExamResult') && _.has(examInfo, 'currentExam'),
+        hasResultCanNotRetake = _.has(examInfo, 'latestExamResult') && !(_.has(examInfo, 'currentExam')),
 
       // 生成页面的函数
         examCurrent,
         examUpcoming,
         examCurrent_continue,
-        examScores;
+        examScores,
+        examScoresCantRetake;
 
       // 有之前未完成考试
       examCurrent_continue = doWhen(canTakeExam,
@@ -236,8 +237,27 @@ var YD = YD || {};
         }));
 
       // 考试成绩区块
-      examScores = doWhen(haslatestExamResult,
+      examScores = doWhen(hasResultCanRetake,
         renderLocalData(examInfo, 'front_content', 'start_scores.ejs'));
+
+      // 有成绩，但无currentExam，可能有upcommings，可能没有
+      examScoresCantRetake = doWhen(hasResultCanNotRetake,
+        renderLocalData(examInfo, 'front_content', 'start_scores_cant_retake_exam.ejs', function (d) {
+          var hasUpcoming = _.has(examInfo, 'upcomingExam'),
+            o;
+          if (hasUpcoming) {
+            o = _.map(d.upcomingExam, function (e) {
+              if (e.isTodayExam) {
+                e.endTime = '';
+                e.isTodayExam = '今天';
+              } else {
+                e.isTodayExam = '';
+              }
+              return e;
+            });
+          }
+          return _.merge(d, {hasUpcoming: hasUpcoming}, {upcomingExam: o}); // 告诉模版没有upcomingExam区块
+        }));
 
       // 用户条
       userInfoAndPhoto = $.when($.ajax(userinfo), $.ajax(photos)).then(function (a, b) {
@@ -254,16 +274,18 @@ var YD = YD || {};
       _.map(
         [
           userBarShow,
-          // examSimulating,
           examCurrent,
-          // examCurrent_continue,
+          examCurrent_continue,
           examUpcoming,
-          examScores
+          examScores,
+          examScoresCantRetake
         ],
         _.identity
       );
 
       note('又看到我啦。证明页面刷新啦。');
+      note(hasResultCanNotRetake, hasResultCanRetake);
+      note('能考么' + hasResultCanNotRetake);
     };
 
     onFailure = function (data, status, xhr) {
