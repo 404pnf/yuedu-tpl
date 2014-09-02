@@ -1,12 +1,12 @@
 如何测试 front 页面
 
-1. 有考试，学生状态为未考  有currentExam， userExamState = 0
+1. 有考试，学生状态为未考  有currentExam， userExamState = 0 但无 latestExamResult
 
-2. 有考试，学生状态为推出或弃考过 有currentExam， userExamState != 0
+2. 有考试，学生状态为推出或弃考过 有currentExam， userExamState != 0 但无 latestExamResult
 
-3. 有考试预告  有upcomingExam, 但无 latestExamResult ；防止和后面的冲突
+3. 有考试预告  有upcomingExam, 但无 latestExamResult , 无 currentExam ；防止和后面的冲突
 
-4. 有成绩，可重测   有 latestExamResult 但无 curerntExam
+4. 有成绩，可重测   有 latestExamResult 有 curerntExam
 
 5. 有成绩，不可重测，无考试预告   有 latestExamResult 但无 curerntExam， 无 upcomingExam
 
