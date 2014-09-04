@@ -324,8 +324,13 @@ var YD = YD || {};
     $("#login").validate();
 
     // 提交表单信息给后台
-    $('form').submit(function () {
-      postJson('/userController/save', 'form#login');
+    // 直接写在html中了
+    // login.html的18行
+    // <form action="/userController/login" method="post" id="login" novalidate="novalidate">
+    // action是提交地址,method是提交方式
+
+    $('form').submit(function (e) {
+      //e.preventDefault();
     });
 
     //
