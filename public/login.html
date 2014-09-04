@@ -1,52 +1,59 @@
-<html lang="en"><head>
-  <meta charset="utf-8">
-  <title>登陆：阅读平台</title>
-  <link rel="stylesheet" media="screen" href="">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>试题模板</title>
+ <link rel="stylesheet" type="text/css" href="css/style_css.css" />
+ <link rel="stylesheet" type="text/css" href="css/style_que.css" />
 </head>
+
 <body>
-<div id="page">
-  <div id="header">
-    <h1>登陆</h1>
-  </div>
-  <div id="msg"></div>
-  <div id="content">
-    <p id="status"></p>
-    <form action="" id="login" novalidate="novalidate">
+<div class="wrapper">
+  <div class="login_bg">
+	<!--.web_tit-->
+    <div class="web_tit">外研社中小学生分级阅读测试系统</div>
+    <!--/.web—_tit-->
+    <div class="login_form">
+    <!--form-->
+    	<form action="" id="login" novalidate="novalidate">
       <fieldset>
-        <legend>登陆信息</legend>
-        <ul>
+        <ul class="form_ul">
           <li class="">
-            <label for="username">
+            <!--<label for="username">
               <span class="required" aria-required="true">用户名</span>
-            </label>
-            <input id="username" name="username" class="text required valid" type="text" aria-required="true" aria-invalid="false">
-            <label for="username" class="error" style="display: none;"></label>
+            </label>-->
+            <input id="username" name="username" class="text required valid input_un fl" type="text" aria-required="true" aria-invalid="false">
+            <label for="username" class="error error_info_un" style="display: none;"></label>
           </li>
           <li class="">
-            <label for="password">
+            <!--<label for="password">
               <span class="required" aria-required="true">密码</span>
-            </label>
-            <input name="password" type="password" class="text valid required" id="password" minlength="1" maxlength="20" aria-required="true" aria-invalid="false">
+            </label>-->
+            <input name="password" type="password" class="text valid required input_pw" id="password" minlength="1" maxlength="20" aria-required="true" aria-invalid="false">
+            <label for="password" class="error error_info_pw" style="display: none;"></label>
           </li>
-          <li>
-            <label class="centered info"><a id="forgotpassword" href="#">忘记密码</a>
-            </label>
+          <li  class="">
+          	<input name="yz" type="text" class="text valid required input_yz fl" id="yz" minlength="1" maxlength="20" aria-required="true" aria-invalid="false">
+            <img src="images/exit_shadow.png" width="80px" height="40px" class="fl" />
+            <label id="yz-error" class="error  error_info_yz" for="yz"  style="display: none;">必选字段</label>
           </li>
         </ul>
       </fieldset>
       <fieldset class="submit">
-        <input type="submit" class="button" id="user_login1" value="登陆">
+        <input type="submit" class="button btn login_btn" id="user_login1" value="登　录"><label class="centered info"><a id="forgotpassword" href="#" class="fpw">忘记密码</a></label>
+            </label>
       </fieldset>
-      <div class="clear"></div>
     </form>
+    <!--/form-->
+    </div>
   </div>
 </div>
-
-    <script src="js/lib.all.js"></script>
+<script src="js/lib.all.js"></script>
     <script src="js/yd.js"></script>
     <script>
       $(document).ready(function () {
         YD.userLogin();
       });
     </script>
-</body></html>
+</body>
+</html>
