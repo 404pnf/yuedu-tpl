@@ -14,7 +14,7 @@ var YD = YD || {};
     doWhen,
     postJson,
     renderLocalData,
-    // redirectToUrl,
+    redirectToUrl,
     note;
 
   //
@@ -54,14 +54,19 @@ var YD = YD || {};
     var form_data = $(cssID).serializeJSON();
     $.post(url, form_data)
       .done(function (data) {
-        if (_.has(data, 'success') && callbackOnSuccess) {
-          callbackOnSuccess();
-        }
-        showStatusMsg(data);
+        // if (_.has(data, 'success') && callbackOnSuccess) {
+        //   callbackOnSuccess();
+        // }
+        var r =  (_.has(data, 'error')) ? data : true;
+        return r;
+        // showStatusMsg(data);
       })
       .fail(function (data, status, xhr) {
         console.log(data);
         $('#msg').text(data, status, xhr).slideDown('slow');
+      })
+      .always(function (data) {
+        // showStatusMsg(data);
       });
   };
 
@@ -79,9 +84,9 @@ var YD = YD || {};
   };
 
   // 将用户重定向到某页面的正确方式
-  // redirectToUrl = function (url) {
-  //   window.location.replace(url);
-  // };
+  redirectToUrl = function (url) {
+    window.location.replace(url);
+  };
 
   // 开发时方便发现错误。封装console.log是为了可在需要时候直接用alert替换console.log。
   // 或者加入其它修饰。
@@ -305,7 +310,8 @@ var YD = YD || {};
   //
   YD.userLogin = function () {
     // highlight
-    var elements = $("input[type!='submit'], textarea, select");
+    var login,
+      elements = $("input[type!='submit'], textarea, select");
 
     elements.focus(function () {
       $(this).parents('li').addClass('highlight');
@@ -322,16 +328,6 @@ var YD = YD || {};
     });
 
     $("#login").validate();
-
-    // 提交表单信息给后台
-    // 直接写在html中了
-    // login.html的18行
-    // <form action="/userController/login" method="post" id="login" novalidate="novalidate">
-    // action是提交地址,method是提交方式
-
-    $('form').submit(function (e) {
-      //e.preventDefault();
-    });
 
     //
     // 修改该 jquery validation 插件的报错信息到中文
@@ -358,6 +354,32 @@ var YD = YD || {};
       max: jQuery.validator.format("请输入一个最大为 {0} 的值"),
       min: jQuery.validator.format("请输入一个最小为 {0} 的值")
     });
+
+    // 提交表单信息给后台
+    // 直接写在html中了
+    // login.html的18行
+    // <form action="/userController/login" method="post" id="login" novalidate="novalidate">
+    // action是提交地址,method是提交方式
+
+
+
+    login = function () {
+      // postJson('/userController/login', 'form#login', redirectToUrl('/front.html'));
+      var r = postJson('/userController/login', 'form#login');
+      if (r === true) {
+        redirectToUrl('/front.html');
+      } else {
+        alert(r);
+      }
+    };
+
+    return (function () {
+      // 提交表单
+      $('form').submit(function (e) {
+        e.preventDefault();
+        login();
+      });
+    }());
 
   }; // end YD.userLogin
 

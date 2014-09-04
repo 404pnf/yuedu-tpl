@@ -151,6 +151,6 @@ post '/userController/login' do
   username = params[:username]
   password = params[:password]
   yanzhengma = params[:yz]
-  r = { msg: "username is #{username}, password is #{password}, cpatcha is #{yanzhengma}" }
+  r = { error: "username is #{username}, password is #{password}, cpatcha is #{yanzhengma}" }
   JSONP r
 end
