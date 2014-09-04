@@ -19,7 +19,7 @@ h1,h2,h3,h4,h5,ul,li,dl,dt,dd,p,img,table,tr,td{margin:0; padding:0; list-style:
 /*exam*/
 .exam_top{ height:169px; margin:0 auto; background:url(../images/exam_top.jpg) center top no-repeat;}
 .exam_center{ margin:0 auto; background:url(../images/exam_center.jpg) repeat-y center;}
-.exam_bottom{ width:100%; background:url(../images/exam_bottom.jpg) no-repeat bottom; min-height:561px; padding-bottom:70px;}
+.exam_bottom{ width:100%; background:url(../images/exam_bottom.jpg) no-repeat bottom; min-height:161px; padding-bottom:160px;}
 .exam_name{ color:#ffffff; font-size:20px; width:87px; font-weight:bold; margin:34px 260px 0 106px; height:44px; line-height:44px; text-align:center}
 .exam_time{ font-size:20px; color:#ffffff; margin:34px 22px 0 0;}
 .exam_time span{ font-size:26px; margin-left:10px;}
@@ -29,7 +29,7 @@ h1,h2,h3,h4,h5,ul,li,dl,dt,dd,p,img,table,tr,td{margin:0; padding:0; list-style:
 a.exam_pause:hover{ background:url(../images/btn_bg.png) no-repeat 0 -150px}
 
 /*btn*/
-.btn{background:url(../images/btn_bg.png) no-repeat; width:126px; height:49px; line-height:43px; text-align:center; color:#FFF; font-size:18px;display: inline-block;}
+.btn{background:url(../images/btn_bg.png) no-repeat; width:126px; height:49px; line-height:43px; text-align:center; color:#FFF; font-size:18px;display: inline-block; border:none; font-family:'微软雅黑';}
 .btn:hover{ background:url(../images/btn_bg.png) no-repeat 0 -100px}
 .next_btn,.next_unbtn{ position:absolute; bottom:90px; right:60px; background:url(../images/btn_bg.png) no-repeat; width:126px; height:49px; line-height:43px; text-align:center; color:#FFF; font-size:18px;}
 .next_unbtn{  background:url(../images/btn_bg.png) no-repeat 0 -50px!important;}
@@ -37,13 +37,13 @@ a.next_btn:hover{ background:url(../images/btn_bg.png) no-repeat 0 -100px}
 
 /*web界面*/
 @font-face {
-	font-family: '迷你简卡通';
+	font-family: 'minijiankatong';
 	/*src: url('../fonts/huakangW12.eot');  IE9 Compat Modes */
 	src: /*url('../fonts/huakangW12.eot?#iefix') format('embedded-opentype'),  IE6-IE8 */
          url('../fonts/minijiankatong.TTF')  format('truetype') /* Safari, Android, iOS */
    }
 .main_bg{ background:url(../images/main_bg.png) no-repeat center 81px; height:810px;}
-.web_tit{ width:935px; height:73px; background:url(../images/web_tit_bg.png) no-repeat; margin:22px auto 15px auto; font-family:"迷你简卡通"; font-size:40px; color:#FFF; font-weight:bold; line-height:73px; padding-left:65px; letter-spacing:-2px;}
+.web_tit{ width:935px; height:73px; background:url(../images/web_tit_bg.png) no-repeat; margin:22px auto 15px auto; font-family:"minijiankatong"; font-size:40px; color:#FFF; font-weight:bold; line-height:73px; padding-left:65px; letter-spacing:-2px;}
 /*nav*/
 .web_nav{ width:845px; margin:0 auto;}
 .web_first{ margin:56px 0 0 20px;}
@@ -103,3 +103,18 @@ a.next_btn:hover{ background:url(../images/btn_bg.png) no-repeat 0 -100px}
 /*5*/
 .ckrep5{margin: 10px 0 30px 90px;}
 .again{ width:316px; height:194px; background:url(../images/again.jpg) no-repeat 0 73px; margin:0 0 0 56px}
+
+/*login*/
+.login_bg{ background:url(../images/login_bg.jpg) top center no-repeat; height:800px;}
+.login_form{ margin:302px auto 0 auto; width:290px; padding-left:60px;}
+.login_form fieldset{ border:none;}
+.login_form .input_un,.login_form .input_pw{ height:42px; width:245px; border:none; margin-bottom:2px; background:none; padding-right:40px; font-size:16px;}
+.login_form li.highlight .input_un, .login_form li.highlight .input_pw,.login_form li.highlight .input_yz{ background:#eeeeee; border:none}
+.login_form .input_yz{height:42px; width:180px;border:none; background:none;font-size:16px;}
+.form_ul{ position:relative}
+.error_info_un,.error_info_pw,.error_info_yz{ position:absolute; right:-265px; background:url(../images/error_bg.png) no-repeat; padding-left:60px; width:240px; color:#fff; line-height:34px;}
+.error_info_pw{ top:45px;}
+.login_btn{ margin:10px 0 0 50px; cursor:pointer}
+.fpw{ color:#333; margin-left:15px;}
+.fpw:hover{ color:#007caa; text-decoration:underline;}
+.error_info_yz{ top:90px;}
