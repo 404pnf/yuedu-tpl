@@ -23,6 +23,7 @@ YD = YD || {};
   // ## 工具函数
   //
 
+  // SIDE-EFFECT ONLY 做参数使用请包裹在 functin () {} 中
   // 先清除之前的msg内容
   showStatusMsg = function (data) {
     // $('#msg').empty();
@@ -70,6 +71,7 @@ YD = YD || {};
       });
   };
 
+  // SIDE-EFFECT ONLY 做参数使用请包裹在 functin () {} 中
   // 从局部变量获得数据，绑定模版，插入到html页面中。
   // 可以在使用数据前通过callback修饰数据。
   // callback中修改的是数据的深拷贝。使用underscore-contrib中的snapshot方法
@@ -83,6 +85,7 @@ YD = YD || {};
     };
   };
 
+  // SIDE-EFFECT ONLY 做参数使用请包裹在 functin () {} 中
   // 将用户重定向到某页面的正确方式
   // 注意：这个函数是副作用起作用，因此作为参数给其它函数用的时候一定要包在function () {} 中
   // 否则由于call-by-value，它一定会被求值并产生副作用，即重定向
@@ -91,6 +94,7 @@ YD = YD || {};
     window.location.replace(url);
   };
 
+  // SIDE-EFFECT ONLY 做参数使用请包裹在 functin () {} 中
   // 开发时方便发现错误。封装console.log是为了可在需要时候直接用alert替换console.log。
   // 或者加入其它修饰。
   // 这就是function as abstract behavior unit。
@@ -185,6 +189,7 @@ YD = YD || {};
       $('#user_info').delegate('#user_photo_save', 'click', userPhotoSave);
     }());
   };
+
   //
   // ## start.html 生成页面的主函数
   //
@@ -304,6 +309,12 @@ YD = YD || {};
       // 只能用字符串或变量名
       // 也就是说，其内部用了eval
       // 具体是不是这样需要查书
+      //
+      // TODO 在 safari中不起作用！
+      // 就是说虽然每几秒执行一次函数
+      // 但是后台数据变了页面并不帅新
+      // 需要按ctrl - r 刷新
+      // chrome中就自动刷新
       setInterval(repeat, 2000);
     }());
   }; // end YD.startDispache
@@ -313,8 +324,7 @@ YD = YD || {};
   //
   YD.userLogin = function () {
     // highlight
-    var login,
-      elements = $("input[type!='submit'], textarea, select");
+    var elements = $("input[type!='submit'], textarea, select");
 
     elements.focus(function () {
       $(this).parents('li').addClass('highlight');
@@ -358,23 +368,13 @@ YD = YD || {};
       min: jQuery.validator.format("请输入一个最小为 {0} 的值")
     });
 
-    // 提交表单信息给后台
-    // 直接写在html中了
-    // login.html的18行
-    // <form action="/userController/login" method="post" id="login" novalidate="novalidate">
-    // action是提交地址,method是提交方式
-    login = function () {
-      postJson('/userController/login', 'form#login', function () {
-        redirectToUrl('/front.html');
-      });
-    };
-
     return (function () {
       // 提交表单
       $('form').submit(function (e) {
         e.preventDefault();
-        login();
-
+        postJson('/userController/login', 'form#login', function () {
+          redirectToUrl('/front.html');
+        });
       });
     }());
 
