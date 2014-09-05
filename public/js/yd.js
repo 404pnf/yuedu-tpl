@@ -366,7 +366,7 @@ YD = YD || {};
     login = function () {
       postJson('/userController/login', 'form#login', function () {
         redirectToUrl('/front.html');
-      })
+      });
     };
 
     return (function () {
