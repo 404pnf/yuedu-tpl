@@ -1,9 +1,11 @@
 // ## jslint配置 不要删除
 /*jslint browser: true , devel: true, nomen: true, indent: 2*/
-/*global $, jQuery, EJS, _ */
+/*global  $, jQuery, EJS, _ */
 
 // ## 唯一暴露出来的全局变量。也是程序的命名空间
-var YD = YD || {};
+var YD;
+
+YD = YD || {};
 
 // ## 用匿名函数做为 let scope
 
@@ -23,7 +25,7 @@ var YD = YD || {};
 
   // 先清除之前的msg内容
   showStatusMsg = function (data) {
-    $('#msg').empty();
+    // $('#msg').empty();
     // 错误就是一个字符串，获取方法是读取 data.error 的值
     alert(data.error);
   };
@@ -50,23 +52,22 @@ var YD = YD || {};
   // 因为用户页面的默认逻辑就是显示信息
   // 但如果这样，重定向后的页面无法获得post提交后服务器返回的信息，也就无法显示
   // 这是用现在这种纯手工活js而不用框架的限制。
-  postJson = function (url, cssID, callbackOnSuccess) {
+  postJson = function (url, cssID, onSuccess) {
     var form_data = $(cssID).serializeJSON();
     $.post(url, form_data)
       .done(function (data) {
-        // if (_.has(data, 'success') && callbackOnSuccess) {
-        //   callbackOnSuccess();
-        // }
-        var r =  (_.has(data, 'error')) ? data : true;
-        return r;
-        // showStatusMsg(data);
+        if (_.has(data, 'error')) {
+          alert(data.error);
+        } else {
+          note('zenme keneng kandao else');
+          // onSuccess();
+        }
       })
       .fail(function (data, status, xhr) {
-        console.log(data);
-        $('#msg').text(data, status, xhr).slideDown('slow');
+        showStatusMsg(data + ' ' + status + ' ' + xhr);
       })
       .always(function (data) {
-        // showStatusMsg(data);
+        note(data.error);
       });
   };
 
@@ -360,17 +361,14 @@ var YD = YD || {};
     // login.html的18行
     // <form action="/userController/login" method="post" id="login" novalidate="novalidate">
     // action是提交地址,method是提交方式
-
-
-
     login = function () {
-      // postJson('/userController/login', 'form#login', redirectToUrl('/front.html'));
-      var r = postJson('/userController/login', 'form#login');
-      if (r === true) {
-        redirectToUrl('/front.html');
-      } else {
-        alert(r);
-      }
+      postJson('/userController/login', 'form#login', redirectToUrl('/front.html'));
+      // var r = postJson('/userController/login', 'form#login');
+      // if (r === true) {
+      //   redirectToUrl('/front.html');
+      // } else {
+      //   note(r);
+      // }
     };
 
     return (function () {
