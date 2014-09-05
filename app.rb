@@ -103,13 +103,13 @@ get '/examController/studentLogin' do
         isTodayExam: false
       }],
 
-    # latestExamResult: {
-    #   examGradeResult: '4级，还不错',
-    #   vocabularySize: '22000',
-    #   personalEndTime: '2014-08-26',
-    #   duration: '15', # 分钟
-    #   id: 'exam_result_id'
-    # }
+    latestExamResult: {
+      examGradeResult: '4级，还不错',
+      vocabularySize: '22000',
+      personalEndTime: '2014-08-26',
+      duration: '15', # 分钟
+      id: 'exam_result_id'
+    }
 
   }
   JSONP r
@@ -145,4 +145,13 @@ get '/resultsController/loginUser' do
   ]
 
   JSONP chart_data
+end
+
+post '/userController/login' do
+  username = params[:username]
+  password = params[:password]
+  yanzhengma = params[:yz]
+  # r = { error: "username is #{username}, password is #{password}, cpatcha is #{yanzhengma}" }
+  r = {success: '成功啦'}
+  JSONP r
 end

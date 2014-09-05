@@ -8,21 +8,26 @@ ul li{ list-style:none}
 /*单选&填空*/
 .input_text{ line-height:200%;margin-left: 10px;width: 200px;}
 
-.one_que{ font-family:Arial, Helvetica, sans-serif; width:884px; margin:0 auto;}
+.one_que{ font-family:Arial, Helvetica, sans-serif; width:884px; margin:0 auto; overflow:hidden}
 .one_que div{ line-height:200%;}
 .one_que p{ font-size:16px; color:#333333; line-height:170%;}
 .explain{ font-size:20px; color:#af1e23; font-weight:bold; line-height:300%;}
+.qid{background-color:#eaeaea; border-radius: 20px; padding:4px 14px 4px 20px; display:inline-block;}
+.qid span{ display:inline-block; width:22px; height:22px; border-radius: 20px; color:#FFF; font-size:14px; background:#cbcbcb; line-height:22px; text-align:center; margin-right:6px;}
+.qid span.current{ background:#009dd4;}
 .one_que .que_tit{ font-size:18px; font-weight:bold; line-height:40px;margin-top: 5px;}
 .con_text{ margin-bottom:40px;}
-.dan_selected{ background-color:#ffcc00; border-radius: 20px; display:inline-block; padding:10px 15px;}
+.dan_selected{ background-color:#ffcc00; border-radius: 50px; display:inline-block; padding:10px 20px;}
 .dan_unselected{  border-radius: 20px; padding:10px 15px;}
 
 /*词汇探测题*/
 .que_wrapper{ width:700px;}
-.tct_one{ margin-left:50px; overflow:hidden;font-family:Arial, Helvetica, sans-serif; margin-top:30px; width:300px;}
-.tct_t li{ line-height:300%; width:200px;}
+.tct_one{ overflow:hidden;font-family:Arial, Helvetica, sans-serif; margin:15px 25px 0 0; width:390px; padding-bottom:15px; padding-left:25px; padding-top:15px;}
+.tct_t li{ line-height:300%; width:160px; font-family:'微软雅黑'; font-size:16px;}
+.tct_t li span{ font-weight:bold;}
+.tct_t li select{ margin-left:10px;}
 .tct_a{ margin-left:20px}
-.tct_a li{ line-height:150%}
+.tct_a li{ line-height:150%; font-family:Arial, Helvetica, sans-serif; font-size:18px;}
 
 /*配对题*/
 .pd_box{ border:1px dotted #666}
@@ -31,3 +36,16 @@ ul li{ list-style:none}
 .draggable li{ float:left; margin-right:10px; border:1px solid #999; padding:10px;}
 .droppable{ clear:both; margin-top:20px; width:700px;}
 .droppable li{ float:left; margin:0 10px 10px 0;}
+
+/*phonics*/
+.phonics_img{ margin:30px auto 15px auto; display:block}
+.phonics_anw1{ float:left; position:relative; left:50%; }
+.phonics_anw1 li{ float:left; font-weight:bold; font-size:20px; line-height:18px; position:relative; right:50%; margin-top:26px;}
+.phonics_anw2 li,.phonics_anw3 li{width:47px; height:58px; margin:0 10px; line-height:58px; text-align:center; margin-top:12px;}
+.phonics_anw2 li.dan_tu_unselected{ background:url(../images/phonics_an_bg.jpg) -68px 0 no-repeat; }
+.phonics_anw2 li.dan_tu_selected{ background:url(../images/phonics_an_bg.jpg) 0 0 no-repeat;}
+.phonics_anw3{ clear:both}
+.phonics_anw3 li.dan_tu_selected{background:url(../images/phonics_an_bg.jpg) -133px 0 no-repeat; }
+.phonics_anw4 li{ width:230px; height:144px;border:10px solid #e6e6e6; margin:0px 15px 0 15px;position:relative}
+.phonics_anw4 li.dan_tu_selected{ border:10px solid #ffcc00;}
+.phonics_anw4 li span{ position:absolute; left:1px; top:1px; height:32px; width:32px; color:#ffffff; font-size:22px; text-align:center; line-height:32px; background:#009dd4; border-radius: 50px;}

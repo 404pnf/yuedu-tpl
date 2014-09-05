@@ -1,9 +1,11 @@
 // ## jslint配置 不要删除
 /*jslint browser: true , devel: true, nomen: true, indent: 2*/
-/*global $, jQuery, EJS, _ */
+/*global  $, jQuery, EJS, _ */
 
 // ## 唯一暴露出来的全局变量。也是程序的命名空间
-var YD = YD || {};
+var YD;
+
+YD = YD || {};
 
 // ## 用匿名函数做为 let scope
 
@@ -14,16 +16,17 @@ var YD = YD || {};
     doWhen,
     postJson,
     renderLocalData,
-    // redirectToUrl,
+    redirectToUrl,
     note;
 
   //
   // ## 工具函数
   //
 
+  // SIDE-EFFECT ONLY 做参数使用请包裹在 functin () {} 中
   // 先清除之前的msg内容
   showStatusMsg = function (data) {
-    $('#msg').empty();
+    // $('#msg').empty();
     // 错误就是一个字符串，获取方法是读取 data.error 的值
     alert(data.error);
   };
@@ -50,21 +53,25 @@ var YD = YD || {};
   // 因为用户页面的默认逻辑就是显示信息
   // 但如果这样，重定向后的页面无法获得post提交后服务器返回的信息，也就无法显示
   // 这是用现在这种纯手工活js而不用框架的限制。
-  postJson = function (url, cssID, callbackOnSuccess) {
+  postJson = function (url, cssID, onSuccess) {
     var form_data = $(cssID).serializeJSON();
     $.post(url, form_data)
       .done(function (data) {
-        if (_.has(data, 'success') && callbackOnSuccess) {
-          callbackOnSuccess();
+        if (_.has(data, 'error')) {
+          alert(data.error);
+        } else {
+          onSuccess();
         }
-        showStatusMsg(data);
       })
       .fail(function (data, status, xhr) {
-        console.log(data);
-        $('#msg').text(data, status, xhr).slideDown('slow');
+        showStatusMsg(data + ' ' + status + ' ' + xhr);
+      })
+      .always(function (data) {
+        note('on always: ' + data);
       });
   };
 
+  // SIDE-EFFECT ONLY 做参数使用请包裹在 functin () {} 中
   // 从局部变量获得数据，绑定模版，插入到html页面中。
   // 可以在使用数据前通过callback修饰数据。
   // callback中修改的是数据的深拷贝。使用underscore-contrib中的snapshot方法
@@ -78,11 +85,16 @@ var YD = YD || {};
     };
   };
 
+  // SIDE-EFFECT ONLY 做参数使用请包裹在 functin () {} 中
   // 将用户重定向到某页面的正确方式
-  // redirectToUrl = function (url) {
-  //   window.location.replace(url);
-  // };
+  // 注意：这个函数是副作用起作用，因此作为参数给其它函数用的时候一定要包在function () {} 中
+  // 否则由于call-by-value，它一定会被求值并产生副作用，即重定向
+  // 这个问题我用了两天，花费了好几个小时才搞明白
+  redirectToUrl = function (url) {
+    window.location.replace(url);
+  };
 
+  // SIDE-EFFECT ONLY 做参数使用请包裹在 functin () {} 中
   // 开发时方便发现错误。封装console.log是为了可在需要时候直接用alert替换console.log。
   // 或者加入其它修饰。
   // 这就是function as abstract behavior unit。
@@ -177,6 +189,7 @@ var YD = YD || {};
       $('#user_info').delegate('#user_photo_save', 'click', userPhotoSave);
     }());
   };
+
   //
   // ## start.html 生成页面的主函数
   //
@@ -296,6 +309,12 @@ var YD = YD || {};
       // 只能用字符串或变量名
       // 也就是说，其内部用了eval
       // 具体是不是这样需要查书
+      //
+      // TODO 在 safari中不起作用！
+      // 就是说虽然每几秒执行一次函数
+      // 但是后台数据变了页面并不帅新
+      // 需要按ctrl - r 刷新
+      // chrome中就自动刷新
       setInterval(repeat, 2000);
     }());
   }; // end YD.startDispache
@@ -323,11 +342,6 @@ var YD = YD || {};
 
     $("#login").validate();
 
-    // 提交表单信息给后台
-    $('form').submit(function () {
-      postJson('/userController/save', 'form#login');
-    });
-
     //
     // 修改该 jquery validation 插件的报错信息到中文
     //
@@ -335,7 +349,7 @@ var YD = YD || {};
     // http://www.open-open.com/lib/view/open1342179346214.html
     //
     jQuery.extend(jQuery.validator.messages, {
-      required: "必选字段",
+      required: "必填字段",
       remote: "请修正该字段",
       email: "请输入正确格式的电子邮件",
       url: "请输入合法的网址",
@@ -353,6 +367,16 @@ var YD = YD || {};
       max: jQuery.validator.format("请输入一个最大为 {0} 的值"),
       min: jQuery.validator.format("请输入一个最小为 {0} 的值")
     });
+
+    return (function () {
+      // 提交表单
+      $('form').submit(function (e) {
+        e.preventDefault();
+        postJson('/userController/login', 'form#login', function () {
+          redirectToUrl('/front.html');
+        });
+      });
+    }());
 
   }; // end YD.userLogin
 
