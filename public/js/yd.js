@@ -59,15 +59,14 @@ YD = YD || {};
         if (_.has(data, 'error')) {
           alert(data.error);
         } else {
-          note('zenme keneng kandao else');
-          // onSuccess();
+          onSuccess();
         }
       })
       .fail(function (data, status, xhr) {
         showStatusMsg(data + ' ' + status + ' ' + xhr);
       })
       .always(function (data) {
-        note(data.error);
+        note('on always: ' + data);
       });
   };
 
@@ -85,6 +84,9 @@ YD = YD || {};
   };
 
   // 将用户重定向到某页面的正确方式
+  // 注意：这个函数是副作用起作用，因此作为参数给其它函数用的时候一定要包在function () {} 中
+  // 否则由于call-by-value，它一定会被求值并产生副作用，即重定向
+  // 这个问题我用了两天，花费了好几个小时才搞明白
   redirectToUrl = function (url) {
     window.location.replace(url);
   };
@@ -362,13 +364,9 @@ YD = YD || {};
     // <form action="/userController/login" method="post" id="login" novalidate="novalidate">
     // action是提交地址,method是提交方式
     login = function () {
-      postJson('/userController/login', 'form#login', redirectToUrl('/front.html'));
-      // var r = postJson('/userController/login', 'form#login');
-      // if (r === true) {
-      //   redirectToUrl('/front.html');
-      // } else {
-      //   note(r);
-      // }
+      postJson('/userController/login', 'form#login', function () {
+        redirectToUrl('/front.html');
+      })
     };
 
     return (function () {
@@ -376,6 +374,7 @@ YD = YD || {};
       $('form').submit(function (e) {
         e.preventDefault();
         login();
+
       });
     }());
 
