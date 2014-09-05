@@ -310,7 +310,7 @@ YD = YD || {};
       repeat();
       // 坑
       // setInterval不接受 repeatCallback()
-      // 只能用字符串或变量名
+      // 只能用字符串或变量名，且不能有括号！
       // 也就是说，其内部用了eval
       // 具体是不是这样需要查书
       //
@@ -319,7 +319,7 @@ YD = YD || {};
       // 但是后台数据变了页面并不帅新
       // 需要按ctrl - r 刷新
       // chrome中就自动刷新
-      setInterval(repeat, 2000);
+      setInterval(repeat, 20000); // 单位是毫秒
     }());
   }; // end YD.startDispache
 
