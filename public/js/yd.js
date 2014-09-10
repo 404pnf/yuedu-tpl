@@ -55,6 +55,7 @@ YD = YD || {};
   // 这是用现在这种纯手工活js而不用框架的限制。
   postJson = function (url, cssID, onSuccess) {
     var form_data = $(cssID).serializeJSON();
+    console.log(form_data);
     $.post(url, form_data)
       .done(function (data) {
         if (_.has(data, 'error')) {
