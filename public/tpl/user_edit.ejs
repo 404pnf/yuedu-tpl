@@ -14,12 +14,12 @@
      <% }); %>
   </div>
 
-  <div><label>出生日期:</label><input type="text"  name="dob" value=<%= dob %> class="input_style"/></div>
+  <div><label>出生日期:</label><input type="text" name="dob" value=<%= dob %> class="input_style"/></div>
 
   <div><label>年级:</label>
     <select name="grade" class="input_style wryh">
       <% _.each(grades, function(e) { %>
-        <option value="<%= e.key %>">
+        <option value=<%= e.key %>>
           <% if (e.key === user.grade.key) { %>
             selected
           <% } %>
