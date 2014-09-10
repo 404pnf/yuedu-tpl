@@ -71,12 +71,13 @@ YD = YD || {};
 
   };
 
-  // SIDE-EFFECT ONLY 做参数使用请包裹在 functin () {} 中
-  // 从局部变量获得数据，绑定模版，插入到html页面中。
-  // 可以在使用数据前通过callback修饰数据。
-  // callback中修改的是数据的深拷贝。使用underscore-contrib中的snapshot方法
-  // 因此不会影响原始数据。
-  // 这里遵守不是自己创建的数据就不应该修改的原则。
+  // 绑定数据到模版并将渲染结果插入到页面
+  // 1. SIDE-EFFECT ONLY 做参数使用请包裹在 functin () {} 中
+  // 2. 从局部变量获得数据，绑定模版，插入到html页面中。
+  // 3. 可以在使用数据前通过callback修饰数据。
+  // 4. callback中修改的是数据的深拷贝。使用underscore-contrib中的snapshot方法
+  //    因此不会影响原始数据。
+  //    这里遵守不是自己创建的数据就不应该修改的原则。
   renderLocalData = function (data, cssID, tpl, callback) {
     return function () {
       var cb = callback || _.identity,
