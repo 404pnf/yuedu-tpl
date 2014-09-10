@@ -17,16 +17,15 @@ YD = YD || {};
     postJson,
     renderLocalData,
     redirectToUrl,
+    wrap,
     note;
 
   //
   // ## 工具函数
   //
 
-  // SIDE-EFFECT ONLY 做参数使用请包裹在 functin () {} 中
-  // 先清除之前的msg内容
+  // SIDE-EFFECT ONLY
   showStatusMsg = function (data) {
-    // $('#msg').empty();
     // 错误就是一个字符串，获取方法是读取 data.error 的值
     alert(data.error);
   };
@@ -34,6 +33,7 @@ YD = YD || {};
   // 模仿if (predict) {}，
   // 或者说模仿scheme中的when。
   // **注意：action必须是一个返回函数的函数，这样才能延迟执行**
+  // 可以用后面写的wrap函数包裹一下
   doWhen = function (predict, action) {
     if (predict) {
       action();
@@ -43,16 +43,10 @@ YD = YD || {};
   // ## 提交表单内容到后台
   //
   // 1. 从表单获取数据
-  // 2. 将数据转为json
+  // 2. 用jquery插件将数据转为json
   // 3. 提交json给后台api
-  // 4. 显示错误信息到html，此函数写死在.done里面
-  // 5. 如果成功，后台会返回带有'success'键名的对象，此时执行成功时的回调函数
-  //
-  // TODO
-  // 我尝试把这个函数改为 1 使用 promise 2 callback直接用 redirectToUrl 方法定向会用户页面
-  // 因为用户页面的默认逻辑就是显示信息
-  // 但如果这样，重定向后的页面无法获得post提交后服务器返回的信息，也就无法显示
-  // 这是用现在这种纯手工活js而不用框架的限制。
+  // 4. 如果后台返回带"error"的键名的对象，显示错误并停止提交，停留在编辑页面
+  // 5. 如果后台会返回带有'success'键名的对象，表示提交成功，执行回调函数
   postJson = function (url, cssID, callback) {
     var form_data,
       onSuccess,
@@ -91,24 +85,21 @@ YD = YD || {};
     };
   };
 
-  // SIDE-EFFECT ONLY 做参数使用请包裹在 functin () {} 中
-  // 将用户重定向到某页面的正确方式
-  // 注意：这个函数是副作用起作用，因此作为参数给其它函数用的时候一定要包在function () {} 中
-  // 否则由于call-by-value，它一定会被求值并产生副作用，即重定向
-  // 这个问题我用了两天，花费了好几个小时才搞明白
   redirectToUrl = function (url) {
     window.location.replace(url);
   };
 
-  // SIDE-EFFECT ONLY 做参数使用请包裹在 functin () {} 中
-  // 开发时方便发现错误。封装console.log是为了可在需要时候直接用alert替换console.log。
-  // 或者加入其它修饰。
-  // 这就是function as abstract behavior unit。
+  // 包裹那些有副作用的函数，防止它们在作为参数的时候先被求值了
+  wrap = function wrap(func) {
+    return function () {
+      func();
+    };
+  };
+
   note = function (msg) {
     console.log("NOTE: ");
     console.log(msg);
   };
-
 
   //
   // ##  user.html 页面
@@ -157,7 +148,6 @@ YD = YD || {};
       userInfoAll.then(function (data) {
         new EJS({url: 'tpl/' + 'user_edit.ejs'}).update('user_info', data);
       });
-      // getUserDataAndCallback('user_edit.ejs', 'user_info');
     };
 
     // 这里不能简化，因为这里不但需要知道总共有多少图片可选还需知道用户当前选的是哪个
@@ -172,15 +162,12 @@ YD = YD || {};
     // 这样此函数作为参数传给postJson时才不会被执行产生副作用
     // 只有这样 postJson 中的检查是否有错误的逻辑才能起作用
     userSave = function () {
-      postJson('/userController/save', 'form#user_info', function () { userShow(); });
-      // var data =  $('form#user_info').serializeJSON();
-      // $.post('/userController/save', {data: data});
+      postJson('/userController/save', 'form#user_info', wrap(userSave));
     };
 
     userPhotoSave = function () {
-      postJson('/userController/save', 'form#user_info', userShow());
+      postJson('/userController/save', 'form#user_info', wrap(userShow));
     };
-
 
     return (function () {
       // 直接显示用户信息和头像
