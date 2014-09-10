@@ -53,23 +53,28 @@ YD = YD || {};
   // 因为用户页面的默认逻辑就是显示信息
   // 但如果这样，重定向后的页面无法获得post提交后服务器返回的信息，也就无法显示
   // 这是用现在这种纯手工活js而不用框架的限制。
-  postJson = function (url, cssID, onSuccess) {
-    var form_data = $(cssID).serializeJSON();
+  postJson = function (url, cssID, callback) {
+    var form_data,
+      onSuccess,
+      onFailure;
+
+    form_data = { data: $(cssID).serializeJSON() };
     console.log(form_data);
-    $.post(url, form_data)
-      .done(function (data) {
-        if (_.has(data, 'error')) {
-          alert(data.error);
-        } else {
-          onSuccess();
-        }
-      })
-      .fail(function (data, status, xhr) {
-        showStatusMsg(data + ' ' + status + ' ' + xhr);
-      })
-      .always(function (data) {
-        note('on always: ' + data);
-      });
+
+    onSuccess = function (data) {
+      if (_.has(data, 'error')) {
+        alert(data.error);
+      } else {
+        callback();
+      }
+    };
+
+    onFailure = function (data, status, xhr) {
+      showStatusMsg(data + ' ' + status + ' ' + xhr);
+    };
+
+    $.post(url, form_data).done(onSuccess).fail(onFailure);
+
   };
 
   // SIDE-EFFECT ONLY 做参数使用请包裹在 functin () {} 中
@@ -167,7 +172,9 @@ YD = YD || {};
     // 这样此函数作为参数传给postJson时才不会被执行产生副作用
     // 只有这样 postJson 中的检查是否有错误的逻辑才能起作用
     userSave = function () {
-      postJson('/userController/save', 'form#user_info', userShow());
+      postJson('/userController/save', 'form#user_info', function () { userShow(); });
+      // var data =  $('form#user_info').serializeJSON();
+      // $.post('/userController/save', {data: data});
     };
 
     userPhotoSave = function () {
