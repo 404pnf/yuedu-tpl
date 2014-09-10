@@ -157,10 +157,6 @@ YD = YD || {};
       });
     };
 
-    // TODO
-    // 因为 userShow() 直接有副作用，所以这里似乎应该用 userShow。
-    // 这样此函数作为参数传给postJson时才不会被执行产生副作用
-    // 只有这样 postJson 中的检查是否有错误的逻辑才能起作用
     userSave = function () {
       postJson('/userController/save', 'form#user_info', wrap(userSave));
     };
