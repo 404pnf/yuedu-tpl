@@ -14,7 +14,7 @@ end
 get '/' do
   text = %q(
     <a href=/chart.html>chart.html</a><br>
-    <a href=/personal_info.html>personal_info.html</a><br>
+    <a href=/personal_info.html>user</a><br>
     <a href=/front.html>front.html</a><br>
     <a href=/login.html>login.html</a><br>
   )
