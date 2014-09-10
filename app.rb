@@ -24,13 +24,13 @@ end
 get '/userController/photos' do
   photos = {
     photos: [
-      { key: 'a', value: '/images/head.png' },
-      { key: 'b', value: '/images/head.png' },
-      { key: 'c', value: '/images/head.png' },
-      { key: 'd', value: '/images/head.png' },
-      { key: 'e', value: '/images/head.png' },
-      { key: 'f', value: '/images/head.png' },
-      { key: 'g', value: '/images/head.png' }
+      { key: 'a', value: 'images/head1.png'  },
+      { key: 'b', value: 'images/head1.png'  },
+      { key: 'c', value: 'images/head1.png'  },
+      { key: 'd', value: 'images/head1.png'  },
+      { key: 'e', value: 'images/head1.png'  },
+      { key: 'f', value: 'images/head1.png'  },
+      { key: 'g', value: 'images/head1.png'  }
     ]
   }
   JSONP photos
@@ -54,7 +54,7 @@ get '/userController/show/loginUser' do
     gender: { key: 'male', value: '男' },
     age: 12,
     dob: '2004-07-26 11:37:53 +0800',
-    photo: { key: 'e', value: '/images/head.png' },
+    photo: { key: 'e', value: 'images/head1.png' },
     grade: { key: 'd', value: '小学四年级' },
     school: '史家胡同小学',
     email: 'ererer@fltrp.com',
