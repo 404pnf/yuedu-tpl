@@ -1,11 +1,16 @@
-<h2>编辑头像<h2>
+<div class="old_head fl"><img src=<%= photo.value %> /></div>
 <form id='user_photo'>
-<% _.each(photos, function(e) { %>
-  <input type="radio" name='photo_id' value='<%= e.key %>'
-    <% if (e.key === photo.key) { %>
-      checked
-    <% } %>
-    ><img src=<%= e.value %>><br>
-<% }); %>
+<ul class="new_head_list fl">
+  <% _.each(photos, function(e) { %>
+    <li>
+      <img src=<%= e.value %> width="80px" /><br />
+      <input type="radio" name="photo_id" name=<%= e.key %> value=<%= e.key %>
+        <% if (e.key === photo.key) { %>
+          checked
+        <% } %>
+      />
+    </li>
+  <% }); %>
+</ul>
 </form>
-<button type="buttom" id="user_photo_save">保存头像</button> <br>
+<button type="buttom" id="user_photo_save" class="fr btn_box_info">保存</button><a href="personal_info.html" class="btn btn_u">取消</a></div>
