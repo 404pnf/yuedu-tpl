@@ -296,7 +296,7 @@ YD = YD || {};
         _.identity
       );
 
-      note("又看到我啦。证明页面刷新啦。");
+      note("又看到我啦。证明页面刷新啦。 " + new Date());
 
     };
 
@@ -314,18 +314,10 @@ YD = YD || {};
     // 但暂时不改造，还没有掌握更好的方式
     return (function () {
       repeat();
-      // 坑
-      // setInterval不接受 repeatCallback()
-      // 只能用字符串或变量名，且不能有括号！
-      // 也就是说，其内部用了eval
-      // 具体是不是这样需要查书
-      //
-      // TODO 在 safari中不起作用！
-      // 就是说虽然每几秒执行一次函数
-      // 但是后台数据变了页面并不帅新
-      // 需要按ctrl - r 刷新
-      // chrome中就自动刷新
-      setInterval(repeat, 20000); // 单位是毫秒
+      // 这种方法直接浏览器刷新页面；在chrome和safari中都工作正常
+      setTimeout(function () {
+        window.location.reload(1);
+      }, 15000);
     }());
   }; // end YD.startDispache
 
