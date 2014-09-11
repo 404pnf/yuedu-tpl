@@ -1,5 +1,5 @@
 // ## jslint配置 不要删除
-
+// 星号和斜杠，指令间不要有空格
 /*jslint browser: true , devel: true, nomen: true, indent: 2*/
 /*global  $, jQuery, EJS, _ */
 
