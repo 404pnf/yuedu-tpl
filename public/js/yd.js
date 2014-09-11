@@ -90,7 +90,7 @@ YD = YD || {};
     return function () {
       var cb = callback || _.identity,
         clonedData = _.snapshot(data);
-      new EJS({url: 'tpl/' + tpl}).update(cssID, cb(clonedData));
+      new EJS({url: conf.tplDir + tpl}).update(cssID, cb(clonedData));
     };
   };
 
@@ -140,13 +140,13 @@ YD = YD || {};
 
     userShow = function () {
       userInfoAndPhoto.then(function (data) {
-        new EJS({url: 'tpl/' + 'user_show.ejs'}).update('user_info', data);
+        new EJS({url: conf.tplDir + 'user_show.ejs'}).update('user_info', data);
       });
     };
 
     userBarShow = function () {
       userInfoAndPhoto.then(function (data) {
-        new EJS({url: 'tpl/' + 'user_bar.ejs'}).update('user_bar', data);
+        new EJS({url: conf.tplDir + 'user_bar.ejs'}).update('user_bar', data);
       });
     };
 
@@ -155,14 +155,14 @@ YD = YD || {};
 
     userEdit = function () {
       userInfoAll.then(function (data) {
-        new EJS({url: 'tpl/' + 'user_edit.ejs'}).update('user_info', data);
+        new EJS({url: conf.tplDir + 'user_edit.ejs'}).update('user_info', data);
       });
     };
 
     // 这里不能简化，因为这里不但需要知道总共有多少图片可选还需知道用户当前选的是哪个
     userPhotoEdit = function () {
       userInfoAndPhoto.then(function (data) {
-        new EJS({url: 'tpl/' + 'user_photo_edit.ejs'}).update('user_info', data);
+        new EJS({url: conf.tplDir + 'user_photo_edit.ejs'}).update('user_info', data);
       });
     };
 
@@ -277,7 +277,7 @@ YD = YD || {};
       });
 
       userBarShow = userInfoAndPhoto.then(function (data) {
-        new EJS({url: 'tpl/' + 'user_bar.ejs'}).update('user_bar', data);
+        new EJS({url: conf.tpldir + 'user_bar.ejs'}).update('user_bar', data);
       });
 
       // 渲染整个页面。
