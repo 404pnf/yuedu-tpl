@@ -279,7 +279,7 @@ YD = YD || {};
       });
 
       userBarShow = userInfoAndPhoto.then(function (data) {
-        new EJS({url: conf.tpldir + "user_bar.ejs"}).update("user_bar", data);
+        new EJS({url: conf.tplDir + "user_bar.ejs"}).update("user_bar", data);
       });
 
       // 渲染整个页面。
