@@ -296,7 +296,7 @@ YD = YD || {};
         _.identity
       );
 
-      note("又看到我啦。证明页面刷新啦。 " + new Date() );
+      note("又看到我啦。证明页面刷新啦。 " + new Date());
 
     };
 
