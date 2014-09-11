@@ -1,4 +1,5 @@
 // ## jslint配置 不要删除
+
 /*jslint browser: true , devel: true, nomen: true, indent: 2*/
 /*global  $, jQuery, EJS, _ */
 
@@ -12,13 +13,20 @@ YD = YD || {};
 (function () {
   "use strict";
 
-  var showStatusMsg,
+  var conf,
+    showStatusMsg,
     doWhen,
     postJson,
     renderLocalData,
     redirectToUrl,
     wrap,
     note;
+
+  // 配置信息
+  conf = {
+    userHomeUrl: '/personal_info.html',
+    tplDir: /tpl/
+  };
 
   //
   // ## 工具函数
@@ -183,6 +191,10 @@ YD = YD || {};
       $('#user_info').delegate('#user_info_save', 'click', userSave);
       // 保存头像
       $('#user_info').delegate('#user_photo_save', 'click', userPhotoSave);
+      // 监听取消编辑用户信息和取消编辑用户头像信息的按钮；
+      // 这里不能用wrap，因为 redirect(conf.userHomeUrl) 作为参数传给 wrap 时已经被求值
+      // 即副作用redirect已经起作用了
+      $('#user_info').delegate('#user_cancel_edit', 'click', function () { redirectToUrl(conf.userHomeUrl) });
     }());
   };
 
