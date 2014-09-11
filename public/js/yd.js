@@ -56,12 +56,12 @@ YD = YD || {};
   // 4. 如果后台返回带"error"的键名的对象，显示错误并停止提交，停留在编辑页面
   // 5. 如果后台会返回带有"success"键名的对象，表示提交成功，执行回调函数
   postJson = function (url, cssID, callback) {
-    var form_data,
+    var formData,
       onSuccess,
       onFailure;
 
-    form_data = { data: $(cssID).serializeJSON() };
-    console.log(form_data);
+    formData = { data: $(cssID).serializeJSON() };
+    console.log(formData);
 
     onSuccess = function (data) {
       if (_.has(data, "error")) {
@@ -75,7 +75,7 @@ YD = YD || {};
       showStatusMsg(data + " " + status + " " + xhr);
     };
 
-    $.post(url, form_data).done(onSuccess).fail(onFailure);
+    $.post(url, formData).done(onSuccess).fail(onFailure);
 
   };
 
@@ -194,7 +194,9 @@ YD = YD || {};
       // 监听取消编辑用户信息和取消编辑用户头像信息的按钮；
       // 这里不能用wrap，因为 redirect(conf.userHomeUrl) 作为参数传给 wrap 时已经被求值
       // 即副作用redirect已经起作用了
-      $("#user_info").delegate("#user_cancel_edit", "click", function () { redirectToUrl(conf.userHomeUrl) });
+      $("#user_info").delegate("#user_cancel_edit", "click", function () {
+        redirectToUrl(conf.userHomeUrl);
+      });
     }());
   };
 
@@ -226,7 +228,7 @@ YD = YD || {};
       // 生成页面的函数
         examCurrent,
         examUpcoming,
-        examCurrent_continue,
+        examCurrentContinue,
         examScores,
         examScoresCantRetake,
 
@@ -234,7 +236,7 @@ YD = YD || {};
         updateDateText;
 
       // 有之前未完成考试
-      examCurrent_continue = doWhen(canTakeExam,
+      examCurrentContinue = doWhen(canTakeExam,
         renderLocalData(examInfo, "front_content", "start_current_continue.ejs"));
 
       // 有新考试可考
@@ -286,7 +288,7 @@ YD = YD || {};
         [
           userBarShow,
           examCurrent,
-          examCurrent_continue,
+          examCurrentContinue,
           examUpcoming,
           examScores,
           examScoresCantRetake
@@ -332,7 +334,7 @@ YD = YD || {};
   //
   YD.userLogin = function () {
     // highlight
-    var elements = $("input[type!="submit"], textarea, select");
+    var elements = $("input[type!='submit'], textarea, select");
 
     elements.focus(function () {
       $(this).parents("li").addClass("highlight");
