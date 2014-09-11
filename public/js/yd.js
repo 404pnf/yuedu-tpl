@@ -1,7 +1,7 @@
 // ## jslint配置 不要删除
 // 星号和斜杠，指令间不要有空格
 /*jslint browser: true , devel: true, nomen: true, indent: 2*/
-/*global  $, jQuery, EJS, _ */
+/*global $, jQuery, EJS, _, alert, console, setInterval, window*/
 
 // ## 唯一暴露出来的全局变量。也是程序的命名空间
 var YD;
@@ -65,7 +65,7 @@ YD = YD || {};
 
     onSuccess = function (data) {
       if (_.has(data, "error")) {
-        alert(data.error);
+        showStatusMsg(data.error);
       } else {
         callback();
       }
