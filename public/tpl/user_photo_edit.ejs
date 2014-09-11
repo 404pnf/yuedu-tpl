@@ -1,16 +1,19 @@
 <div class="old_head fl"><img src=<%= photo.value %> /></div>
 <form id='user_photo'>
-<ul class="new_head_list fl">
-  <% _.each(photos, function(e) { %>
-    <li>
-      <img src=<%= e.value %> width="80px" /><br />
-      <input type="radio" name="photo_id" name=<%= e.key %> value=<%= e.key %>
-        <% if (e.key === photo.key) { %>
-          checked
-        <% } %>
-      />
-    </li>
-  <% }); %>
-</ul>
+  <ul class="new_head_list fl">
+    <% _.each(photos, function(e) { %>
+      <li>
+        <img src=<%= e.value %> width="80px" /><br />
+        <input type="radio" name="photo_id" name=<%= e.key %> value=<%= e.key %>
+          <% if (e.key === photo.key) { %>
+            checked
+          <% } %>
+        />
+      </li>
+    <% }); %>
+  </ul>
 </form>
-<button type="buttom" id="user_photo_save" class="fr btn_box_info">保存</button><a href="personal_info.html" class="btn btn_u">取消</a></div>
+<div class="fr btn_box_info">
+<button type="button" id="user_photo_save" class="btn">保存</button>
+<button type="button" id="user_cancel_edit" class="btn btn_u">取消</button>
+</div>

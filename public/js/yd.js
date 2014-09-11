@@ -1,6 +1,7 @@
 // ## jslint配置 不要删除
+// 星号和斜杠，指令间不要有空格
 /*jslint browser: true , devel: true, nomen: true, indent: 2*/
-/*global  $, jQuery, EJS, _ */
+/*global $, jQuery, EJS, _, alert, console, setInterval, window*/
 
 // ## 唯一暴露出来的全局变量。也是程序的命名空间
 var YD;
@@ -12,13 +13,20 @@ YD = YD || {};
 (function () {
   "use strict";
 
-  var showStatusMsg,
+  var conf,
+    showStatusMsg,
     doWhen,
     postJson,
     renderLocalData,
     redirectToUrl,
     wrap,
     note;
+
+  // 配置信息
+  conf = {
+    userHomeUrl: "/personal_info.html",
+    tplDir: /tpl/
+  };
 
   //
   // ## 工具函数
@@ -46,28 +54,28 @@ YD = YD || {};
   // 2. 用jquery插件将数据转为json
   // 3. 提交json给后台api
   // 4. 如果后台返回带"error"的键名的对象，显示错误并停止提交，停留在编辑页面
-  // 5. 如果后台会返回带有'success'键名的对象，表示提交成功，执行回调函数
+  // 5. 如果后台会返回带有"success"键名的对象，表示提交成功，执行回调函数
   postJson = function (url, cssID, callback) {
-    var form_data,
+    var formData,
       onSuccess,
       onFailure;
 
-    form_data = { data: $(cssID).serializeJSON() };
-    console.log(form_data);
+    formData = { data: $(cssID).serializeJSON() };
+    console.log(formData);
 
     onSuccess = function (data) {
-      if (_.has(data, 'error')) {
-        alert(data.error);
+      if (_.has(data, "error")) {
+        showStatusMsg(data.error);
       } else {
         callback();
       }
     };
 
     onFailure = function (data, status, xhr) {
-      showStatusMsg(data + ' ' + status + ' ' + xhr);
+      showStatusMsg(data + " " + status + " " + xhr);
     };
 
-    $.post(url, form_data).done(onSuccess).fail(onFailure);
+    $.post(url, formData).done(onSuccess).fail(onFailure);
 
   };
 
@@ -82,7 +90,7 @@ YD = YD || {};
     return function () {
       var cb = callback || _.identity,
         clonedData = _.snapshot(data);
-      new EJS({url: 'tpl/' + tpl}).update(cssID, cb(clonedData));
+      new EJS({url: conf.tplDir + tpl}).update(cssID, cb(clonedData));
     };
   };
 
@@ -111,9 +119,9 @@ YD = YD || {};
       userPhotoEdit,
       userSave,
       userPhotoSave,
-      userinfo = '/userController/show/loginUser',
-      grades = '/userController/grades',
-      photos = '/userController/photos',
+      userinfo = "/userController/show/loginUser",
+      grades = "/userController/grades",
+      photos = "/userController/photos",
       userInfoAndPhoto,
       userBarShow,
       userInfoAll;
@@ -132,13 +140,13 @@ YD = YD || {};
 
     userShow = function () {
       userInfoAndPhoto.then(function (data) {
-        new EJS({url: 'tpl/' + 'user_show.ejs'}).update('user_info', data);
+        new EJS({url: conf.tplDir + "user_show.ejs"}).update("user_info", data);
       });
     };
 
     userBarShow = function () {
       userInfoAndPhoto.then(function (data) {
-        new EJS({url: 'tpl/' + 'user_bar.ejs'}).update('user_bar', data);
+        new EJS({url: conf.tplDir + "user_bar.ejs"}).update("user_bar", data);
       });
     };
 
@@ -147,23 +155,23 @@ YD = YD || {};
 
     userEdit = function () {
       userInfoAll.then(function (data) {
-        new EJS({url: 'tpl/' + 'user_edit.ejs'}).update('user_info', data);
+        new EJS({url: conf.tplDir + "user_edit.ejs"}).update("user_info", data);
       });
     };
 
     // 这里不能简化，因为这里不但需要知道总共有多少图片可选还需知道用户当前选的是哪个
     userPhotoEdit = function () {
       userInfoAndPhoto.then(function (data) {
-        new EJS({url: 'tpl/' + 'user_photo_edit.ejs'}).update('user_info', data);
+        new EJS({url: conf.tplDir + "user_photo_edit.ejs"}).update("user_info", data);
       });
     };
 
     userSave = function () {
-      postJson('/userController/save', 'form#user_info', wrap(userSave));
+      postJson("/userController/save", "form#user_info", wrap(userSave));
     };
 
     userPhotoSave = function () {
-      postJson('/userController/save', 'form#user_info', wrap(userShow));
+      postJson("/userController/save", "form#user_info", wrap(userShow));
     };
 
     return (function () {
@@ -176,13 +184,19 @@ YD = YD || {};
       //
 
       // 编辑用户
-      $('#user_info').delegate('#user_info_edit', 'click', userEdit);
+      $("#user_info").delegate("#user_info_edit", "click", userEdit);
       // 编辑头像
-      $('#user_info').delegate('#user_photo_edit', 'click', userPhotoEdit);
+      $("#user_info").delegate("#user_photo_edit", "click", userPhotoEdit);
       // 保存用户
-      $('#user_info').delegate('#user_info_save', 'click', userSave);
+      $("#user_info").delegate("#user_info_save", "click", userSave);
       // 保存头像
-      $('#user_info').delegate('#user_photo_save', 'click', userPhotoSave);
+      $("#user_info").delegate("#user_photo_save", "click", userPhotoSave);
+      // 监听取消编辑用户信息和取消编辑用户头像信息的按钮；
+      // 这里不能用wrap，因为 redirect(conf.userHomeUrl) 作为参数传给 wrap 时已经被求值
+      // 即副作用redirect已经起作用了
+      $("#user_info").delegate("#user_cancel_edit", "click", function () {
+        redirectToUrl(conf.userHomeUrl);
+      });
     }());
   };
 
@@ -192,29 +206,29 @@ YD = YD || {};
   // 每隔一段时间时间查看一下数据源并重新刷新页面。
   YD.startDispache = function () {
 
-    var ajaxInfo =  $.get('/examController/studentLogin'),
+    var ajaxInfo =  $.get("/examController/studentLogin"),
       onSuccess,
       onFailure,
       repeat;
 
     onSuccess = function (data) {
-      var userinfo = '/userController/show/loginUser',
-        photos = '/userController/photos',
+      var userinfo = "/userController/show/loginUser",
+        photos = "/userController/photos",
         userInfoAndPhoto,
         userBarShow,
 
       // 将判定抽象为函数
         examInfo = _.snapshot(data), // - data 是 onSuccess 的参数； bind data to local variable
-        canTakeExam = _.has(examInfo, 'currentExam') && examInfo.currentExam.userExamState !== '0' && !(_.has(examInfo, 'latestExamResult')),
-        TookNoExam = canTakeExam && examInfo.currentExam.userExamState === '0' && !(_.has(examInfo, 'latestExamResult')),
-        hasUpcomingExam = _.has(examInfo, 'upcomingExam') && !_.has(examInfo, 'latestExamResult') && !_.has(examInfo, 'currentExam'),
-        hasResultCanRetake = _.has(examInfo, 'latestExamResult') && _.has(examInfo, 'currentExam'),
-        hasResultCanNotRetake = _.has(examInfo, 'latestExamResult') && !(_.has(examInfo, 'currentExam')),
+        canTakeExam = _.has(examInfo, "currentExam") && examInfo.currentExam.userExamState !== "0" && !(_.has(examInfo, "latestExamResult")),
+        TookNoExam = canTakeExam && examInfo.currentExam.userExamState === "0" && !(_.has(examInfo, "latestExamResult")),
+        hasUpcomingExam = _.has(examInfo, "upcomingExam") && !_.has(examInfo, "latestExamResult") && !_.has(examInfo, "currentExam"),
+        hasResultCanRetake = _.has(examInfo, "latestExamResult") && _.has(examInfo, "currentExam"),
+        hasResultCanNotRetake = _.has(examInfo, "latestExamResult") && !(_.has(examInfo, "currentExam")),
 
       // 生成页面的函数
         examCurrent,
         examUpcoming,
-        examCurrent_continue,
+        examCurrentContinue,
         examScores,
         examScoresCantRetake,
 
@@ -222,20 +236,20 @@ YD = YD || {};
         updateDateText;
 
       // 有之前未完成考试
-      examCurrent_continue = doWhen(canTakeExam,
-        renderLocalData(examInfo, 'front_content', 'start_current_continue.ejs'));
+      examCurrentContinue = doWhen(canTakeExam,
+        renderLocalData(examInfo, "front_content", "start_current_continue.ejs"));
 
       // 有新考试可考
       examCurrent = doWhen(TookNoExam,
-        renderLocalData(examInfo, 'front_content', 'start_current.ejs'));
+        renderLocalData(examInfo, "front_content", "start_current.ejs"));
 
       updateDateText = function (d) {
         var o = _.map(d.upcomingExam, function (e) {
           if (e.isTodayExam) {
-            e.endTime = '';
-            e.isTodayExam = '今天';
+            e.endTime = "";
+            e.isTodayExam = "今天";
           } else {
-            e.isTodayExam = '';
+            e.isTodayExam = "";
           }
           return e;
         });
@@ -245,16 +259,16 @@ YD = YD || {};
 
       // 考试预告区块
       examUpcoming = doWhen(hasUpcomingExam,
-        renderLocalData(examInfo, 'front_content', 'start_upcoming.ejs', updateDateText));
+        renderLocalData(examInfo, "front_content", "start_upcoming.ejs", updateDateText));
 
       // 考试成绩区块
       examScores = doWhen(hasResultCanRetake,
-        renderLocalData(examInfo, 'front_content', 'start_scores.ejs'));
+        renderLocalData(examInfo, "front_content", "start_scores.ejs"));
 
       // 有成绩，但无currentExam，可能有upcommings，可能没有
       examScoresCantRetake = doWhen(hasResultCanNotRetake,
-        renderLocalData(examInfo, 'front_content', 'start_scores_cant_retake_exam.ejs', function (d) {
-          var hasUpcoming = _.has(examInfo, 'upcomingExam');
+        renderLocalData(examInfo, "front_content", "start_scores_cant_retake_exam.ejs", function (d) {
+          var hasUpcoming = _.has(examInfo, "upcomingExam");
           return _.merge(d, {hasUpcoming: hasUpcoming}, updateDateText(d)); // 告诉模版没有upcomingExam区块
         }));
 
@@ -265,7 +279,7 @@ YD = YD || {};
       });
 
       userBarShow = userInfoAndPhoto.then(function (data) {
-        new EJS({url: 'tpl/' + 'user_bar.ejs'}).update('user_bar', data);
+        new EJS({url: conf.tplDir + "user_bar.ejs"}).update("user_bar", data);
       });
 
       // 渲染整个页面。
@@ -274,7 +288,7 @@ YD = YD || {};
         [
           userBarShow,
           examCurrent,
-          examCurrent_continue,
+          examCurrentContinue,
           examUpcoming,
           examScores,
           examScoresCantRetake
@@ -282,12 +296,12 @@ YD = YD || {};
         _.identity
       );
 
-      note('又看到我啦。证明页面刷新啦。');
+      note("又看到我啦。证明页面刷新啦。");
 
     };
 
     onFailure = function (data, status, xhr) {
-      $('#msg').text(data, status, xhr).slideDown('slow');
+      $("#msg").text(data, status, xhr).slideDown("slow");
     };
 
     repeat = function () {
@@ -323,10 +337,10 @@ YD = YD || {};
     var elements = $("input[type!='submit'], textarea, select");
 
     elements.focus(function () {
-      $(this).parents('li').addClass('highlight');
+      $(this).parents("li").addClass("highlight");
     });
     elements.blur(function () {
-      $(this).parents('li').removeClass('highlight');
+      $(this).parents("li").removeClass("highlight");
     });
 
     $("#forgotpassword").click(function () {
@@ -366,10 +380,10 @@ YD = YD || {};
 
     return (function () {
       // 提交表单
-      $('form').submit(function (e) {
+      $("form").submit(function (e) {
         e.preventDefault();
-        postJson('/userController/login', 'form#login', function () {
-          redirectToUrl('/front.html');
+        postJson("/userController/login", "form#login", function () {
+          redirectToUrl("/front.html");
         });
       });
     }());

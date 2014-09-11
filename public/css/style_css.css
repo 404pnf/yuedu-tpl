@@ -58,18 +58,17 @@ a.next_btn:hover{ background:url(../images/btn_bg.png) no-repeat 0 -100px}
 .nav_exit{ background:url(../images/exit.png) no-repeat bottom; width:294px; height:133px; display:inline-block;}
 .nav_exit:hover{ background:url(../images/exit_h.png) no-repeat bottom;}
 .nav_head{ position:absolute; z-index:1000; width:121px; height:97px; text-align:center; padding-top:36px;}
-.nav_head img{ display:block; margin:0 auto 8px auto;}
+.nav_head img{ display:block; margin:0 auto 8px auto; height: 55px;}
 .nav_head span{ font-size:18px; color:#FFF;}
 .nav_last{ position:relative;}
 
 /*main*/
 .web_main{ width:800px; height:330px; margin: 44px auto 0 auto;}
 .main_left{ width:300px; margin-right:50px;margin-top: 26px;}
-.main_right{ width:423px; padding-top:20px;margin-top: 26px;}
+.main_right{ width:423px; margin-top: 26px;}
 	/*person_info*/
-.head_box{ margin-bottom:25px;}
-.head_box img{ float:left; margin:0 42px 0 30px;}
-.head_box a{}
+.head_box{ margin-bottom:25px; overflow: hidden;}
+.head_box img{ float:left; margin:0 42px 0 30px; height: 80px}
 .form_one{ background:#d1e2e7; border-radius:5px; line-height:44px; height:44px; margin-bottom:20px; display:inline-block;}
 .form_one label{ background:#3d9ee1; color:#ffffff; font-size:18px; display:inline-block; width:102px; text-align:center;border-radius:5px 0 0 5px; height:44px;}
 .form_one .span1{ width:172px; display:inline-block; padding-left:20px;}
@@ -123,14 +122,15 @@ a.next_btn:hover{ background:url(../images/btn_bg.png) no-repeat 0 -100px}
 /*edit_info*/
 .old_head{ width:200px; text-align:center; margin-top:50px;}
 .old_head_info{ margin-right:20px;}
-.new_head_list{ width:530px; margin-top:20px;}
+.new_head_list{ width:530px; margin-top:20px;margin-left: 40px;}
 .new_head_list li{ float:left; margin:0px 16px 10px 80px; text-align:center}
-.btn_box_info a{ margin-right:36px;}
+.btn_box_info button{ margin-right:36px;}
 .info_l{ width:290px; margin-bottom:40px;}
 .info_l label{ width:75px; display: block; float:left; font-weight:bold; margin-top:3px;}
 .info_l div{ margin-top:60px;}
-.info_l div input,.info_l div select{ margin-left:10px;}
+.info_l div input,.info_l div select{ margin-left:10px;font-size: 16px;}
 .input_style{ border:1px solid #dadada; box-shadow:2px 2px 1px #b2b0ac; height:27px; line-height:27px; width:160px;}
 .male,.female{ border-radius:20px; padding:2px 20px; color:#fff; margin:0 5px}
 .male{ background:#009dd5;}
 .female{ background:#f2a8c8;}
+.btn_box_info{}

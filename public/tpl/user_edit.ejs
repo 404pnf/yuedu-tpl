@@ -1,45 +1,46 @@
-<div class="old_head fl old_head_info"><img src="images/head1.png" width="110px" /><br /><bottun type="button" id="user_photo_edit" class="btn">更换头像</button></div>
-
-<div class="info_l fl">
+<div class="old_head fl old_head_info"><img src=<%= photo.value %> width="110px" /><br /><bottun type="button" id="user_photo_edit" class="btn">更换头像</button></div>
 
 <form id="user_info">
-  <div><label>姓名:</label><input type="text" name="userName" value=<%= userName %> class="input_style wryh" /></div>
+  <div class="info_l fl">
+    <div><label>姓名:</label><input type="text" name="userName" value=<%= userName %> class="input_style wryh" /></div>
 
-  <div><label>出生日期:</label><input type="text" name="dob" value=<%= dob %> class="input_style"/></div>
-
-  <div><label>性别:</label>
-    <% _.each({male: "男", female: "女"}, function(v, k) { %>
-      <input type="radio" name="gender" value=<%= k %>
-        <% if (gender.key === k) { %>
-          checked
-        <% } %>
-      ><span class=<%= k %>><%= v %></span>
-     <% }); %>
-  </div>
-
-  <div><label>年级:</label>
-    <select name="grade" class="input_style wryh">
-      <% _.each(grades, function(e) { %>
-        <option value=<%= e.key %>
-          <% if (e.key === grade.key) { %>
-            selected
+    <div><label>性别:</label>
+      <% _.each({male: "男", female: "女"}, function(v, k) { %>
+        <input type="radio" name="gender" value=<%= k %>
+          <% if (gender.key === k) { %>
+            checked
           <% } %>
-        >
-        <%= e.value %>
-        </option>
-      <% }); %>
-    </select>
+        ><span class=<%= k %>><%= v %></span>
+       <% }); %>
+    </div>
+
+    <div><label>出生日期:</label><input type="text" name="dob" value=<%= dob %> class="input_style"/></div>
   </div>
 
-  <div><label>学校:</label><input type="text" name="school" value=<%= school %> class="input_style wryh"/></div>
+  <div class="info_l fl">
+    <div><label>年级:</label>
+      <select name="grade" class="input_style wryh">
+        <% _.each(grades, function(e) { %>
+          <option value=<%= e.key %>
+            <% if (e.key === grade.key) { %>
+              selected
+            <% } %>
+          >
+          <%= e.value %>
+          </option>
+        <% }); %>
+      </select>
+    </div>
 
-  <div><label>邮箱:</label><input type="text"  name="email" value=<%= email %> class="input_style wryh"/></div>
+    <!--   <div><label>学校:</label><input type="text" name="school" value=<%= school %> class="input_style wryh"/></div>  -->
+
+    <div><label>邮箱:</label><input type="text"  name="email" value=<%= email %> class="input_style wryh"/></div>
+  </div>
 
 </from>
 
-  <div>
-    <button type ="button" id = "user_info_save" class="fr btn_box_info">保存</button>
-    <button href="#none" class="btn btn_u">取消</bottun>
-  </div>
-
+<div class="fr btn_box_info clear">
+  <button type ="button" id = "user_info_save" class="btn">保存</button>
+  <button type ="button" id="user_cancel_edit" class="btn btn_u">取消</bottun>
 </div>
+

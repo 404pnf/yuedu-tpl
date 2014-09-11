@@ -29,8 +29,7 @@ get '/userController/photos' do
       { key: 'c', value: 'images/head1.png'  },
       { key: 'd', value: 'images/head1.png'  },
       { key: 'e', value: 'images/head1.png'  },
-      { key: 'f', value: 'images/head1.png'  },
-      { key: 'g', value: 'images/head1.png'  }
+      { key: 'f', value: 'images/head1.png'  }
     ]
   }
   JSONP photos
