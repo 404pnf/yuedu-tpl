@@ -414,7 +414,7 @@ YD = YD || {};
         function (a, e) {
           return (a && $(e).val());
         },
-      true);
+        true);
 
       console.log(validValue);
 
@@ -423,7 +423,7 @@ YD = YD || {};
           wrap(redirectToUrl("/front.html"));
         });
       } else {
-        alert("所有输入框都必须填写。")
+        alert("所有输入框都必须填写。");
       }
     });
 
