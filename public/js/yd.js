@@ -222,7 +222,8 @@ YD = YD || {};
       // 将判定抽象为函数
         examInfo = _.snapshot(data), // - data 是 onSuccess 的参数； bind data to local variable
         canTakeExam = _.has(examInfo, "currentExam") && examInfo.currentExam.userExamState !== "0" && !(_.has(examInfo, "latestExamResult")),
-        TookNoExam = canTakeExam && examInfo.currentExam.userExamState === "0" && !(_.has(examInfo, "latestExamResult")),
+        canTakeExamNolatestExamResult = _.has(examInfo, "currentExam"),
+        TookNoExam = canTakeExam && examInfo.currentExam.userExamState === "0"  && !(_.has(examInfo, "latestExamResult")),
         hasUpcomingExam = _.has(examInfo, "upcomingExam") && !_.has(examInfo, "latestExamResult") && !_.has(examInfo, "currentExam"),
         hasResultCanRetake = _.has(examInfo, "latestExamResult") && _.has(examInfo, "currentExam"),
         hasResultCanNotRetake = _.has(examInfo, "latestExamResult") && !(_.has(examInfo, "currentExam")),
@@ -230,6 +231,7 @@ YD = YD || {};
 
       // 生成页面的函数
         examCurrent,
+        examCurrentNoResulat,
         examUpcoming,
         examCurrentContinue,
         examScores,
@@ -237,6 +239,10 @@ YD = YD || {};
 
         // 帮助函数
         updateDateText;
+
+      // 之前未考过任何考试，因此无latestResult，当前有考试
+      examCurrentNoResulat = doWhen(canTakeExamNolatestExamResult,
+        renderLocalData(examInfo, "front_content", "start_current_continue.ejs"));
 
       // 有之前未完成考试
       examCurrentContinue = doWhen(canTakeExam,
@@ -287,10 +293,12 @@ YD = YD || {};
 
       // 渲染整个页面。
       // 对每个函数执行_identity就等于执行了它们。
+      // TODO:  注意： 顺序是有关系的！
       _.map(
         [
           userBarShow,
           examCurrent,
+          examCurrentNoResulat,
           examCurrentContinue,
           examUpcoming,
           examScores,
@@ -332,23 +340,23 @@ YD = YD || {};
   //
   YD.userLogin = function () {
     // highlight
-    var elements = $("input[type!='submit'], textarea, select");
+    // var elements = $("input[type!='submit'], textarea, select");
 
-    elements.focus(function () {
-      $(this).parents("li").addClass("highlight");
-    });
-    elements.blur(function () {
-      $(this).parents("li").removeClass("highlight");
-    });
+    // elements.focus(function () {
+    //   $(this).parents("li").addClass("highlight");
+    // });
+    // elements.blur(function () {
+    //   $(this).parents("li").removeClass("highlight");
+    // });
 
-    $("#forgotpassword").click(function () {
-      $("#password").removeClass("required");
-      $("#login").submit();
-      $("#password").addClass("required");
-      return false;
-    });
+    // $("#forgotpassword").click(function () {
+    //   $("#password").removeClass("required");
+    //   $("#login").submit();
+    //   $("#password").addClass("required");
+    //   return false;
+    // });
 
-    $("#login").validate();
+    // $("#login").validate();
 
     //
     // 修改该 jquery validation 插件的报错信息到中文
@@ -356,25 +364,25 @@ YD = YD || {};
     // 如需要修改，可在js代码中加入：
     // http://www.open-open.com/lib/view/open1342179346214.html
     //
-    jQuery.extend(jQuery.validator.messages, {
-      required: "必填字段",
-      remote: "请修正该字段",
-      email: "请输入正确格式的电子邮件",
-      url: "请输入合法的网址",
-      date: "请输入合法的日期",
-      dateISO: "请输入合法的日期 (ISO).",
-      number: "请输入合法的数字",
-      digits: "只能输入整数",
-      creditcard: "请输入合法的信用卡号",
-      equalTo: "请再次输入相同的值",
-      accept: "请输入拥有合法后缀名的字符串",
-      maxlength: jQuery.validator.format("请输入一个长度最多是 {0} 的字符串"),
-      minlength: jQuery.validator.format("请输入一个长度最少是 {0} 的字符串"),
-      rangelength: jQuery.validator.format("请输入一个长度介于 {0} 和 {1} 之间的字符串"),
-      range: jQuery.validator.format("请输入一个介于 {0} 和 {1} 之间的值"),
-      max: jQuery.validator.format("请输入一个最大为 {0} 的值"),
-      min: jQuery.validator.format("请输入一个最小为 {0} 的值")
-    });
+    // jQuery.extend(jQuery.validator.messages, {
+    //   required: "必填字段",
+    //   remote: "请修正该字段",
+    //   email: "请输入正确格式的电子邮件",
+    //   url: "请输入合法的网址",
+    //   date: "请输入合法的日期",
+    //   dateISO: "请输入合法的日期 (ISO).",
+    //   number: "请输入合法的数字",
+    //   digits: "只能输入整数",
+    //   creditcard: "请输入合法的信用卡号",
+    //   equalTo: "请再次输入相同的值",
+    //   accept: "请输入拥有合法后缀名的字符串",
+    //   maxlength: jQuery.validator.format("请输入一个长度最多是 {0} 的字符串"),
+    //   minlength: jQuery.validator.format("请输入一个长度最少是 {0} 的字符串"),
+    //   rangelength: jQuery.validator.format("请输入一个长度介于 {0} 和 {1} 之间的字符串"),
+    //   range: jQuery.validator.format("请输入一个介于 {0} 和 {1} 之间的值"),
+    //   max: jQuery.validator.format("请输入一个最大为 {0} 的值"),
+    //   min: jQuery.validator.format("请输入一个最小为 {0} 的值")
+    // });
 
     // ## 注意
     // 直接在html中用 method='post'提交了
@@ -392,6 +400,18 @@ YD = YD || {};
     //     });
     //   });
     // }());
+
+    // NB: in JS, empty string is false
+    // '' is false
+    // ' ' with a space is true
+    var validValue;
+    validValue = _.reduce(["#password", "#username", "#yz"],
+      function (a, e) {
+        return (a && $(e).val());
+      },
+      false);
+
+
 
   }; // end YD.userLogin
 
