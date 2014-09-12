@@ -65,7 +65,8 @@ YD = YD || {};
 
     onSuccess = function onSuccess(data) {
       if (_.has(data, "error")) {
-        showStatusMsg(data.error);
+        //showStatusMsg(data.error);
+        alert(data.error);
       } else {
         callback();
       }
@@ -405,11 +406,26 @@ YD = YD || {};
     // '' is false
     // ' ' with a space is true
     var validValue;
-    validValue = _.reduce(["#password", "#username", "#yz"],
-      function (a, e) {
-        return (a && $(e).val());
-      },
-      false);
+
+    $("form").submit(function (e) {
+      e.preventDefault();
+
+      validValue = _.reduce(["#password", "#username", "#yz"],
+        function (a, e) {
+          return (a && $(e).val());
+        },
+      true);
+
+      console.log(validValue);
+
+      if (validValue) {
+        postJson("/userController/login", "form#login", function () {
+          wrap(redirectToUrl("/front.html"));
+        });
+      } else {
+        alert("所有输入框都必须填写。")
+      }
+    });
 
 
 
