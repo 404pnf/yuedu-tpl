@@ -376,7 +376,7 @@ YD = YD || {};
       $("form").submit(function (e) {
         e.preventDefault();
         postJson("/userController/login", "form#login", function () {
-          redirectToUrl("/front.html");
+          wrap(redirectToUrl("/front.html"));
         });
       });
     }());
