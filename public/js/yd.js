@@ -33,7 +33,7 @@ YD = YD || {};
   //
 
   // SIDE-EFFECT ONLY
-  showStatusMsg = function (data) {
+  showStatusMsg = function showStatusMsg(data) {
     // 错误就是一个字符串，获取方法是读取 data.error 的值
     alert(data.error);
   };
@@ -42,7 +42,7 @@ YD = YD || {};
   // 或者说模仿scheme中的when。
   // **注意：action必须是一个返回函数的函数，这样才能延迟执行**
   // 可以用后面写的wrap函数包裹一下
-  doWhen = function (predict, action) {
+  doWhen = function doWhen(predict, action) {
     if (predict) {
       action();
     }
@@ -55,7 +55,7 @@ YD = YD || {};
   // 3. 提交json给后台api
   // 4. 如果后台返回带"error"的键名的对象，显示错误并停止提交，停留在编辑页面
   // 5. 如果后台会返回带有"success"键名的对象，表示提交成功，执行回调函数
-  postJson = function (url, cssID, callback) {
+  postJson = function postJson(url, cssID, callback) {
     var formData,
       onSuccess,
       onFailure;
@@ -63,7 +63,7 @@ YD = YD || {};
     formData = { data: $(cssID).serializeJSON() };
     console.log(formData);
 
-    onSuccess = function (data) {
+    onSuccess = function onSuccess(data) {
       if (_.has(data, "error")) {
         showStatusMsg(data.error);
       } else {
@@ -71,7 +71,7 @@ YD = YD || {};
       }
     };
 
-    onFailure = function (data, status, xhr) {
+    onFailure = function onFailure(data, status, xhr) {
       showStatusMsg(data + " " + status + " " + xhr);
     };
 
@@ -86,7 +86,7 @@ YD = YD || {};
   // 4. callback中修改的是数据的深拷贝。使用underscore-contrib中的snapshot方法
   //    因此不会影响原始数据。
   //    这里遵守不是自己创建的数据就不应该修改的原则。
-  renderLocalData = function (data, cssID, tpl, callback) {
+  renderLocalData = function renderLocalData(data, cssID, tpl, callback) {
     return function () {
       var cb = callback || _.identity,
         clonedData = _.snapshot(data);
@@ -94,7 +94,7 @@ YD = YD || {};
     };
   };
 
-  redirectToUrl = function (url) {
+  redirectToUrl = function redirectToUrl(url) {
     window.location.replace(url);
   };
 
@@ -105,7 +105,7 @@ YD = YD || {};
     };
   };
 
-  note = function (msg) {
+  note = function note(msg) {
     console.log("NOTE: ");
     console.log(msg);
   };
@@ -138,39 +138,40 @@ YD = YD || {};
       return data;
     });
 
-    userShow = function () {
+    userShow = function userShow() {
       userInfoAndPhoto.then(function (data) {
         new EJS({url: conf.tplDir + "user_show.ejs"}).update("user_info", data);
       });
     };
 
-    userBarShow = function () {
+    userBarShow = function userBarShow() {
       userInfoAndPhoto.then(function (data) {
         new EJS({url: conf.tplDir + "user_bar.ejs"}).update("user_bar", data);
       });
     };
 
     // 为了让其它页面也能直接调页面通用的用户信息条
+    // 未生效？
     YD.userBarShow = userBarShow;
 
-    userEdit = function () {
+    userEdit = function userEdit() {
       userInfoAll.then(function (data) {
         new EJS({url: conf.tplDir + "user_edit.ejs"}).update("user_info", data);
       });
     };
 
     // 这里不能简化，因为这里不但需要知道总共有多少图片可选还需知道用户当前选的是哪个
-    userPhotoEdit = function () {
+    userPhotoEdit = function userPhotoEdit() {
       userInfoAndPhoto.then(function (data) {
         new EJS({url: conf.tplDir + "user_photo_edit.ejs"}).update("user_info", data);
       });
     };
 
-    userSave = function () {
+    userSave = function userSave() {
       postJson("/userController/save", "form#user_info", wrap(userSave));
     };
 
-    userPhotoSave = function () {
+    userPhotoSave = function userPhotoSave() {
       postJson("/userController/save", "form#user_info", wrap(userShow));
     };
 
@@ -211,7 +212,7 @@ YD = YD || {};
       onFailure,
       repeat;
 
-    onSuccess = function (data) {
+    onSuccess = function onSuccess(data) {
       var userinfo = "/userController/show/loginUser",
         photos = "/userController/photos",
         userInfoAndPhoto,
@@ -243,7 +244,7 @@ YD = YD || {};
       examCurrent = doWhen(TookNoExam,
         renderLocalData(examInfo, "front_content", "start_current.ejs"));
 
-      updateDateText = function (d) {
+      updateDateText = function updateDateText(d) {
         var o = _.map(d.upcomingExam, function (e) {
           if (e.isTodayExam) {
             e.endTime = "";
@@ -300,11 +301,11 @@ YD = YD || {};
 
     };
 
-    onFailure = function (data, status, xhr) {
+    onFailure = function onFailure(data, status, xhr) {
       $("#msg").text(data, status, xhr).slideDown("slow");
     };
 
-    repeat = function () {
+    repeat = function repeat() {
       ajaxInfo.done(onSuccess).fail(onFailure);
     };
 
@@ -375,7 +376,7 @@ YD = YD || {};
       $("form").submit(function (e) {
         e.preventDefault();
         postJson("/userController/login", "form#login", function () {
-          redirectToUrl("/front.html");
+          wrap(redirectToUrl("/front.html"));
         });
       });
     }());
