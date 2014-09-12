@@ -376,15 +376,22 @@ YD = YD || {};
       min: jQuery.validator.format("请输入一个最小为 {0} 的值")
     });
 
-    return (function () {
-      // 提交表单
-      $("form").submit(function (e) {
-        e.preventDefault();
-        postJson("/userController/login", "form#login", function () {
-          wrap(redirectToUrl("/front.html"));
-        });
-      });
-    }());
+    // ## 注意
+    // 直接在html中用 method='post'提交了
+    // 由后台来处理登陆成功后去哪里
+    // 由后台来处理登陆失败去哪里和显示什么
+
+
+    //
+    // return (function () {
+    //   // 提交表单
+    //   $("form").submit(function (e) {
+    //     e.preventDefault();
+    //     postJson("/userController/login", "form#login", function () {
+    //       wrap(redirectToUrl("/front.html"));
+    //     });
+    //   });
+    // }());
 
   }; // end YD.userLogin
 
