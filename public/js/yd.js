@@ -210,6 +210,7 @@ YD = YD || {};
     var ajaxInfo =  $.get("/examController/studentLogin"),
       onSuccess,
       onFailure,
+      refreshPage,
       repeat;
 
     onSuccess = function onSuccess(data) {
@@ -225,6 +226,7 @@ YD = YD || {};
         hasUpcomingExam = _.has(examInfo, "upcomingExam") && !_.has(examInfo, "latestExamResult") && !_.has(examInfo, "currentExam"),
         hasResultCanRetake = _.has(examInfo, "latestExamResult") && _.has(examInfo, "currentExam"),
         hasResultCanNotRetake = _.has(examInfo, "latestExamResult") && !(_.has(examInfo, "currentExam")),
+        noExamToTake = !_.has(examInfo, "currentExam"),
 
       // 生成页面的函数
         examCurrent,
@@ -299,26 +301,29 @@ YD = YD || {};
 
       note("又看到我啦。证明页面刷新啦。 " + new Date());
 
+      // 给后续 .then 函数使用的值
+      return noExamToTake;
     };
 
     onFailure = function onFailure(data, status, xhr) {
-      $("#msg").text(data, status, xhr).slideDown("slow");
+      showStatusMsg(data + status + xhr);
+    };
+
+    // 让浏览器刷新页面的函数
+    refreshPage = function refreshPage(pred) {
+      if (pred) {
+        setTimeout(function () {
+          window.location.reload(1);
+        }, 5000);
+      }
     };
 
     repeat = function repeat() {
-      ajaxInfo.done(onSuccess).fail(onFailure);
+      ajaxInfo.then(onSuccess, onFailure).then(refreshPage);
     };
 
-    // TODO
-    // self-recursion async call
-    // 不是一种好方法，原因见 trevor 的async新书
-    // 但暂时不改造，还没有掌握更好的方式
     return (function () {
       repeat();
-      // 这种方法直接浏览器刷新页面；在chrome和safari中都工作正常
-      setTimeout(function () {
-        window.location.reload(1);
-      }, 15000);
     }());
   }; // end YD.startDispache
 
