@@ -221,13 +221,29 @@ YD = YD || {};
         userBarShow,
 
       // 将判定抽象为函数
-        examInfo = _.snapshot(data), // - data 是 onSuccess 的参数； bind data to local variable
+
+        // 将从后台获得的数据（从onSuccess函数的参数传进来）绑定到局部变量
+        examInfo = _.snapshot(data),
+
+        // 有考试，学生状态为未考，有上次考试成绩  有currentExam， userExamState = 0 但无 latestExamResult
         canTakeExam = _.has(examInfo, "currentExam") && examInfo.currentExam.userExamState !== "0" && !(_.has(examInfo, "latestExamResult")),
+
+        // 有考试，无上次考试成绩，无考试预告
         canTakeExamNolatestExamResult = _.has(examInfo, "currentExam"),
+
+        // 有考试，学生状态为未考，无上次考试成绩
         TookNoExam = canTakeExam && examInfo.currentExam.userExamState === "0"  && !(_.has(examInfo, "latestExamResult")),
+
+        // 有考试预告  有upcomingExam, 但无 latestExamResult , 无 currentExam ；防止和后面的冲突
         hasUpcomingExam = _.has(examInfo, "upcomingExam") && !_.has(examInfo, "latestExamResult") && !_.has(examInfo, "currentExam"),
+
+        // 有成绩，可重测   有 latestExamResult 有 curerntExam
         hasResultCanRetake = _.has(examInfo, "latestExamResult") && _.has(examInfo, "currentExam"),
+
+        // 有成绩，不可重测，有考试预告   有 latestExamResult 但无 curerntExam， 有 upcomingExam
         hasResultCanNotRetake = _.has(examInfo, "latestExamResult") && !(_.has(examInfo, "currentExam")),
+
+        // 无考试，无考试预告，无上次成绩
         noExamToTake = !_.has(examInfo, "currentExam"),
 
       // 生成页面的函数
