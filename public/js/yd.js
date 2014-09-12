@@ -222,7 +222,7 @@ YD = YD || {};
       // 将判定抽象为函数
         examInfo = _.snapshot(data), // - data 是 onSuccess 的参数； bind data to local variable
         canTakeExam = _.has(examInfo, "currentExam") && examInfo.currentExam.userExamState !== "0" && !(_.has(examInfo, "latestExamResult")),
-        canTakeExamNolatestExamResult = _.has(examInfo, "currentExam") && examInfo.currentExam.userExamState !== "0",
+        canTakeExamNolatestExamResult = _.has(examInfo, "currentExam"),
         TookNoExam = canTakeExam && examInfo.currentExam.userExamState === "0"  && !(_.has(examInfo, "latestExamResult")),
         hasUpcomingExam = _.has(examInfo, "upcomingExam") && !_.has(examInfo, "latestExamResult") && !_.has(examInfo, "currentExam"),
         hasResultCanRetake = _.has(examInfo, "latestExamResult") && _.has(examInfo, "currentExam"),
