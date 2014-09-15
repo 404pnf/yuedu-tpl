@@ -66,7 +66,7 @@ end
 post '/userController/save' do
   # logger.info 'in /user/save '
   status = {
-    #success: '成功啦',
+    # success: '成功啦',
     error: '错误'
   }
   JSONP status
@@ -116,31 +116,31 @@ end
 
 get '/resultsController/loginUser' do
   chart_data = [
-      {
-          date: "214-08-14",
-          value: 10,
-          url: "321"
-      },
-                      {
-          date: "214-08-15",
-          value: 12,
-          url: "212"
-      },
-                      {
-          date: "214-08-18",
-          value: 15,
-          url: "4321"
-      },
-                      {
-          date: "214-08-18",
-          value: 8,
-          url: "352"
-      },
-                      {
-          date: "214-09-24",
-          value: 19,
-          url: "73"
-      }
+    {
+      date: '214-08-14',
+      value: 10,
+      url: '321'
+    },
+    {
+      date: '214-08-15',
+      value: 12,
+      url: '212'
+    },
+    {
+      date: '214-08-18',
+      value: 15,
+      url: '4321'
+    },
+    {
+      date: '214-08-18',
+      value: 8,
+      url: '352'
+    },
+    {
+      date: '214-09-24',
+      value: 19,
+      url: '73'
+    }
   ]
 
   JSONP chart_data
@@ -150,7 +150,7 @@ post '/userController/login' do
   username = params[:username]
   password = params[:password]
   yanzhengma = params[:yz]
-  r = { error: "用户名和密码不对。" }
-  #r = {success: '成功啦'}
+  r = { error: '用户名和密码不对。' }
+  # r = {success: '成功啦'}
   JSONP r
 end
