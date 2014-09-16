@@ -353,7 +353,7 @@ YD = YD || {};
       if (_.has(data, "error")) {
         alert(data.error);
       } else {
-        //
+        redirectToUrl("/front.html");
       }
     };
 
@@ -361,18 +361,18 @@ YD = YD || {};
       showStatusMsg(data + " " + status + " " + xhr);
     };
 
-    name = $("#username").val();
-    password = $.md5($("#password").val());
-    jsonData = {name: name, password: password}.toJSON;
-
-    validValue = _.reduce(["#password", "#username", "#yz"],
-      function (a, e) {
-        return (a && $(e).val());
-      },
-      true);
-
     $("form").submit(function (e) {
       e.preventDefault();
+      name = $("#username").val();
+      password = $.md5($("#password").val());
+      jsonData = {name: name, password: password}.toJSON;
+
+      validValue = _.reduce(["#password", "#username", "#yz"],
+        function (a, e) {
+          return (a && $(e).val());
+        },
+        true);
+
       if (validValue) {
         $.post("/userController/login", jsonData).done(onSuccess).fail(onFailure);
           // postJson("/userController/login", "form#login", function () {
