@@ -1,16 +1,18 @@
-@charset "utf-8";
+﻿@charset "utf-8";
 *{ margin:0; padding:0}
 .fl{ float:left}
 .clear{ clear:both}
 ul li{ list-style:none}
 .hidden{ display:none}
-
+.tc{ text-align:center}
+.img_pr_di{position: relative; display:inline-block;}
 /*单选&填空*/
 .input_text{ line-height:200%;margin-left: 10px;width: 200px;}
 
 .one_que{ font-family:Arial, Helvetica, sans-serif; width:884px; margin:0 auto; position:relative}
 .one_que div{ line-height:200%;}
-.one_que p{ font-size:16px; color:#333333; line-height:170%;}
+
+
 .m_tit_name{ position:absolute; left:-54px; top:-3px; background-image:url(../images/m_tit_name.jpg); width:36px; height:109px;}
 .chtc_tit_name{ background-position:0 0;}
 .phonics_tit_name{ background-position:36px 0;}
@@ -22,7 +24,7 @@ ul li{ list-style:none}
 .one_que .que_tit{ font-size:18px; font-weight:bold; line-height:40px;margin-top: 5px;}
 .con_text{ margin-bottom:40px;}
 .dan_selected{ background-color:#ffcc00; border-radius: 50px; display:inline-block; padding:10px 20px;}
-.dan_unselected{  border-radius: 20px; padding:10px 15px;}
+.dan_unselected{  border-radius: 20px; padding:10px 15px; line-height:120%;}
 
 /*词汇探测题*/
 .que_wrapper{ width:700px;}
@@ -34,22 +36,62 @@ ul li{ list-style:none}
 .tct_a li{ line-height:150%; font-family:Arial, Helvetica, sans-serif; font-size:18px;}
 
 /*配对题*/
-.pd_box{ border:1px dotted #666}
-.pd_text_box{ width:200px; height:40px;}
-.draggable{ overflow:hidden; width:700px;}
-.draggable li{ float:left; margin-right:10px; border:1px solid #999; padding:10px;}
-.droppable{ clear:both; margin-top:20px; width:700px;}
-.droppable li{ float:left; margin:0 10px 10px 0;}
+.line_droppable .pd_box{ border:1px solid #aaaaaa}
 
+.line_droppable .draggable_1{ overflow:hidden; height: 650px; width:200px;}
+.line_droppable .draggable_1 li{  border:1px solid #999; padding:5px; display:inline-block; border:none;}
+.line_droppable .margin_auto{ display:inline-block; width:100%;text-align: center;}
+.line_droppable .margin_auto li{ margin:10px auto!important; float:none!important; display:inline-block!important;}
+.line_droppable .droppable{ clear:both; margin-top:20px;}
+.line_droppable .droppable li{ float:left; margin:0 10px 10px 0;}
+.line_droppable .questionDrop {float: left!important; width: 22%!important;}/*jqui*/
+.line_droppable .dragMove {cursor: move;}
+.line_droppable #selector { float: left;  margin:10px 0;}
+.line_droppable .selector.custom-state-active { background: #eee; }
+/*.line_droppable .selector li { float: left;  margin: 0 20px 20px 0; text-align: center; cursor: move; border-radius:5px!important; background:#e6e6e6;border: none;
+padding: 10px; font-family:'微软雅黑' }*/
+.line_droppable .questionDrop {    width: 100%!important; min-height: 8em; margin:10px 10px 10px 0; border-radius:5px;font-family:'微软雅黑'   }
+     
+.line_droppable  .radiogrp label{cursor: pointer;}
+   /*jqui*/
+.line_droppable    .ui-widget-header {padding-left: 10px; }
+/*next_btn*/
+.op_line{ clear:both;}
+
+/*new_配对*/
+.text_img_que{ width:360px; margin-left:50px;}
+.text_img_an{ display:inline-block; width:200px; margin-left:100px;}
+.text_img_que .pd_text_box{ width:200px; height:140px;}
+.text_img_an ul{ }
+.text_img_an li { margin: 10px 20px 10px 0; text-align: center; cursor: move; border-radius:5px!important; background:#e6e6e6;border: none;
+padding: 10px; font-family:'微软雅黑' }
 /*phonics*/
 .phonics_img{ margin:30px auto 15px auto; display:block}
 .phonics_anw1{ float:left; position:relative; left:50%; }
-.phonics_anw1 li{ float:left; font-weight:bold; font-size:20px; line-height:18px; position:relative; right:50%; margin-top:26px;}
-.phonics_anw2 li,.phonics_anw3 li{width:47px; height:58px; margin:0 10px; line-height:58px; text-align:center; margin-top:12px;}
-.phonics_anw2 li.dan_tu_unselected{ background:url(../images/phonics_an_bg.jpg) -68px 0 no-repeat; }
-.phonics_anw2 li.dan_tu_selected{ background:url(../images/phonics_an_bg.jpg) 0 0 no-repeat;}
+.phonics_anw1 li{ float:left; font-weight:bold; font-size:20px; line-height:18px; position:relative; right:50%; margin-top:26px; display:inline-block;}
+.phonics_anw2 li{width:47px; height:58px; margin:0 10px; line-height:58px; text-align:center; margin-top:12px;}
+.phonics_droppable .phonics_anw3 li{width:47px; height:58px; margin:0 10px; line-height:58px; text-align:center;}
+.phonics_droppable .selector li{ font-weight:bold; font-size:20px; background:url(/static/images/phonics_an_bg.jpg) 0 0 no-repeat;width: 48px;height: 58px;line-height: 58px; display:inline-block;} 
+.phonics_droppable .questionDrop{ background:url(/static/images/phonics_an_bg.jpg) -68px 0 no-repeat;width:48px; height:58px; margin:0 10px; line-height:58px; text-align:center; margin-top:12px; /*float:left;*/}
+/*.phonics_droppable  .phonics_anw2 li.dan_tu_unselected{ background:url(/static/images/phonics_an_bg.jpg) -68px 0 no-repeat; }*/
+/*.phonics_droppable  .phonics_anw2 li.dan_tu_selected{ background:url(/static/images/phonics_an_bg.jpg) 0 0 no-repeat;}*/
+.phonics_droppable  .droppable{ width:800px; overflow:hidden; margin:0 auto; text-align:center; /*float:left; position:relative; left:50%;*/}
+.phonics_droppable  .droppable .questionDrop{font-size: 20px; display:inline-block;/*position:relative; right:50%;*/}
+.phonics_droppable  .custom-state-active { background: #eee; }
+.phonics_droppable .new_ul_drop{position: static;width: 500px;height: 58px;background: #eee;margin: 0 auto;clear: both;float: none;}
+.phonics_droppable .phonics_anw3{ clear:both; width:800px;height:70px; margin:0 auto; text-align:center; margin-top:12px;}
+.track_s{ width:19px; height:17px; background:url(/static/images/audio_btn_s.png); display:inline-block;}
+.track_b{ width:32px; height:28px; background:url(/static/images/audio_btn_b.png); display:inline-block;}
+.track_pos{ position:absolute; right:1px; bottom:10px;}
+.phonics_droppable .draggable{ float:left;}
+.phonics_droppable .ui-state-highlight{ border:none!important;}
 .phonics_anw3{ clear:both}
-.phonics_anw3 li.dan_tu_selected{background:url(../images/phonics_an_bg.jpg) -133px 0 no-repeat; }
-.phonics_anw4 li{ width:230px; height:144px;border:10px solid #e6e6e6; margin:0px 15px 0 15px;position:relative}
+.phonics_anw3 li.dan_tu_selected{background:url(/static/images/phonics_an_bg.jpg) -133px 0 no-repeat; }
+.phonics_anw4 li{ width:230px; height:144px;border:10px solid #e6e6e6; margin:0px 15px 0 15px;position:relative; background:#ffffff; text-align:center}
+.phonics_anw4 li img{ height:144px;}
 .phonics_anw4 li.dan_tu_selected{ border:10px solid #ffcc00;}
 .phonics_anw4 li span{ position:absolute; left:1px; top:1px; height:32px; width:32px; color:#ffffff; font-size:22px; text-align:center; line-height:32px; background:#009dd4; border-radius: 50px;}
+.word_text{ color:#1d81bd; font-size:70px; width:100%; text-align:center; line-height:300%!important;}
+
+/*questions_stems*/
+.questions_stems p{ text-align:justify; font-size:17px; font-family:Arial, Helvetica, sans-serif; color:#333333; margin-bottom:16px; line-height:150%;letter-spacing: 0.2px; text-indent:39px;}
