@@ -9,6 +9,7 @@ YD.conf = {
   tplDir: "/tpl/",
   userinfo: "/userController/show/loginUser",
   grades: "/userController/grades",
-  photos: "/userController/photos"
+  photos: "/userController/photos",
+  getExamInfo: "/examController/studentLogin"
 };
 

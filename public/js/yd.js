@@ -224,13 +224,13 @@ YD = YD || {};
 
   YD.startDispache = function () {
 
-    var ajaxInfo =  $.get("/examController/studentLogin"),
+    var getExamInfo = $.get(YD.conf.getExamInfo),
       promise,
       onSuccess,
       onFailure,
       repeat;
 
-    promise = ajaxInfo.then(function (data) {
+    promise = getExamInfo.then(function (data) {
       var updateDateText = function updateDateText(d) {
         var o = _.map(d.upcomingExam, function (e) {
           if (e.isTodayExam) {
