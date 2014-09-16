@@ -376,6 +376,47 @@ YD = YD || {};
   }; // end YD.userLogin
 
   YD.resetPass = function () {
+    var validValue,
+      oldPass,
+      newPass,
+      newPassConfirm,
+      jsonData,
+      onSuccess,
+      onFailure;
+
+    onSuccess = function onSuccess(data) {
+      if (_.has(data, "error")) {
+        alert(data.error);
+      } else {
+        redirectToUrl(YD.conf.userHomeUrl);
+      }
+    };
+
+    onFailure = function onFailure(data, status, xhr) {
+      showStatusMsg(data + " " + status + " " + xhr);
+    };
+
+    $("form").submit(function (e) {
+      e.preventDefault();
+      oldPass = $("#old_pass").val();
+      newPass =  $.md5($("#new_pass").val());
+      newPassConfirm = $.md5($("#new_pass_confirm").val());
+      jsonData = {name: name, oldPass: oldPass, newPass: newPass}.toJSON;
+
+      validValue = _.reduce([oldPass, newPassConfirm, newPass, (newPass === newPassConfirm)],
+        function (a, e) {
+          return (a && e);
+        }, true);
+
+      // NB: in JS, empty string is false
+      // '' is false
+      // ' ' with a space is true
+      if (validValue) {
+        $.post("/userController/login", jsonData).done(onSuccess).fail(onFailure);
+      } else {
+        alert("所有输入框都必须填写。");
+      }
+    });
 
   }; // end YD.resetPass
 

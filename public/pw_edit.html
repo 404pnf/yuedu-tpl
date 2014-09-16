@@ -25,12 +25,12 @@
     <!--.web_main-->
     <div class="web_main">
     	<div class="pw_box">
-            <div><label>当前密码:</label><input type="password" class="input_style wryh" /></div>
-            <div><label>新密码:</label><input type="password" class="input_style wryh" /></div>
-            <div><label>确认新密码:</label><input type="password"  class="input_style"/></div>
+            <div><label>当前密码:</label><input id="old_pass" type="password" class="input_style wryh" /></div>
+            <div><label>新密码:</label><input id="new_pass" type="password" class="input_style wryh" /></div>
+            <div><label>确认新密码:</label><input id="new_pass_confirm" type="password"  class="input_style"/></div>
             <div class="btn_box_info">
-                <a href="#none" class="btn">保存</a>
-                <a href="#none" class="btn btn_u">取消</a>
+                <button type ="button" id = "reset_pass_save" class="btn">保存</button>
+                <button type ="button" id="reset_pass_cancel" class="btn btn_u">取消</bottun>
             </div>
         </div>
     </div>
