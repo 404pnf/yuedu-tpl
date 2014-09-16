@@ -199,10 +199,35 @@ YD = YD || {};
     }());
   };
 
+
+  // 渲染用户条
+  YD.userBar = function userBar() {
+    var userinfo = "/userController/show/loginUser",
+      photos = "/userController/photos",
+      userInfoAndPhoto;
+
+    if (YD.userBarShow) {
+      note("from YD");
+      YD.userBarShow();
+    } else {
+      // note("re-render userBar");
+      // 用户条
+      userInfoAndPhoto = $.when($.ajax(userinfo), $.ajax(photos)).then(function (a, b) {
+        var d = (_.extend(a[0], b[0])); // 这里如果也用data，会shadow函数onSuccess的输入，虽然不是错误，但避免吧
+        return d;
+      });
+
+      userInfoAndPhoto.done(function (data) {
+        new EJS({url: conf.tplDir + "user_bar.ejs"}).update("user_bar", data);
+      });
+    }
+  };
+
   //
   // ## start.html 生成页面的主函数
   //
   // 每隔一段时间时间查看一下数据源并重新刷新页面。
+
   YD.startDispache = function () {
 
     var ajaxInfo =  $.get("/examController/studentLogin"),
@@ -211,29 +236,6 @@ YD = YD || {};
       onFailure,
       refreshPage,
       repeat;
-
-    // 直接渲染用户条
-    (function () {
-      var userinfo = "/userController/show/loginUser",
-        photos = "/userController/photos",
-        userInfoAndPhoto;
-
-      if (YD.userBarShow) {
-        note("from YD");
-        YD.userBarShow();
-      } else {
-        // note("re-render userBar");
-        // 用户条
-        userInfoAndPhoto = $.when($.ajax(userinfo), $.ajax(photos)).then(function (a, b) {
-          var d = (_.extend(a[0], b[0])); // 这里如果也用data，会shadow函数onSuccess的输入，虽然不是错误，但避免吧
-          return d;
-        });
-
-        userInfoAndPhoto.done(function (data) {
-          new EJS({url: conf.tplDir + "user_bar.ejs"}).update("user_bar", data);
-        });
-      }
-    }());
 
     promise = ajaxInfo.then(function (data) {
       var updateDateText = function updateDateText(d) {
@@ -315,6 +317,7 @@ YD = YD || {};
     // set data to cache
     promise.done(function (data) {
       YD.exam = YD.exam || data;
+      // note(YD.exam);
     });
 
     repeat = function repeat() {
@@ -322,7 +325,9 @@ YD = YD || {};
       promise.then(onSuccess);
       promise.done(function () {
         if (!_.has(YD.exam, "currentExam")) {
-          setTimeout(window.location.reload(1), 15000);
+          setTimeout(function () {
+            window.location.reload(1)
+          }, 180000); // 3 mins
         }
       })
     };
