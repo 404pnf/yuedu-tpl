@@ -308,15 +308,21 @@ YD = YD || {};
 
       // 考试预告区块
       examUpcoming = doWhen(hasUpcomingExam,
-        renderLocalData(examInfo, "front_content", "start_upcoming.ejs", updateDateText));
+        // renderLocalData(examInfo, "front_content", "start_upcoming.ejs", updateDateText));
+        render("front_content", "start_upcoming.ejs", updateDateText));
 
       // 考试成绩区块
       examScores = doWhen(hasResultCanRetake,
-        renderLocalData(examInfo, "front_content", "start_scores.ejs"));
+        // renderLocalData(examInfo, "front_content", "start_scores.ejs"));
+        render("front_content", "start_scores.ejs"));
 
       // 有成绩，但无currentExam，可能有upcommings，可能没有
       examScoresCantRetake = doWhen(hasResultCanNotRetake,
-        renderLocalData(examInfo, "front_content", "start_scores_cant_retake_exam.ejs", function (d) {
+        // renderLocalData(examInfo, "front_content", "start_scores_cant_retake_exam.ejs", function (d) {
+        //   var hasUpcoming = _.has(examInfo, "upcomingExam");
+        //   return _.merge(d, {hasUpcoming: hasUpcoming}, updateDateText(d)); // 告诉模版没有upcomingExam区块
+        // }));
+        render("front_content", "start_scores_cant_retake_exam.ejs", function (d) {
           var hasUpcoming = _.has(examInfo, "upcomingExam");
           return _.merge(d, {hasUpcoming: hasUpcoming}, updateDateText(d)); // 告诉模版没有upcomingExam区块
         }));
@@ -353,7 +359,7 @@ YD = YD || {};
       if (pred) {
         ajaxInfo.then(function (data) {
           var eql = _.isEqual(data, YD.cache);;
-          setTimeout(repeat, 5000);
+          setTimeout(repeat, 15000);
         });
         // setTimeout(function () {
         //   window.location.reload(1);
