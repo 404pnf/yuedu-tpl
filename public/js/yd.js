@@ -322,10 +322,12 @@ YD = YD || {};
       promise.then(onSuccess);
       promise.done(function () {
         if (!_.has(YD.exam, "currentExam")) {
-          setTimeout( window.location.reload(1), 15000);
+          setTimeout(window.location.reload(1), 15000);
         }
       })
     };
+
+    repeat();
 
   }; // end YD.startDispache
 
