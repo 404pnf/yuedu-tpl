@@ -19,7 +19,8 @@ YD = YD || {};
     renderLocalData,
     redirectToUrl,
     wrap,
-    note;
+    note,
+    hasBlank;
 
   //
   // ## 工具函数
@@ -102,6 +103,23 @@ YD = YD || {};
   note = function note(msg) {
     console.log("NOTE: ");
     console.log(msg);
+  };
+
+
+  hasBlank = function hasBlank(arr) {
+    var isBlank,
+      coll;
+
+    isBlank = function isBlank(e) {
+      return e === "";
+    };
+
+    coll = _.map(arr, isBlank);
+
+    return _.reduce(coll, function (a, e) {
+      return (a || e);
+    }, false);
+
   };
 
   //
@@ -334,10 +352,8 @@ YD = YD || {};
   YD.userLogin = function () {
     var name,
       password,
+      yz,
       jsonData,
-      isBlank,
-      coll,
-      hasBlank,
       onSuccess,
       onFailure;
 
@@ -357,19 +373,11 @@ YD = YD || {};
       e.preventDefault();
       name = $("#username").val();
       password = $("#password").val();
+      yz = $("#yz").val();
 
-      jsonData = {name: name, password: $.md5(password)}.toJSON;
+      jsonData = {name: name, password: $.md5(password)};
       note(jsonData);
-
-      isBlank = function isBlank(e) {
-        return e === "";
-      };
-      coll = _.map([name, password], isBlank);
-      hasBlank = _.reduce(coll,
-        function (a, e) {
-          return (a || e);
-        }, false);
-      if (hasBlank) {
+      if (hasBlank([name, password, yz])) {
         alert("所有输入框都必须填写。");
       } else {
         $.post(YD.conf.userLogin, jsonData).done(onSuccess).fail(onFailure);
@@ -379,13 +387,10 @@ YD = YD || {};
   }; // end YD.userLogin
 
   YD.resetPass = function () {
-    var hasBlank,
-      dontMatch,
+    var dontMatch,
       oldPass,
       newPass,
       newPassConfirm,
-      isBlank,
-      coll,
       jsonData,
       onSuccess,
       onFailure;
@@ -410,19 +415,11 @@ YD = YD || {};
       newPass =  $("#new_pass").val();
       newPassConfirm = $("#new_pass_confirm").val();
       jsonData = {oldPass: $.md5(oldPass), newPass: $.md5(newPass), newPassConfirm: $.md5(newPassConfirm)};
-      isBlank = function isBlank(e) {
-        return e === "";
-      };
-      coll = _.map([oldPass, newPassConfirm, newPass], isBlank);
-      hasBlank = _.reduce(coll,
-        function (a, e) {
-          return (a || e);
-        }, false);
-      dontMatch = !(newPass === newPassConfirm);
-
       note(jsonData);
 
-      if (hasBlank) {
+      dontMatch = (newPass !== newPassConfirm);
+
+      if (hasBlank([oldPass, newPass, newPassConfirm])) {
         alert("所有输入框都必须填写。");
       } else if (dontMatch) {
         alert("两次输入的新密码不匹配。");
