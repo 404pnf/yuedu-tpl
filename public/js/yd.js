@@ -234,7 +234,6 @@ YD = YD || {};
       promise,
       onSuccess,
       onFailure,
-      refreshPage,
       repeat;
 
     promise = ajaxInfo.then(function (data) {
@@ -326,10 +325,10 @@ YD = YD || {};
       promise.done(function () {
         if (!_.has(YD.exam, "currentExam")) {
           setTimeout(function () {
-            window.location.reload(1)
+            window.location.reload(1);
           }, 180000); // 3 mins
         }
-      })
+      });
     };
 
     repeat();
@@ -343,10 +342,30 @@ YD = YD || {};
     // NB: in JS, empty string is false
     // '' is false
     // ' ' with a space is true
-    var validValue;
+    var validValue,
+      name,
+      password,
+      jsonData,
+      onSuccess,
+      onFailure;
+
+    onSuccess = function onSuccess(data) {
+      if (_.has(data, "error")) {
+        alert(data.error);
+      } else {
+        redirectToUrl("/front.html");
+      }
+    };
+
+    onFailure = function onFailure(data, status, xhr) {
+      showStatusMsg(data + " " + status + " " + xhr);
+    };
 
     $("form").submit(function (e) {
       e.preventDefault();
+      name = $("#username").val();
+      password = $.md5($("#password").val());
+      jsonData = {name: name, password: password}.toJSON;
 
       validValue = _.reduce(["#password", "#username", "#yz"],
         function (a, e) {
@@ -354,16 +373,16 @@ YD = YD || {};
         },
         true);
 
-      console.log(validValue);
-
       if (validValue) {
-        postJson("/userController/login", "form#login", function () {
-          wrap(redirectToUrl("/front.html"));
-        });
+        $.post("/userController/login", jsonData).done(onSuccess).fail(onFailure);
+          // postJson("/userController/login", "form#login", function () {
+          //   wrap(redirectToUrl("/front.html"));
+          // });
       } else {
         alert("所有输入框都必须填写。");
       }
     });
+
   }; // end YD.userLogin
 
 }()); // end of let scope
