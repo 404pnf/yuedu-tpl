@@ -22,12 +22,6 @@ YD = YD || {};
     wrap,
     note;
 
-  // 配置信息
-  conf = {
-    userHomeUrl: "/personal_info.html",
-    tplDir: /tpl/
-  };
-
   //
   // ## 工具函数
   //
@@ -91,7 +85,7 @@ YD = YD || {};
     return function () {
       var cb = callback || _.identity,
         clonedData = _.snapshot(data);
-      new EJS({url: conf.tplDir + tpl}).update(cssID, cb(clonedData));
+      new EJS({url: YD.conf.tplDir + tpl}).update(cssID, cb(clonedData));
     };
   };
 
@@ -141,26 +135,26 @@ YD = YD || {};
 
     userShow = function userShow() {
       userInfoAndPhoto.then(function (data) {
-        new EJS({url: conf.tplDir + "user_show.ejs"}).update("user_info", data);
+        new EJS({url: YD.conf.tplDir + "user_show.ejs"}).update("user_info", data);
       });
     };
 
     userBarShow = function userBarShow() {
       userInfoAndPhoto.then(function (data) {
-        new EJS({url: conf.tplDir + "user_bar.ejs"}).update("user_bar", data);
+        new EJS({url: YD.conf.tplDir + "user_bar.ejs"}).update("user_bar", data);
       });
     };
 
     userEdit = function userEdit() {
       userInfoAll.then(function (data) {
-        new EJS({url: conf.tplDir + "user_edit.ejs"}).update("user_info", data);
+        new EJS({url: YD.conf.tplDir + "user_edit.ejs"}).update("user_info", data);
       });
     };
 
     // 这里不能简化，因为这里不但需要知道总共有多少图片可选还需知道用户当前选的是哪个
     userPhotoEdit = function userPhotoEdit() {
       userInfoAndPhoto.then(function (data) {
-        new EJS({url: conf.tplDir + "user_photo_edit.ejs"}).update("user_info", data);
+        new EJS({url: YD.conf.tplDir + "user_photo_edit.ejs"}).update("user_info", data);
       });
     };
 
@@ -194,7 +188,7 @@ YD = YD || {};
       // 这里不能用wrap，因为 redirect(conf.userHomeUrl) 作为参数传给 wrap 时已经被求值
       // 即副作用redirect已经起作用了
       $("#user_info").delegate("#user_cancel_edit", "click", function () {
-        redirectToUrl(conf.userHomeUrl);
+        redirectToUrl(YD.conf.userHomeUrl);
       });
     }());
   };
@@ -218,7 +212,7 @@ YD = YD || {};
       });
 
       userInfoAndPhoto.done(function (data) {
-        new EJS({url: conf.tplDir + "user_bar.ejs"}).update("user_bar", data);
+        new EJS({url: YD.conf.tplDir + "user_bar.ejs"}).update("user_bar", data);
       });
     }
   };
@@ -353,7 +347,7 @@ YD = YD || {};
       if (_.has(data, "error")) {
         alert(data.error);
       } else {
-        redirectToUrl("/front.html");
+        redirectToUrl(YD.conf.siteHomeUrl);
       }
     };
 
@@ -375,9 +369,6 @@ YD = YD || {};
 
       if (validValue) {
         $.post("/userController/login", jsonData).done(onSuccess).fail(onFailure);
-          // postJson("/userController/login", "form#login", function () {
-          //   wrap(redirectToUrl("/front.html"));
-          // });
       } else {
         alert("所有输入框都必须填写。");
       }
