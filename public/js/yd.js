@@ -375,4 +375,8 @@ YD = YD || {};
 
   }; // end YD.userLogin
 
+  YD.resetPass = function () {
+
+  }; // end YD.resetPass
+
 }()); // end of let scope

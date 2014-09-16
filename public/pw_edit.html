@@ -20,15 +20,8 @@
             <a href="#none" class="nav nav_mexam"></a>
             <a href="#none" class="nav nav_pw"></a>
         </div>
-        <div class="nav_last fr">
-            <a href="#none" class="nav_head">
-                <img src="images/head.png" />
-                <span>王小军啊</span>
-            </a>
-            <a href="#none" class="nav_exit"></a>
-        </div>
-    </div>
-    <!--/.web_nav-->
+        <div id="user_bar"></div>
+    </div><!--/.web_nav-->
     <!--.web_main-->
     <div class="web_main">
     	<div class="pw_box">
@@ -49,7 +42,8 @@
 <script src="js/yd.js"></script>
 <script type="text/javascript">
   $(document).ready(function() {
-
+    YD.userBar();
+    YD.resetPass();
 });
 </script>
 
