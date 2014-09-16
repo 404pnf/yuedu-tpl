@@ -206,7 +206,7 @@ YD = YD || {};
   YD.startDispache = function () {
 
     var ajaxInfo =  $.get("/examController/studentLogin"),
-      formatedData,
+      promise,
       onSuccess,
       onFailure,
       refreshPage,
@@ -235,9 +235,32 @@ YD = YD || {};
       }
     }());
 
-    formatedData = ajaxInfo.then(function () {
-      return;
+    promise = ajaxInfo.then(function (data) {
+      var updateDateText = function updateDateText(d) {
+        var o = _.map(d.upcomingExam, function (e) {
+          if (e.isTodayExam) {
+            e.endTime = "";
+            e.isTodayExam = "今天";
+          } else {
+            e.isTodayExam = "";
+          }
+          return e;
+        });
+
+        return {upcomingExam: o};
+      };
+
+      // 一次性将数据处理好
+      if (data.upcomingExam) {
+        _.extend(data, updateDateText(data), {hasUpcoming: true}); // 直接修改了examInfo
+        note(data);
+      } else {
+        _.extend(data, {hasUpcoming: false});
+      }
+      return data;
     });
+
+    note(promise);
 
     onSuccess = function onSuccess(data) {
       // 将判定抽象为函数
@@ -275,30 +298,30 @@ YD = YD || {};
         examScoresCantRetake,
 
         // 帮助函数
-        updateDateText,
+        // updateDateText,
         render;
 
-      updateDateText = function updateDateText(d) {
-        var o = _.map(d.upcomingExam, function (e) {
-          if (e.isTodayExam) {
-            e.endTime = "";
-            e.isTodayExam = "今天";
-          } else {
-            e.isTodayExam = "";
-          }
-          return e;
-        });
+      // updateDateText = function updateDateText(d) {
+      //   var o = _.map(d.upcomingExam, function (e) {
+      //     if (e.isTodayExam) {
+      //       e.endTime = "";
+      //       e.isTodayExam = "今天";
+      //     } else {
+      //       e.isTodayExam = "";
+      //     }
+      //     return e;
+      //   });
 
-        return {upcomingExam: o};
-      };
+      //   return {upcomingExam: o};
+      // };
 
-      // 一次性将数据处理好
-      if (examInfo.upcomingExam) {
-        _.extend(examInfo, updateDateText(examInfo), {hasUpcoming: true}); // 直接修改了examInfo
-        note(examInfo);
-      } else {
-        _.extend(examInfo, {hasUpcoming: false});
-      }
+      // // 一次性将数据处理好
+      // if (examInfo.upcomingExam) {
+      //   _.extend(examInfo, updateDateText(examInfo), {hasUpcoming: true}); // 直接修改了examInfo
+      //   note(examInfo);
+      // } else {
+      //   _.extend(examInfo, {hasUpcoming: false});
+      // }
 
       render = _.partial(renderLocalData, examInfo);
 
@@ -312,7 +335,7 @@ YD = YD || {};
       examCurrent = doWhen(TookNoExam, render("front_content", "start_current.ejs"));
 
       // 考试预告区块
-      examUpcoming = doWhen(hasUpcomingExam, render("front_content", "start_upcoming.ejs", updateDateText));
+      examUpcoming = doWhen(hasUpcomingExam, render("front_content", "start_upcoming.ejs"));
 
       // 考试成绩区块
       examScores = doWhen(hasResultCanRetake, render("front_content", "start_scores.ejs"));
