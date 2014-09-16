@@ -332,13 +332,12 @@ YD = YD || {};
   // ## 登陆页面
   //
   YD.userLogin = function () {
-    // NB: in JS, empty string is false
-    // '' is false
-    // ' ' with a space is true
-    var validValue,
-      name,
+    var name,
       password,
       jsonData,
+      isBlank,
+      coll,
+      hasBlank,
       onSuccess,
       onFailure;
 
@@ -357,20 +356,23 @@ YD = YD || {};
     $("form").submit(function (e) {
       e.preventDefault();
       name = $("#username").val();
-      password = $.md5($("#password").val());
-      jsonData = {name: name, password: password}.toJSON;
+      password = $("#password").val();
 
-      // NB: rely on this: true && "" && "ab"
-      validValue = _.reduce(["#password", "#username", "#yz"],
+      jsonData = {name: name, password: $.md5(password)}.toJSON;
+      note(jsonData);
+
+      isBlank = function isBlank(e) {
+        return e === "";
+      };
+      coll = _.map([name, password], isBlank);
+      hasBlank = _.reduce(coll,
         function (a, e) {
-          return (a && $(e).val());
-        },
-        true);
-
-      if (validValue) {
-        $.post(YD.conf.userLogin, jsonData).done(onSuccess).fail(onFailure);
-      } else {
+          return (a || e);
+        }, false);
+      if (hasBlank) {
         alert("所有输入框都必须填写。");
+      } else {
+        $.post(YD.conf.userLogin, jsonData).done(onSuccess).fail(onFailure);
       }
     });
 
