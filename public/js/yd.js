@@ -178,7 +178,6 @@ YD = YD || {};
       userShow();
       userBarShow();
 
-
       //
       // 通过jQuery的delegate监听尚未出现在页面的元素
       //
@@ -207,6 +206,7 @@ YD = YD || {};
   YD.startDispache = function () {
 
     var ajaxInfo =  $.get("/examController/studentLogin"),
+      formatedData,
       onSuccess,
       onFailure,
       refreshPage,
@@ -234,6 +234,10 @@ YD = YD || {};
         });
       }
     }());
+
+    formatedData = ajaxInfo.then(function () {
+      return;
+    });
 
     onSuccess = function onSuccess(data) {
       // 将判定抽象为函数
@@ -274,24 +278,6 @@ YD = YD || {};
         updateDateText,
         render;
 
-      render = _.partial(renderLocalData, examInfo);
-
-      // 之前未考过任何考试，因此无latestResult，当前有考试
-      examCurrentNoResulat = doWhen(canTakeExamNolatestExamResult,
-        // renderLocalData(examInfo, "front_content", "start_current_continue.ejs"));
-        render("front_content", "start_current_continue.ejs"));
-
-      // 有之前未完成考试
-      examCurrentContinue = doWhen(canTakeExam,
-         // renderLocalData(examInfo, "front_content", "start_current_continue.ejs"));
-        render("front_content", "start_current_continue.ejs"));
-
-
-      // 有新考试可考
-      examCurrent = doWhen(TookNoExam,
-        // renderLocalData(examInfo, "front_content", "start_current.ejs"));
-        render("front_content", "start_current.ejs"));
-
       updateDateText = function updateDateText(d) {
         var o = _.map(d.upcomingExam, function (e) {
           if (e.isTodayExam) {
@@ -306,26 +292,33 @@ YD = YD || {};
         return {upcomingExam: o};
       };
 
+      // 一次性将数据处理好
+      if (examInfo.upcomingExam) {
+        _.extend(examInfo, updateDateText(examInfo), {hasUpcoming: true}); // 直接修改了examInfo
+        note(examInfo);
+      } else {
+        _.extend(examInfo, {hasUpcoming: false});
+      }
+
+      render = _.partial(renderLocalData, examInfo);
+
+      // 之前未考过任何考试，因此无latestResult，当前有考试
+      examCurrentNoResulat = doWhen(canTakeExamNolatestExamResult, render("front_content", "start_current_continue.ejs"));
+
+      // 有之前未完成考试
+      examCurrentContinue = doWhen(canTakeExam, render("front_content", "start_current_continue.ejs"));
+
+      // 有新考试可考
+      examCurrent = doWhen(TookNoExam, render("front_content", "start_current.ejs"));
+
       // 考试预告区块
-      examUpcoming = doWhen(hasUpcomingExam,
-        // renderLocalData(examInfo, "front_content", "start_upcoming.ejs", updateDateText));
-        render("front_content", "start_upcoming.ejs", updateDateText));
+      examUpcoming = doWhen(hasUpcomingExam, render("front_content", "start_upcoming.ejs", updateDateText));
 
       // 考试成绩区块
-      examScores = doWhen(hasResultCanRetake,
-        // renderLocalData(examInfo, "front_content", "start_scores.ejs"));
-        render("front_content", "start_scores.ejs"));
+      examScores = doWhen(hasResultCanRetake, render("front_content", "start_scores.ejs"));
 
       // 有成绩，但无currentExam，可能有upcommings，可能没有
-      examScoresCantRetake = doWhen(hasResultCanNotRetake,
-        // renderLocalData(examInfo, "front_content", "start_scores_cant_retake_exam.ejs", function (d) {
-        //   var hasUpcoming = _.has(examInfo, "upcomingExam");
-        //   return _.merge(d, {hasUpcoming: hasUpcoming}, updateDateText(d)); // 告诉模版没有upcomingExam区块
-        // }));
-        render("front_content", "start_scores_cant_retake_exam.ejs", function (d) {
-          var hasUpcoming = _.has(examInfo, "upcomingExam");
-          return _.merge(d, {hasUpcoming: hasUpcoming}, updateDateText(d)); // 告诉模版没有upcomingExam区块
-        }));
+      examScoresCantRetake = doWhen(hasResultCanNotRetake, render("front_content", "start_scores_cant_retake_exam.ejs"));
 
       // 渲染整个页面。
       // 对每个函数执行_identity就等于执行了它们。
@@ -358,7 +351,7 @@ YD = YD || {};
     refreshPage = function refreshPage(pred) {
       if (pred) {
         ajaxInfo.then(function (data) {
-          var eql = _.isEqual(data, YD.cache);;
+          //var eql = _.isEqual(data, YD.cache);
           setTimeout(repeat, 15000);
         });
         // setTimeout(function () {
