@@ -11,6 +11,9 @@ YD.conf = {
   userinfo: "/userController/show/loginUser",
   grades: "/userController/grades",
   photos: "/userController/photos",
-  getExamInfo: "/examController/studentLogin"
+  getExamInfo: "/examController/studentLogin",
+  userSave: "/userController/save",
+  userLogin: "/userController/login",
+  userResetPass: ""
 };
 

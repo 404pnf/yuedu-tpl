@@ -158,11 +158,11 @@ YD = YD || {};
     };
 
     userSave = function userSave() {
-      postJson("/userController/save", "form#user_info", wrap(userSave));
+      postJson(YD.conf.userSave, "form#user_info", wrap(userSave));
     };
 
     userPhotoSave = function userPhotoSave() {
-      postJson("/userController/save", "form#user_info", wrap(userShow));
+      postJson(YD.conf.userSave, "form#user_info", wrap(userShow));
     };
 
 
@@ -367,7 +367,7 @@ YD = YD || {};
         true);
 
       if (validValue) {
-        $.post("/userController/login", jsonData).done(onSuccess).fail(onFailure);
+        $.post(YD.conf.userLogin, jsonData).done(onSuccess).fail(onFailure);
       } else {
         alert("所有输入框都必须填写。");
       }
@@ -396,7 +396,7 @@ YD = YD || {};
       showStatusMsg(data + " " + status + " " + xhr);
     };
 
-    $("form").submit(function (e) {
+    $("#reset_pass_save").click(function (e) {
       e.preventDefault();
       oldPass = $("#old_pass").val();
       newPass =  $.md5($("#new_pass").val());
@@ -412,7 +412,7 @@ YD = YD || {};
       // '' is false
       // ' ' with a space is true
       if (validValue) {
-        $.post("/userController/login", jsonData).done(onSuccess).fail(onFailure);
+        $.post(YD.conf.userLogin, jsonData).done(onSuccess).fail(onFailure);
       } else {
         alert("所有输入框都必须填写。");
       }
