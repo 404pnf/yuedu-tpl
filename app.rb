@@ -17,6 +17,7 @@ get '/' do
     <a href=/personal_info.html>user</a><br>
     <a href=/front.html>front.html</a><br>
     <a href=/login.html>login.html</a><br>
+    <a href=/pw_edit.html>pw_edit.html</a><br>
   )
   text
 end
@@ -52,6 +53,9 @@ get '/userController/show/loginUser' do
     userName: '田金慧',
     gender: { key: 'male', value: '男' },
     age: 12,
+    year: '',
+    month: '',
+    day: '',
     dob: '2004-07-26 11:37:53 +0800',
     photo: { key: 'e', value: 'images/head1.png' },
     grade: { key: 'd', value: '小学四年级' },
@@ -151,5 +155,11 @@ post '/userController/login' do
   yanzhengma = params[:yz]
   r = { error: '用户名和密码不对。' }
   # r = {success: '成功啦'}
+  JSONP r
+end
+
+post "/students/password/reset" do
+  # r = { error: '用户名和密码不对。' }
+  r = {success: '成功啦'}
   JSONP r
 end

@@ -8,18 +8,19 @@ a{ text-decoration:none;}
 .clear{ clear:both}
 .wryh{ font-family:'微软雅黑'}
 .Arial{ font-family:Arial, Helvetica, sans-serif}
+a{ cursor: pointer;}
 /*清除浏览器默认样式*/
 h1,h2,h3,h4,h5,ul,li,dl,dt,dd,p,img,table,tr,td{margin:0; padding:0; list-style:none; border:none;}
 
 /*common*/
 .wrapper{ width:100%; background:url(../images/wrapper_bg.jpg) repeat-x bottom #bee7f0;}
 .no_scollw{ width:1000px; margin:0 auto;}
-.pos_rel{position:relative}
+.pos_rel{position:relative; clear:both}
 
 /*exam*/
 .exam_top{ height:169px; margin:0 auto; background:url(../images/exam_top.jpg) center top no-repeat;}
 .exam_center{ margin:0 auto; background:url(../images/exam_center.jpg) repeat-y center;}
-.exam_bottom{ width:100%; background:url(../images/exam_bottom.jpg) no-repeat bottom; min-height:161px; padding-bottom:160px;}
+.exam_bottom{ width:100%; background:url(../images/exam_bottom.jpg) no-repeat bottom; min-height:461px; padding-bottom:160px;}
 .exam_name{ color:#ffffff; font-size:20px; width:87px; font-weight:bold; margin:34px 260px 0 106px; height:44px; line-height:44px; text-align:center}
 .exam_time{ font-size:20px; color:#ffffff; margin:34px 22px 0 0;}
 .exam_time span{ font-size:26px; margin-left:10px;}
@@ -58,17 +59,17 @@ a.next_btn:hover{ background:url(../images/btn_bg.png) no-repeat 0 -100px}
 .nav_exit{ background:url(../images/exit.png) no-repeat bottom; width:294px; height:133px; display:inline-block;}
 .nav_exit:hover{ background:url(../images/exit_h.png) no-repeat bottom;}
 .nav_head{ position:absolute; z-index:1000; width:121px; height:97px; text-align:center; padding-top:36px;}
-.nav_head img{ display:block; margin:0 auto 8px auto; height: 55px;}
+.nav_head img{ display:block; margin:0 auto 8px auto;height: 55px;}
 .nav_head span{ font-size:18px; color:#FFF;}
 .nav_last{ position:relative;}
 
 /*main*/
 .web_main{ width:800px; height:330px; margin: 44px auto 0 auto;}
 .main_left{ width:300px; margin-right:50px;margin-top: 26px;}
-.main_right{ width:423px; margin-top: 26px;}
+.main_right{ width:423px;margin-top: 26px;}
 	/*person_info*/
-.head_box{ margin-bottom:25px; overflow: hidden;}
-.head_box img{ float:left; margin:0 42px 0 30px; height: 80px}
+.head_box{ margin-bottom:25px;overflow: hidden;}
+.head_box img{ float:left; margin:0 42px 0 30px;height: 80px}
 .form_one{ background:#d1e2e7; border-radius:5px; line-height:44px; height:44px; margin-bottom:20px; display:inline-block;}
 .form_one label{ background:#3d9ee1; color:#ffffff; font-size:18px; display:inline-block; width:102px; text-align:center;border-radius:5px 0 0 5px; height:44px;}
 .form_one .span1{ width:172px; display:inline-block; padding-left:20px;}
@@ -133,4 +134,39 @@ a.next_btn:hover{ background:url(../images/btn_bg.png) no-repeat 0 -100px}
 .male,.female{ border-radius:20px; padding:2px 20px; color:#fff; margin:0 5px}
 .male{ background:#009dd5;}
 .female{ background:#f2a8c8;}
-.btn_box_info{}
+
+/*----------------report------------------*/
+/*one_report*/
+.wrapper_report{ background:url(../images/report_bg.jpg) repeat-x bottom;}
+.report_bottom{ background:url(../images/report_bottom_bg.jpg) bottom #ffffff no-repeat; border-radius:20px;  width:753px; margin:30px auto 0 auto; padding-top:50px; padding-bottom:180px;}
+.report_tit{ background:url(../images/report_tit_bg.jpg) no-repeat center; width:100%; height:129px; margin-bottom:40px; text-align:center}
+.report_tit_p{ background:url(../images/report_tit_p.jpg); width:355px; height:60px; margin-top:37px; display:inline-block}
+.report_mylevel{ background:url(../images/report_mylevel.jpg) no-repeat; width:753px; height:393px;}
+.report_mylevel ul{ margin-left:47px;}
+.report_mylevel ul li{ float:left; font-size:13px; color:#ffffff; height:29px; line-height:29px; margin-right:20px;}
+.report_mylevel .user_name{ width:98px}
+.report_mylevel .user_testtime{ width:146px;}
+.report_mylevel .user_school{ width:210px}
+.report_mylevel .user_class{ width:150px;}
+.report_stit_bg{ width:176px; height:43px; background:url(../images/report_stit_bg.jpg); text-align:center; color:#ffffff; font-size:18px; line-height:46px; margin-left:45px; margin-top:70px; position:relative}
+.report_more{ color:#009dd4; font-size:20px; position:absolute; left:160px; width:140px;}
+.mylevel{ border-radius:20px; border:7px solid #009dd4; padding:30px 20px; width:660px; margin:0 auto;}
+.mylevel div{ color:#ab1c27; font-size:20px; font-weight:bold; margin-bottom:5px;}
+.mylevel div span{ color:#ffffff; font-size:30px; border-radius:100px; background:#c4d703; padding:0 10px; margin:0 10px}
+.mylevel p{ color:#009dd4; font-size:16px; line-height:170%;}
+.yz_box{ text-align:center; margin-top:40px;}
+.yz1{ background:url(../images/sample_chapter.jpg) no-repeat; padding:12px 0 5px 36px; margin-right:60px; display:inline-block;}
+.yz2{ background:url(../images/sample_chapter1.jpg) no-repeat; padding:12px 0 5px 36px;display:inline-block;}
+.interested_book_box{ width:685px; margin:0 auto;}
+.interested_book_box li{ margin:36px 13px; float:left; background:url(../images/report_book_name.jpg) no-repeat bottom; text-align:center; width:202px;}
+.interested_book_name{ height:24px; line-height:24px; color:#ffffff; font-size:15px;overflow:hidden;text-overflow:ellipsis; white-space:nowrap;}
+.my_chart{ width:629px; height:309px; margin:0 auto; padding-top:70px}
+
+/*pw*/
+.pw_box{ width: 406px; margin: 100px 0 0 153px;}
+.pw_box label{ width:100px; display:inline-block; text-align:right; margin-right:20px;}
+.pw_box div{ margin-bottom:30px;}
+.pw_box div .input_style{ width:270px;}
+.pw_box .btn_box_info{ margin-left:120px;}
+.pw_box .btn_box_info .btn{ margin-right:15px;}
+.pw_box .btn_box_info .btn_u{ margin-right:0px!important;}

@@ -158,11 +158,11 @@ YD = YD || {};
     };
 
     userSave = function userSave() {
-      postJson("/userController/save", "form#user_info", wrap(userSave));
+      postJson(YD.conf.userSave, "form#user_info", wrap(userSave));
     };
 
     userPhotoSave = function userPhotoSave() {
-      postJson("/userController/save", "form#user_info", wrap(userShow));
+      postJson(YD.conf.userSave, "form#user_info", wrap(userShow));
     };
 
 
@@ -360,6 +360,7 @@ YD = YD || {};
       password = $.md5($("#password").val());
       jsonData = {name: name, password: password}.toJSON;
 
+      // NB: rely on this: true && "" && "ab"
       validValue = _.reduce(["#password", "#username", "#yz"],
         function (a, e) {
           return (a && $(e).val());
@@ -367,12 +368,67 @@ YD = YD || {};
         true);
 
       if (validValue) {
-        $.post("/userController/login", jsonData).done(onSuccess).fail(onFailure);
+        $.post(YD.conf.userLogin, jsonData).done(onSuccess).fail(onFailure);
       } else {
         alert("所有输入框都必须填写。");
       }
     });
 
   }; // end YD.userLogin
+
+  YD.resetPass = function () {
+    var hasBlank,
+      dontMatch,
+      oldPass,
+      newPass,
+      newPassConfirm,
+      isBlank,
+      coll,
+      jsonData,
+      onSuccess,
+      onFailure;
+
+    onSuccess = function onSuccess(data) {
+      if (_.has(data, "error")) {
+        alert(data.error);
+      } else {
+        redirectToUrl(YD.conf.userHomeUrl);
+      }
+    };
+
+    onFailure = function onFailure(data, status, xhr) {
+      showStatusMsg(data + " " + status + " " + xhr);
+    };
+
+
+    $("#reset_pass_save").click(function (e) {
+      e.preventDefault();
+
+      oldPass = $("#old_pass").val();
+      newPass =  $("#new_pass").val();
+      newPassConfirm = $("#new_pass_confirm").val();
+      jsonData = {oldPass: $.md5(oldPass), newPass: $.md5(newPass), newPassConfirm: $.md5(newPassConfirm)};
+      isBlank = function isBlank(e) {
+        return e === "";
+      };
+      coll = _.map([oldPass, newPassConfirm, newPass], isBlank);
+      hasBlank = _.reduce(coll,
+        function (a, e) {
+          return (a || e);
+        }, false);
+      dontMatch = !(newPass === newPassConfirm);
+
+      note(jsonData);
+
+      if (hasBlank) {
+        alert("所有输入框都必须填写。");
+      } else if (dontMatch) {
+        alert("两次输入的新密码不匹配。");
+      } else {
+        $.post(YD.conf.userResetPass, jsonData).done(onSuccess).fail(onFailure);
+      }
+    });
+
+  }; // end YD.resetPass
 
 }()); // end of let scope

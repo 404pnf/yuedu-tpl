@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>试题模板</title>
+ <link rel="stylesheet" type="text/css" href="css/style_css.css" />
+ <link rel="stylesheet" type="text/css" href="css/style_que.css" />
+</head>
+
+<body>
+<div class="wrapper">
+  <div class="main_bg">
+	<!--.web_tit-->
+    <div class="web_tit">外研社中小学生分级阅读测试系统</div>
+    <!--/.web—_tit-->
+    <!--.web_nav-->
+    <div class="web_nav oh">
+        <div class="web_first fl">
+            <a href="#none" class="nav nav_home"></a>
+            <a href="#none" class="nav nav_mexam"></a>
+            <a href="#none" class="nav nav_pw"></a>
+        </div>
+        <div id="user_bar"></div>
+    </div><!--/.web_nav-->
+    <!--.web_main-->
+    <div class="web_main">
+    	<div class="pw_box">
+            <div><label>当前密码:</label><input id="old_pass" type="password" class="input_style wryh" /></div>
+            <div><label>新密码:</label><input id="new_pass" type="password" class="input_style wryh" /></div>
+            <div><label>确认新密码:</label><input id="new_pass_confirm" type="password"  class="input_style"/></div>
+            <div class="btn_box_info">
+                <button type ="button" id = "reset_pass_save" class="btn">保存</button>
+                <button type ="button" id="reset_pass_cancel" class="btn btn_u">取消</bottun>
+            </div>
+        </div>
+    </div>
+    <!--/.web_main-->
+  </div>
+</div>
+<script src="js/lib.all.js"></script>
+<script src="js/yd_conf.js"></script>
+<script src="js/yd.js"></script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    YD.userBar();
+    YD.resetPass();
+});
+</script>
+
+</body>
+</html>
