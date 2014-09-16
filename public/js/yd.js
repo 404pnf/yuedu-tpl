@@ -360,6 +360,7 @@ YD = YD || {};
       password = $.md5($("#password").val());
       jsonData = {name: name, password: password}.toJSON;
 
+      // NB: rely on this: true && "" && "ab"
       validValue = _.reduce(["#password", "#username", "#yz"],
         function (a, e) {
           return (a && $(e).val());
@@ -376,10 +377,13 @@ YD = YD || {};
   }; // end YD.userLogin
 
   YD.resetPass = function () {
-    var validValue,
+    var hasBlank,
+      dontMatch,
       oldPass,
       newPass,
       newPassConfirm,
+      isBlank,
+      coll,
       jsonData,
       onSuccess,
       onFailure;
@@ -396,25 +400,37 @@ YD = YD || {};
       showStatusMsg(data + " " + status + " " + xhr);
     };
 
+
     $("#reset_pass_save").click(function (e) {
       e.preventDefault();
       oldPass = $("#old_pass").val();
-      newPass =  $.md5($("#new_pass").val());
-      newPassConfirm = $.md5($("#new_pass_confirm").val());
-      jsonData = {name: name, oldPass: oldPass, newPass: newPass}.toJSON;
+      newPass =  $("#new_pass").val();
+      newPassConfirm = $("#new_pass_confirm").val();
+      jsonData = {oldPass: $.md5(oldPass), newPass: $.md5(newPass), newPassConfirm: $.md5(newPassConfirm)};
 
-      validValue = _.reduce([oldPass, newPassConfirm, newPass, (newPass === newPassConfirm)],
+      isBlank = function isBlank(e) {
+        return e === "";
+      };
+
+      coll = _.map([oldPass, newPassConfirm, newPass], isBlank);
+      // note(coll);
+
+      hasBlank = _.reduce(coll,
         function (a, e) {
-          return (a && e);
-        }, true);
+          return (a || e);
+        }, false);
 
-      // NB: in JS, empty string is false
-      // '' is false
-      // ' ' with a space is true
-      if (validValue) {
-        $.post(YD.conf.userLogin, jsonData).done(onSuccess).fail(onFailure);
-      } else {
+      dontMatch = !(newPass === newPassConfirm);
+      //note(dontMatch);
+
+      note(jsonData);
+
+      if (hasBlank) {
         alert("所有输入框都必须填写。");
+      } else if (dontMatch) {
+        alert("两次输入的新密码不匹配。");
+      } else {
+        $.post(YD.conf.userResetPass, jsonData).done(onSuccess).fail(onFailure);
       }
     });
 

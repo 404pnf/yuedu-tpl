@@ -14,6 +14,6 @@ YD.conf = {
   getExamInfo: "/examController/studentLogin",
   userSave: "/userController/save",
   userLogin: "/userController/login",
-  userResetPass: ""
+  userResetPass: "/students/password/reset"
 };
 
