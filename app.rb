@@ -75,7 +75,6 @@ end
 get '/examController/studentLogin' do
   # userExamState:'0|1', //用户考试状态（0：未开始 1：开始 2：结束 3：弃考）
   r = {
-
     currentExam: {
       endTime: '2014-09-16 15:20',
       name: '2014秋季测试',
