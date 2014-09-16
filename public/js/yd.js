@@ -349,15 +349,15 @@ YD = YD || {};
 
     // 让浏览器刷新页面的函数
     refreshPage = function refreshPage(pred) {
-      if (pred) {
-        ajaxInfo.then(function (data) {
-          //var eql = _.isEqual(data, YD.cache);
-          setTimeout(repeat, 15000);
-        });
-        // setTimeout(function () {
-        //   window.location.reload(1);
-        // }, 60000);
-      }
+      // if (pred) {
+      //   ajaxInfo.then(function (data) {
+      //     //var eql = _.isEqual(data, YD.cache);
+      //     setTimeout(repeat, 15000);
+      //   });
+      //   // setTimeout(function () {
+      //   //   window.location.reload(1);
+      //   // }, 60000);
+      // }
     };
 
     repeat = function repeat() {
