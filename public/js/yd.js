@@ -403,25 +403,20 @@ YD = YD || {};
 
     $("#reset_pass_save").click(function (e) {
       e.preventDefault();
+
       oldPass = $("#old_pass").val();
       newPass =  $("#new_pass").val();
       newPassConfirm = $("#new_pass_confirm").val();
       jsonData = {oldPass: $.md5(oldPass), newPass: $.md5(newPass), newPassConfirm: $.md5(newPassConfirm)};
-
       isBlank = function isBlank(e) {
         return e === "";
       };
-
       coll = _.map([oldPass, newPassConfirm, newPass], isBlank);
-      // note(coll);
-
       hasBlank = _.reduce(coll,
         function (a, e) {
           return (a || e);
         }, false);
-
       dontMatch = !(newPass === newPassConfirm);
-      //note(dontMatch);
 
       note(jsonData);
 
