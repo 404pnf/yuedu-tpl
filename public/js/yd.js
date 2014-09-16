@@ -13,8 +13,7 @@ YD = YD || {};
 (function () {
   "use strict";
 
-  var conf,
-    showStatusMsg,
+  var showStatusMsg,
     doWhen,
     postJson,
     renderLocalData,
