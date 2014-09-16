@@ -114,9 +114,9 @@ YD = YD || {};
       userPhotoEdit,
       userSave,
       userPhotoSave,
-      userinfo = "/userController/show/loginUser",
-      grades = "/userController/grades",
-      photos = "/userController/photos",
+      userinfo = YD.conf.userinfo,
+      grades = YD.conf.grades,
+      photos = YD.conf.photos,
       userInfoAndPhoto,
       userBarShow,
       userInfoAll;
@@ -196,8 +196,8 @@ YD = YD || {};
 
   // 渲染用户条
   YD.userBar = function userBar() {
-    var userinfo = "/userController/show/loginUser",
-      photos = "/userController/photos",
+    var userinfo = YD.conf.userinfo,
+      photos = YD.conf.photos,
       userInfoAndPhoto;
 
     if (YD.userBarShow) {

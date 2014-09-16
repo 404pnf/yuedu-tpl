@@ -1,10 +1,14 @@
-var YD
+var YD;
 
 YD = {};
 
 YD.conf = {
   userHomeUrl: "/personal_info.html",
   siteHomeUrl: "/front.html",
-  tplDir: /tpl/
+  logout: "/log/out ",
+  tplDir: "/tpl/",
+  userinfo: "/userController/show/loginUser",
+  grades: "/userController/grades",
+  photos: "/userController/photos"
 };
 
