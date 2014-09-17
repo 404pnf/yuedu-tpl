@@ -1,7 +1,7 @@
 // ## jslint配置 不要删除
 // 星号和斜杠，指令间不要有空格
 /*jslint browser: true , devel: true, nomen: true, indent: 2*/
-/*global $, jQuery, EJS, _, alert, setInterval, window, setTimeout*/
+/*global $, jQuery, EJS, _, alert, console, setInterval, window, setTimeout*/
 
 // ## 唯一暴露出来的全局变量。也是程序的命名空间
 var YD;
@@ -25,9 +25,6 @@ YD = YD || {};
   //
   // ## 工具函数
   //
-
-  // ie没有consoloe.log，会无法运行本js
-  console.log = console.log || function () {};
 
   // SIDE-EFFECT ONLY
   showStatusMsg = function showStatusMsg(data) {
@@ -58,7 +55,7 @@ YD = YD || {};
       onFailure;
 
     formData = { data: $(cssID).serializeJSON() };
-    console.log(formData);
+    note(formData);
 
     onSuccess = function onSuccess(data) {
       if (_.has(data, "error")) {
@@ -104,7 +101,8 @@ YD = YD || {};
   };
 
   note = function note(msg) {
-    console.log("NOTE: ");
+    // ie没有consoloe.log，会无法运行本js
+    console.log = console.log || function () { return; };
     console.log(msg);
   };
 
