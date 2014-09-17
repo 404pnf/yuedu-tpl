@@ -102,7 +102,10 @@ YD = YD || {};
 
   note = function note(msg) {
     // ie没有consoloe.log，会无法运行本js
-    console.log = console.log || function () { return; };
+    if (!console) {
+      console = {};
+      console.log = function () {};
+    }
     console.log(msg);
   };
 
