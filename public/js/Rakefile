@@ -12,3 +12,9 @@ end
 task :default do
   :concat
 end
+
+task :lint do
+  system('jslint yd*.js')
+  system('jshint yd*.js')
+end
+
