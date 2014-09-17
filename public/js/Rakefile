@@ -1,10 +1,10 @@
-desc "concat third party js to a single file"
+desc 'concat third party js to a single file'
 task :concat do
   Dir.chdir('lib') { system('cat jquery.js jquery.serialize-object.js jquery.md5.js underscore-min.js ejs.js underscore.object.builders.js json2.js> ../lib.all.js') }
   Dir.chdir('lib') { system('cat amcharts.js serial.js amstock.js > ../amcharts.all.js') }
 end
 
-desc "compile local js"
+desc 'compile local js'
 task :compile do
   system('java -jar ~/gogole-closure-compiler/compiler.jar --js yd.js > yd.min.js')
 end
@@ -17,4 +17,3 @@ task :lint do
   system('jslint yd*.js')
   system('jshint yd*.js')
 end
-
