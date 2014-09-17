@@ -379,7 +379,7 @@ YD = YD || {};
       password = $("#password").val();
       yz = $("#yz").val();
 
-      jsonData = {name: name, password: $.md5(password)};
+      jsonData = JSON.stringify({name: name, password: $.md5(password)});
       note(jsonData);
       if (hasBlank([name, password, yz])) {
         alert("所有输入框都必须填写。");
@@ -418,7 +418,7 @@ YD = YD || {};
       oldPass = $("#old_pass").val();
       newPass =  $("#new_pass").val();
       newPassConfirm = $("#new_pass_confirm").val();
-      jsonData = {oldPass: $.md5(oldPass), newPass: $.md5(newPass), newPassConfirm: $.md5(newPassConfirm)};
+      jsonData = JSON.stringify({oldPass: $.md5(oldPass), newPass: $.md5(newPass), newPassConfirm: $.md5(newPassConfirm)});
       note(jsonData);
 
       dontMatch = (newPass !== newPassConfirm);
