@@ -53,9 +53,9 @@ get '/userController/show/loginUser' do
     userName: '田金慧',
     gender: { key: 'male', value: '男' },
     age: 12,
-    year: '',
-    month: '',
-    day: '',
+    year: 2012, # 数字，不是字符串
+    month: 8,
+    day: 23,
     dob: '2004-07-26 11:37:53 +0800',
     photo: { key: 'e', value: 'images/head1.png' },
     grade: { key: 'd', value: '小学四年级' },
@@ -68,11 +68,8 @@ get '/userController/show/loginUser' do
 end
 
 post '/userController/save' do
-  # logger.info 'in /user/save '
-  status = {
-    # success: '成功啦',
-    error: '错误'
-  }
+  status = { error: '保存用户信息错误' }
+  # status { success: '成功啦' }
   JSONP status
 end
 
