@@ -338,7 +338,18 @@ YD = YD || {};
       promise.fail(onFailure);
       promise.then(onSuccess);
       promise.done(function () {
-        if (!_.has(YD.exam, "currentExam")) {
+        // 只有在以下情况都满足时候才不断反复请求后台服务器
+        // 1. 没有当前考试
+        // 2. 有考试预告
+        // 3. 考试预告中有今天的考试
+        // 这样极大减少了不必要的对后台请求
+        var shouldRetry;
+        shouldRetry = !_.has(YD.exam, "currentExam") &&
+          _.has(YD.exam, "upcomingExam") &&
+          _.find(YD.exam.upcomingExam, function (e) {
+            return e.isTodayExam; // 这里必须写return
+          }
+        if (shouldRetry) {
           setTimeout(function () {
             window.location.reload(1);
           }, 180000); // 3 mins
