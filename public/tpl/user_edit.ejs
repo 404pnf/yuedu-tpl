@@ -14,12 +14,44 @@
        <% }); %>
     </div>
 
-    <div><label>出生日期:</label><input type="text" name="dob" value=<%= dob %> class="input_style"/></div>
-  </div>
+    <div>
+      <label>生日:</label>
+      <select name="year" class="input_style ">
+        <option value="">年</option>
+        <% _.each(_.range(2000, 2014), function (e) { %>
+          <option value="<%= e %>"
+            <% if (year === e) { %>
+              selected
+            <% } %>
+          ><%= e %></option>
+        <% }); %>
+      </select>
+      <select name="month" class="input_style ">
+        <option value="">月</option>
+       <% _.each(_.range(1, 13), function (e) { %>
+          <option value="<%= e %>"
+            <% if (month === e) { %>
+              selected
+            <% } %>
+          ><%= e %></option>
+        <% }); %>
+      </select>
+      <select name="day" class="input_style ">
+        <option value="">日</option>
+        <% _.each(_.range(1, 32), function (e) { %>
+          <option value="<%= e %>"
+            <% if (day === e) { %>
+              selected
+            <% } %>
+          ><%= e %></option>
+        <% }); %>
+      </select>
+    </div>
+  </div> <!-- end <div class="info_l fl"> -->
 
   <div class="info_l fl">
     <div><label>年级:</label>
-      <select name="grade" class="input_style wryh">
+      <select name="grade" class="input_style wryh input_style_width">
         <% _.each(grades, function(e) { %>
           <option value=<%= e.key %>
             <% if (e.key === grade.key) { %>

@@ -122,18 +122,19 @@ a.next_btn:hover{ background:url(../images/btn_bg.png) no-repeat 0 -100px}
 
 /*edit_info*/
 .old_head{ width:200px; text-align:center; margin-top:50px;}
-.old_head_info{ margin-right:20px;}
+/*.old_head_info{ margin-right:20px;}*/
 .new_head_list{ width:530px; margin-top:20px;margin-left: 40px;}
 .new_head_list li{ float:left; margin:0px 16px 10px 80px; text-align:center}
 .btn_box_info button{ margin-right:36px;}
-.info_l{ width:290px; margin-bottom:40px;}
-.info_l label{ width:75px; display: block; float:left; font-weight:bold; margin-top:3px;}
+.info_l{ width:300px; margin-bottom:40px;}
+.info_l label{ width:50px; display: block; float:left; font-weight:bold; margin-top:3px;}
 .info_l div{ margin-top:60px;}
 .info_l div input,.info_l div select{ margin-left:10px;font-size: 16px;}
-.input_style{ border:1px solid #dadada; box-shadow:2px 2px 1px #b2b0ac; height:27px; line-height:27px; width:160px;}
+.input_style{ border:1px solid #dadada; box-shadow:2px 2px 1px #b2b0ac; height:27px; line-height:27px;}
 .male,.female{ border-radius:20px; padding:2px 20px; color:#fff; margin:0 5px}
 .male{ background:#009dd5;}
 .female{ background:#f2a8c8;}
+.input_style_width{ width:175px;}
 
 /*----------------report------------------*/
 /*one_report*/
