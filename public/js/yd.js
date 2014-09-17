@@ -368,14 +368,14 @@ YD = YD || {};
     var name,
       password,
       yz;
+
     $("form").submit(function (e) {
       e.preventDefault();
+
       name = $("#username").val();
       password = $("#password").val();
       yz = $("#yz").val();
 
-      // jsonData = JSON.stringify({name: name, password: $.md5(password)});
-      // note(jsonData);
       if (hasBlank([name, password, yz])) {
         alert("所有输入框都必须填写。");
       } else {
@@ -383,7 +383,6 @@ YD = YD || {};
         postJson(YD.conf.userLogin, "#login", function () {
           redirectToUrl(YD.conf.siteHomeUrl);
         });
-        // $.post(YD.conf.userLogin, jsonData).done(onSuccess).fail(onFailure);
       }
     });
 
@@ -394,22 +393,6 @@ YD = YD || {};
       oldPass,
       newPass,
       newPassConfirm;
-      // jsonData,
-      // onSuccess,
-      // onFailure;
-
-    // onSuccess = function onSuccess(data) {
-    //   if (_.has(data, "error")) {
-    //     alert(data.error);
-    //   } else {
-    //     redirectToUrl(YD.conf.userHomeUrl);
-    //   }
-    // };
-
-    // onFailure = function onFailure(data, status, xhr) {
-    //   showStatusMsg(data + " " + status + " " + xhr);
-    // };
-
 
     $("form").submit(function (e) {
       e.preventDefault();
@@ -417,9 +400,8 @@ YD = YD || {};
       oldPass = $("#old_pass").val();
       newPass =  $("#new_pass").val();
       newPassConfirm = $("#new_pass_confirm").val();
-      // jsonData = JSON.stringify({oldPass: $.md5(oldPass), newPass: $.md5(newPass), newPassConfirm: $.md5(newPassConfirm)});
-      // note(jsonData);
       dontMatch = (newPass !== newPassConfirm);
+      note($("#reset_pass_form").serializeJSON());
 
       if (hasBlank([oldPass, newPass, newPassConfirm])) {
         alert("所有输入框都必须填写。");
@@ -429,10 +411,9 @@ YD = YD || {};
         $("#new_pass").val($.md5($("#new_pass").val()));
         $("#old_pass").val($.md5($("#old_pass").val()));
         $("#new_pass_confirm").val($.md5($("#new_pass_confirm").val()));
-        postJson(YD.conf.userResetPass, "#reset_pass", function () {
+        postJson(YD.conf.userResetPass, "#reset_pass_form", function () {
           redirectToUrl(YD.conf.userHomeUrl);
         });
-        // $.post(YD.conf.userResetPass, jsonData).done(onSuccess).fail(onFailure);
       }
     });
 
