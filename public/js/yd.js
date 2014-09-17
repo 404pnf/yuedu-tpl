@@ -59,8 +59,7 @@ YD = YD || {};
 
     onSuccess = function onSuccess(data) {
       if (_.has(data, "error")) {
-        //showStatusMsg(data.error);
-        alert(data.error);
+        showStatusMsg(data);
       } else {
         callback();
       }
@@ -244,6 +243,12 @@ YD = YD || {};
   // 每隔一段时间时间查看一下数据源并重新刷新页面。
 
   YD.startDispache = function () {
+
+    // TODO
+    // 根据网站jslint的报告，现在promise是在必包中
+    // 也应该是如果在promise.then或promise.done的函数中重现调用repeat()但没有实际发起ajax请求的原因
+    // 因为promie的值作为必包被固定在环境中了
+    // 暂时猜测
 
     var getExamInfo = $.get(YD.conf.getExamInfo),
       promise,
