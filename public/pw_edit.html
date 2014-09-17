@@ -24,15 +24,21 @@
     </div><!--/.web_nav-->
     <!--.web_main-->
     <div class="web_main">
-    	<div class="pw_box">
-            <div><label>当前密码:</label><input id="old_pass" type="password" class="input_style wryh" /></div>
-            <div><label>新密码:</label><input id="new_pass" type="password" class="input_style wryh" /></div>
-            <div><label>确认新密码:</label><input id="new_pass_confirm" type="password"  class="input_style"/></div>
-            <div class="btn_box_info">
-                <button type ="button" id = "reset_pass_save" class="btn">保存</button>
-                <button type ="button" id="reset_pass_cancel" class="btn btn_u">取消</bottun>
+        <form id="reset_pass" action="" method="post">
+        	<div class="pw_box">
+                <fieldset>
+                    <div><label>当前密码:</label><input id="old_pass" type="password" class="input_style wryh" /></div>
+
+                    <div><label>新密码:</label><input id="new_pass" type="password" class="input_style wryh" /></div>
+                    <div><label>确认新密码:</label><input id="new_pass_confirm" type="password"  class="input_style"/></div>
+                </fieldset>
+                <div class="btn_box_info">
+<!--                     <button type ="button" id = "reset_pass_save" class="btn">保存</button>
+                    <button type ="button" id="reset_pass_cancel" class="btn btn_u">取消</bottun> -->
+                    <input type="submit" class="button btn login_btn" id="reset_pass_save" value="保存">
+                </div>
             </div>
-        </div>
+        </form>
     </div>
     <!--/.web_main-->
   </div>
