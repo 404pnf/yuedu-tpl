@@ -321,7 +321,6 @@ YD = YD || {};
       // 有成绩，但无currentExam，可能有upcommings，可能没有
       promise.done(doWhen(hasResultCanNotRetake, render("front_content", "start_scores_cant_retake_exam.ejs")));
 
-      note("又看到我啦。证明页面刷新啦。 " + new Date());
     };
 
     onFailure = function onFailure() {
@@ -350,6 +349,7 @@ YD = YD || {};
             return e.isTodayExam; // 这里必须写return
           });
         if (shouldRetry) {
+          note("满足刷新条件，页面将会刷新。 " + new Date());
           setTimeout(function () {
             window.location.reload(1);
           }, 180000); // 3 mins
