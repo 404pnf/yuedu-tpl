@@ -348,7 +348,7 @@ YD = YD || {};
           _.has(YD.exam, "upcomingExam") &&
           _.find(YD.exam.upcomingExam, function (e) {
             return e.isTodayExam; // 这里必须写return
-          }
+          });
         if (shouldRetry) {
           setTimeout(function () {
             window.location.reload(1);
