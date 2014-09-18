@@ -13,7 +13,7 @@ end
 
 get '/' do
   text = %q(
-    <a href=/chart.html>chart.html</a><br>
+    <a href=/charts.html>charts.html</a><br>
     <a href=/personal_info.html>user</a><br>
     <a href=/front.html>front.html</a><br>
     <a href=/login.html>login.html</a><br>
@@ -112,26 +112,41 @@ end
 
 get '/resultsController/loginUser' do
   chart_data = [
-    {
-      date: '214-08-14',
-      value: 10,
-      url: '321'
-    },
-    {
-      date: '214-08-15',
-      value: 12,
-      url: '212'
-    },
-    {
-      date: '214-08-18',
-      value: 15,
-      url: '4321'
-    },
-    {
-      date: '214-08-18',
-      value: 8,
-      url: '352'
-    },
+    # {
+    #   date: '214-08-14',
+    #   value: 10,
+    #   url: '321'
+    # },
+    #     {
+    #   date: '214-08-14',
+    #   value: 10,
+    #   url: '321'
+    # },
+    #     {
+    #   date: '214-08-14',
+    #   value: 10,
+    #   url: '321'
+    # },
+    #     {
+    #   date: '214-08-14',
+    #   value: 10,
+    #   url: '321'
+    # },
+    # {
+    #   date: '214-08-15',
+    #   value: 12,
+    #   url: '212'
+    # },
+    # {
+    #   date: '214-08-18',
+    #   value: 15,
+    #   url: '4321'
+    # },
+    # {
+    #   date: '214-08-18',
+    #   value: 8,
+    #   url: '352'
+    # },
     {
       date: '214-09-24',
       value: 19,

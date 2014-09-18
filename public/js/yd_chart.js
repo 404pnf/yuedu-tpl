@@ -10,6 +10,7 @@ ydMakeChart = function () {
   var drawChart,
     onFailure;
 
+
   drawChart = function (data) {
     AmCharts.makeChart("chartdiv", {
       type: "serial",
@@ -50,5 +51,25 @@ ydMakeChart = function () {
   };
 
     // 请求数据并将图标显示在页面
-  return $.get('/resultsController/loginUser').done(function (d) { drawChart(d); }).fail(onFailure);
+  return (function () {
+    var tryTimes,
+      highestScore;
+
+    $.get('/resultsController/loginUser')
+      .done(function (d) {
+        tryTimes = d.length;
+        highestScore = _.reduce(d, function (a, e) {
+          return (a > e.value ? a : e.value);
+        })
+      })
+      .done(function (d) {
+        drawChart(d);
+      })
+      .done(function () {
+
+        $("#chart_info").text("一共考了" + tryTimes + "次。最佳成绩是" + highestScore + "。");
+      })
+      .fail(onFailure);
+
+  }());
 }; // end ydMakeChart
