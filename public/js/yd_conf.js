@@ -3,11 +3,12 @@ var YD;
 YD = {};
 
 YD.conf = {
-  userHomeUrl: "/personal_info.html",
+  tplDir: "/tpl/",
   siteHomeUrl: "/front.html",
+  simulationExam: "/simulation_exam.html",
   userLogout: "/log/out ",
   pwEditUrl: "/pw_edit.html",
-  tplDir: "/tpl/",
+  userHomeUrl: "/personal_info.html",
   userinfo: "/userController/show/loginUser",
   grades: "/userController/grades",
   photos: "/userController/photos",
