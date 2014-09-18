@@ -67,11 +67,7 @@ get '/userController/show/loginUser' do
   JSONP user
 end
 
-post '/userController/save' do
-  status = { error: '保存用户信息错误' }
-  # status { success: '成功啦' }
-  JSONP status
-end
+
 
 get '/examController/studentLogin' do
   # userExamState:'0|1', //用户考试状态（0：未开始 1：开始 2：结束 3：弃考）
@@ -146,12 +142,18 @@ get '/resultsController/loginUser' do
   JSONP chart_data
 end
 
+post '/userController/save' do
+  # status = { error: '保存用户信息错误' }
+  status = { success: '成功啦' }
+  JSONP status
+end
+
 post '/userController/login' do
   username = params[:username]
   password = params[:password]
   yanzhengma = params[:yz]
-  r = { error: '用户名和密码不对。' }
-  # r = {success: '成功啦'}
+  # r = { error: '用户名和密码不对。' }
+  r = {success: '成功啦'}
   JSONP r
 end
 
