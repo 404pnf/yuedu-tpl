@@ -26,6 +26,7 @@ ydMakeChart = function () {
       },
       graphs: [{
         type: "column",
+        columnWidth: 0.3, // 设定column的宽度 区间是 0 .. 1 相对宽度
         title: "",
         valueField: "value",
         urlField: "url",
@@ -38,7 +39,7 @@ ydMakeChart = function () {
         urlField: "url",
         lineThickness: 6,
         bullet: "round",
-        bulletSize: 30,
+        bulletSize: 20,
         balloonText: "[[date]]<br><b><span style='font-size:24px;'>[[value]]</span></b><br><b><span style='font-size:24px;'>点击查看详情</span></b>"
       }],
 
