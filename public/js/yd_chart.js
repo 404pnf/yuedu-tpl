@@ -61,7 +61,7 @@ ydMakeChart = function () {
         tryTimes = d.length;
         highestScore = _.reduce(d, function (a, e) {
           return (a > e.value ? a : e.value);
-        })
+        });
       })
       .done(function (d) {
         drawChart(d);
