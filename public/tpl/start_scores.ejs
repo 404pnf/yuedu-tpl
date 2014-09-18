@@ -6,7 +6,10 @@
     <h3><%= latestExamResult.name %></h3>
     <div>英语阅读能力等级：<%= latestExamResult.examGradeResult %></div>
     <div>测试时间：<%= latestExamResult.personalEndTime %><span>用时：<%= latestExamResult.duration %></span>分钟</div>
-    <div class="ckrep_btn"><a href="<%= YD.conf.lastExamResult %><%= latestExamResult.id %>" class="btn">查看报告</a><a href="#none" class="btn">我的成长</a></div>
+    <div class="ckrep_btn">
+      <a href="<%= YD.conf.lastExamResult %><%= latestExamResult.id %>" class="btn">查看报告</a>
+      <a href="<%= YD.conf.userTrend %>" class="btn">我的成长</a>
+    </div>
   </div>
   <!--/.ckrep-->
   <!--.again-->
