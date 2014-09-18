@@ -179,7 +179,9 @@ YD = YD || {};
     };
 
     userSave = function userSave() {
-      postJson(YD.conf.userSave, "form#user_info", wrap(userSave));
+      postJson(YD.conf.userSave, "form#user_info", function () {
+        redirectToUrl(YD.conf.userHomeUrl);
+      });
     };
 
     userPhotoSave = function userPhotoSave() {
