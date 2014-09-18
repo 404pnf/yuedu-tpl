@@ -4,6 +4,7 @@ YD = {};
 
 YD.conf = {
   // static route
+  siteHomeUrl: "/",
   tplDir: "/tpl/",
   userLogout: "/log/out ",
   userHomeUrl: "/personal_info.html",
