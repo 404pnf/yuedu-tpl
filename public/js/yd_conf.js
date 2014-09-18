@@ -5,7 +5,7 @@ YD = {};
 YD.conf = {
   userHomeUrl: "/personal_info.html",
   siteHomeUrl: "/front.html",
-  logout: "/log/out ",
+  userLogout: "/log/out ",
   pwEditUrl: "/pw_edit.html",
   tplDir: "/tpl/",
   userinfo: "/userController/show/loginUser",

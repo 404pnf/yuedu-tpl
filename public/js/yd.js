@@ -83,7 +83,7 @@ YD = YD || {};
   renderLocalData = function renderLocalData(data, cssID, tpl, callback) {
     return function () {
       var cb = callback || _.identity,
-        clonedData = _.snapshot(data);
+        clonedData = _.snapshot(_.extend(data, YD.conf));
       new EJS({url: YD.conf.tplDir + tpl}).update(cssID, cb(clonedData));
     };
   };
