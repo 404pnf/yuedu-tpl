@@ -245,104 +245,99 @@ YD = YD || {};
   // 每隔一段时间时间查看一下数据源并重新刷新页面。
 
   YD.startDispache = function () {
+    var next;
 
-    // TODO
-    // 根据网站jslint的报告，现在promise是在必包中
-    // 也应该是如果在promise.then或promise.done的函数中重现调用repeat()但没有实际发起ajax请求的原因
-    // 因为promie的值作为必包被固定在环境中了
-    // 暂时猜测
+    next = function next() {
+      var getExamInfo = $.get(YD.conf.getExamInfo),
+        promise,
+        onSuccess,
+        onFailure;
 
-    var getExamInfo = $.get(YD.conf.getExamInfo),
-      promise,
-      onSuccess,
-      onFailure,
-      repeat;
+      promise = getExamInfo.then(function (data) {
+        var updateDateText = function updateDateText(d) {
+          var o = _.map(d.upcomingExam, function (e) {
+            if (e.isTodayExam) {
+              e.endTime = "";
+              e.isTodayExam = "今天";
+            } else {
+              e.isTodayExam = "";
+            }
+            return e;
+          });
 
-    promise = getExamInfo.then(function (data) {
-      var updateDateText = function updateDateText(d) {
-        var o = _.map(d.upcomingExam, function (e) {
-          if (e.isTodayExam) {
-            e.endTime = "";
-            e.isTodayExam = "今天";
-          } else {
-            e.isTodayExam = "";
-          }
-          return e;
-        });
+          return {upcomingExam: o};
+        };
 
-        return {upcomingExam: o};
-      };
+        // 一次性将数据处理好
+        if (data.upcomingExam) {
+          _.extend(data, updateDateText(data), {hasUpcoming: true}); // 直接修改了examInfo
+          // note(data);
+        } else {
+          _.extend(data, {hasUpcoming: false});
+        }
+        return data;
+      });
 
-      // 一次性将数据处理好
-      if (data.upcomingExam) {
-        _.extend(data, updateDateText(data), {hasUpcoming: true}); // 直接修改了examInfo
-        // note(data);
-      } else {
-        _.extend(data, {hasUpcoming: false});
-      }
-      return data;
-    });
+      // note(promise);
 
-    // note(promise);
-
-    onSuccess = function onSuccess(data) {
-      // 将判定抽象为函数
+      onSuccess = function onSuccess(data) {
+        // 将判定抽象为函数
 
           // 将从后台获得的数据（从onSuccess函数的参数传进来）绑定到局部变量
-      var examInfo = _.snapshot(data),
+        var examInfo = _.snapshot(data),
 
-        // 有考试，学生状态为未考，有上次考试成绩  有currentExam， userExamState = 0 但无 latestExamResult
-        canTakeExam = _.has(examInfo, "currentExam") && examInfo.currentExam.userExamState !== "0" && !(_.has(examInfo, "latestExamResult")),
-        // 有考试，无上次考试成绩，无考试预告
-        canTakeExamNolatestExamResult = _.has(examInfo, "currentExam"),
-        // 有考试，学生状态为未考，无上次考试成绩
-        TookNoExam = canTakeExam && examInfo.currentExam.userExamState === "0"  && !(_.has(examInfo, "latestExamResult")),
-        // 有考试预告  有upcomingExam, 但无 latestExamResult , 无 currentExam ；防止和后面的冲突
-        hasUpcomingExam = _.has(examInfo, "upcomingExam") && !_.has(examInfo, "latestExamResult") && !_.has(examInfo, "currentExam"),
-        // 有成绩，可重测   有 latestExamResult 有 curerntExam
-        hasResultCanRetake = _.has(examInfo, "latestExamResult") && _.has(examInfo, "currentExam"),
-        // 有成绩，不可重测，有考试预告   有 latestExamResult 但无 curerntExam， 有 upcomingExam
-        hasResultCanNotRetake = _.has(examInfo, "latestExamResult") && !(_.has(examInfo, "currentExam")),
-        // 无考试，无考试预告，无上次成绩
-        // noExamToTake = !_.has(examInfo, "currentExam"),
+          // 有考试，学生状态为未考，有上次考试成绩  有currentExam， userExamState = 0 但无 latestExamResult
+          canTakeExam = _.has(examInfo, "currentExam") && examInfo.currentExam.userExamState !== "0" && !(_.has(examInfo, "latestExamResult")),
+          // 有考试，无上次考试成绩，无考试预告
+          canTakeExamNolatestExamResult = _.has(examInfo, "currentExam"),
+          // 有考试，学生状态为未考，无上次考试成绩
+          TookNoExam = canTakeExam && examInfo.currentExam.userExamState === "0"  && !(_.has(examInfo, "latestExamResult")),
+          // 有考试预告  有upcomingExam, 但无 latestExamResult , 无 currentExam ；防止和后面的冲突
+          hasUpcomingExam = _.has(examInfo, "upcomingExam") && !_.has(examInfo, "latestExamResult") && !_.has(examInfo, "currentExam"),
+          // 有成绩，可重测   有 latestExamResult 有 curerntExam
+          hasResultCanRetake = _.has(examInfo, "latestExamResult") && _.has(examInfo, "currentExam"),
+          // 有成绩，不可重测，有考试预告   有 latestExamResult 但无 curerntExam， 有 upcomingExam
+          hasResultCanNotRetake = _.has(examInfo, "latestExamResult") && !(_.has(examInfo, "currentExam")),
+          // 无考试，无考试预告，无上次成绩
+          // noExamToTake = !_.has(examInfo, "currentExam"),
 
-        render;
+          render;
 
-      render = _.partial(renderLocalData, examInfo);
+        render = _.partial(renderLocalData, examInfo);
 
-      // 之前未考过任何考试，因此无latestResult，当前有考试
-      promise.done(doWhen(canTakeExamNolatestExamResult, render("front_content", "start_current_continue.ejs")));
+        // 之前未考过任何考试，因此无latestResult，当前有考试
+        promise.done(doWhen(canTakeExamNolatestExamResult, render("front_content", "start_current_continue.ejs")));
 
-      // 有之前未完成考试
-      promise.done(doWhen(canTakeExam, render("front_content", "start_current_continue.ejs")));
+        // 有之前未完成考试
+        promise.done(doWhen(canTakeExam, render("front_content", "start_current_continue.ejs")));
 
-      // 有新考试可考
-      promise.done(doWhen(TookNoExam, render("front_content", "start_current.ejs")));
+        // 有新考试可考
+        promise.done(doWhen(TookNoExam, render("front_content", "start_current.ejs")));
 
-      // 考试预告区块
-      promise.done(doWhen(hasUpcomingExam, render("front_content", "start_upcoming.ejs")));
+        // 考试预告区块
+        promise.done(doWhen(hasUpcomingExam, render("front_content", "start_upcoming.ejs")));
 
-      // 考试成绩区块
-      promise.done(doWhen(hasResultCanRetake, render("front_content", "start_scores.ejs")));
+        // 考试成绩区块
+        promise.done(doWhen(hasResultCanRetake, render("front_content", "start_scores.ejs")));
 
-      // 有成绩，但无currentExam，可能有upcommings，可能没有
-      promise.done(doWhen(hasResultCanNotRetake, render("front_content", "start_scores_cant_retake_exam.ejs")));
+        // 有成绩，但无currentExam，可能有upcommings，可能没有
+        promise.done(doWhen(hasResultCanNotRetake, render("front_content", "start_scores_cant_retake_exam.ejs")));
 
-    };
+      };
 
-    onFailure = function onFailure() {
-      note("链接后台失败。");
-    };
+      onFailure = function onFailure() {
+        note("链接后台失败。");
+      };
 
-    // set data to cache
-    promise.done(function (data) {
-      YD.exam = YD.exam || data;
-      // note(YD.exam);
-    });
+      // set data to cache
+      promise.done(function (data) {
+        YD.exam = YD.exam || data;
+        // note(YD.exam);
+      });
 
-    repeat = function repeat() {
       promise.fail(onFailure);
-      promise.then(onSuccess);
+      promise.done(onSuccess);
+
       promise.done(function () {
         // 只有在以下情况都满足时候才不断反复请求后台服务器
         // 1. 没有当前考试
@@ -357,14 +352,15 @@ YD = YD || {};
           });
         if (shouldRetry) {
           note("满足刷新条件，页面将会刷新。 " + new Date());
-          setTimeout(function () {
-            window.location.reload(1);
-          }, 180000); // 3 mins
+          // setTimeout(function () {
+          //   window.location.reload(1);
+          // }, 18000); // 3 mins
+          setTimeout(next, 180000); // 3 mins
         }
       });
     };
 
-    repeat();
+    next();
 
   }; // end YD.startDispache
 
