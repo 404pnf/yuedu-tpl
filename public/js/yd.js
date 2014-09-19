@@ -185,7 +185,7 @@ YD = YD || {};
     };
 
     userPhotoSave = function userPhotoSave() {
-      postJson(YD.conf.userSave, "form#user_info", wrap(userShow));
+      postJson(YD.conf.userSave, "form#user_photo", wrap(userShow));
     };
 
 
