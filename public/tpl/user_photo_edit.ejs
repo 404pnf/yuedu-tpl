@@ -4,7 +4,7 @@
     <% _.each(photos, function(e) { %>
       <li>
         <img src=<%= e.value %> width="80px" /><br />
-        <input type="radio" name="photo_id" name=<%= e.key %> value=<%= e.key %>
+        <input type="radio" name="photo" name=<%= e.key %> value=<%= e.key %>
           <% if (e.key === photo.key) { %>
             checked
           <% } %>
