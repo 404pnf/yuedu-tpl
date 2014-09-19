@@ -359,8 +359,10 @@ YD = YD || {};
         }
       });
     };
-
-    next();
+    // 马上开始第一次调用。用setTimeout调用另一个setTimeout永远不会出现栈溢出
+    // 直接 next() 调用会栈溢出的。比如10万次递归后。
+    // 参见  effective javascript : tip 64，65, page 155
+    setTimeout(next, 0);
 
   }; // end YD.startDispache
 
