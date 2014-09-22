@@ -55,7 +55,7 @@ YD = YD || {};
       onFailure;
 
     formData = { data: $(cssID).serializeJSON() };
-    note(formData);
+    // note(formData);
 
     onSuccess = function onSuccess(data) {
       if (_.has(data, "error")) {
@@ -101,7 +101,7 @@ YD = YD || {};
 
   note = function note(msg) {
     // ie没有consoloe.log，会无法运行本js
-    if (!console) {
+    if (!window.console) {
       console = {};
       console.log = function () {};
     }
@@ -335,7 +335,7 @@ YD = YD || {};
       };
 
       onFailure = function onFailure() {
-        note("链接后台失败。");
+        // note("链接后台失败。");
       };
 
       // set data to cache
@@ -360,7 +360,7 @@ YD = YD || {};
             return e.isTodayExam; // 这里必须写return
           });
         if (shouldRetry) {
-          note("满足刷新条件，页面将会刷新。 " + new Date());
+          // note("满足刷新条件，页面将会刷新。 " + new Date());
           // setTimeout(function () {
           //   window.location.reload(1);
           // }, 18000); // 3 mins
@@ -409,14 +409,14 @@ YD = YD || {};
       newPass,
       newPassConfirm;
 
-    $("form").submit(function (e) {
+    $("#reset_pass_save").click(function (e) {
       e.preventDefault();
 
       oldPass = $("#old_pass").val();
       newPass =  $("#new_pass").val();
       newPassConfirm = $("#new_pass_confirm").val();
       dontMatch = (newPass !== newPassConfirm);
-      note($("#reset_pass_form").serializeJSON());
+      // note($("#reset_pass_form").serializeJSON());
 
       if (hasBlank([oldPass, newPass, newPassConfirm])) {
         alert("所有输入框都必须填写。");
@@ -430,6 +430,7 @@ YD = YD || {};
           redirectToUrl(YD.conf.userHomeUrl);
         });
       }
+      // e.preventDefault();
     });
 
   }; // end YD.resetPass
