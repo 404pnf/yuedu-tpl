@@ -8,6 +8,8 @@ var YD;
 
 YD = YD || {};
 
+YD.debug = true;
+
 // ## 用匿名函数做为 let scope
 
 (function () {
@@ -105,7 +107,9 @@ YD = YD || {};
       console = {};
       console.log = function () {};
     }
-    console.log(msg);
+    if (YD.debug) {
+      console.log(msg);
+    }
   };
 
 
