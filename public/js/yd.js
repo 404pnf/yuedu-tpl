@@ -288,20 +288,22 @@ YD = YD || {};
           // 将从后台获得的数据（从onSuccess函数的参数传进来）绑定到局部变量
         var examInfo = _.snapshot(data),
 
-          // 有考试，学生状态为未考，有上次考试成绩  有currentExam， userExamState = 0 但无 latestExamResult
+          // 有考试，无上次考试成绩 学生状态为未考 0
           canTakeExam = _.has(examInfo, "currentExam") && examInfo.currentExam.userExamState !== "0" && !(_.has(examInfo, "latestExamResult")),
-          // 有考试，无上次考试成绩，无考试预告
-          canTakeExamNolatestExamResult = _.has(examInfo, "currentExam"),
-          // 有考试，学生状态为未考，无上次考试成绩
-          TookNoExam = canTakeExam && examInfo.currentExam.userExamState === "0"  && !(_.has(examInfo, "latestExamResult")),
-          // 有考试预告  有upcomingExam, 但无 latestExamResult , 无 currentExam ；防止和后面的冲突
+          // 有考试，无上次考试成绩，学生状态不为 0
+          canTakeExamNolatestExamResult = _.has(examInfo, "currentExam") && examInfo.currentExam.userExamState !== "0",
+          // 有考试，无上次考试成绩， 学生状态为未考，
+          TookNoExam = _.has(examInfo, "currentExam") && examInfo.currentExam.userExamState === "0"  && !(_.has(examInfo, "latestExamResult")),
+          // 有考试预告，无上次成绩,无当前考试
           hasUpcomingExam = _.has(examInfo, "upcomingExam") && !_.has(examInfo, "latestExamResult") && !_.has(examInfo, "currentExam"),
-          // 有成绩，可重测   有 latestExamResult 有 curerntExam
-          hasResultCanRetake = _.has(examInfo, "latestExamResult") && _.has(examInfo, "currentExam"),
+          // 有上次成绩，有当前考试（即可重测），学生状态为未考 0
+          hasResultCanRetake = _.has(examInfo, "latestExamResult") && _.has(examInfo, "currentExam") && examInfo.currentExam.userExamState === "0",
+          // 有上次成绩，有当前考试（即可重测），学生状态为未考 0
+          hasResultCanRetakeContinue = _.has(examInfo, "latestExamResult") && _.has(examInfo, "currentExam") && examInfo.currentExam.userExamState !== "0",
           // 有成绩，不可重测，有考试预告   有 latestExamResult 但无 curerntExam， 有 upcomingExam
           hasResultCanNotRetake = _.has(examInfo, "latestExamResult") && !(_.has(examInfo, "currentExam")),
           // 无考试，无考试预告，无上次成绩
-          // noExamToTake = !_.has(examInfo, "currentExam"),
+          noExamToTake = !_.has(examInfo, "currentExam") && !_.has(examInfo, "upcomingExam") && !_.has(examInfo, "latestExamResult"),
 
           render;
 
@@ -321,10 +323,15 @@ YD = YD || {};
 
         // 考试成绩区块
         promise.done(doWhen(hasResultCanRetake, render("front_content", "start_scores.ejs")));
+        // 考试成绩区块
+        promise.done(doWhen(hasResultCanRetakeContinue, render("front_content", "start_current_continue.ejs")));
+
 
         // 有成绩，但无currentExam，可能有upcommings，可能没有
         promise.done(doWhen(hasResultCanNotRetake, render("front_content", "start_scores_cant_retake_exam.ejs")));
 
+        // 什么数据都没有
+        promise.done(doWhen(noExamToTake, render("front_content", "start_scores_cant_retake_exam.ejs")));
       };
 
       onFailure = function onFailure() {
