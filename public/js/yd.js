@@ -293,21 +293,42 @@ YD.debug = true;
         var examInfo = _.snapshot(data),
 
           // 有考试，无上次考试成绩 学生状态为未考 0
-          canTakeExam = _.has(examInfo, "currentExam") && examInfo.currentExam.userExamState !== "0" && !(_.has(examInfo, "latestExamResult")),
+          canTakeExam = _.has(examInfo, "currentExam") &&
+            examInfo.currentExam.userExamState !== "0" &&
+            !(_.has(examInfo, "latestExamResult")),
+
           // 有考试，无上次考试成绩，学生状态不为 0
-          canTakeExamNolatestExamResult = _.has(examInfo, "currentExam") && examInfo.currentExam.userExamState !== "0",
+          canTakeExamNolatestExamResult = _.has(examInfo, "currentExam") &&
+            examInfo.currentExam.userExamState !== "0",
+
           // 有考试，无上次考试成绩， 学生状态为未考，
-          TookNoExam = _.has(examInfo, "currentExam") && examInfo.currentExam.userExamState === "0"  && !(_.has(examInfo, "latestExamResult")),
+          TookNoExam = _.has(examInfo, "currentExam") &&
+            examInfo.currentExam.userExamState === "0"  &&
+            !(_.has(examInfo, "latestExamResult")),
+
           // 有考试预告，无上次成绩,无当前考试
-          hasUpcomingExam = _.has(examInfo, "upcomingExam") && !_.has(examInfo, "latestExamResult") && !_.has(examInfo, "currentExam"),
+          hasUpcomingExam = _.has(examInfo, "upcomingExam") &&
+            !_.has(examInfo, "latestExamResult") &&
+            !_.has(examInfo, "currentExam"),
+
           // 有上次成绩，有当前考试（即可重测），学生状态为未考 0
-          hasResultCanRetake = _.has(examInfo, "latestExamResult") && _.has(examInfo, "currentExam") && examInfo.currentExam.userExamState === "0",
+          hasResultCanRetake = _.has(examInfo, "latestExamResult") &&
+            _.has(examInfo, "currentExam") &&
+            examInfo.currentExam.userExamState === "0",
+
           // 有上次成绩，有当前考试（即可重测），学生状态为未考 0
-          hasResultCanRetakeContinue = _.has(examInfo, "latestExamResult") && _.has(examInfo, "currentExam") && examInfo.currentExam.userExamState !== "0",
+          hasResultCanRetakeContinue = _.has(examInfo, "latestExamResult") &&
+             _.has(examInfo, "currentExam") &&
+             examInfo.currentExam.userExamState !== "0",
+
           // 有成绩，不可重测，有考试预告   有 latestExamResult 但无 curerntExam， 有 upcomingExam
-          hasResultCanNotRetake = _.has(examInfo, "latestExamResult") && !(_.has(examInfo, "currentExam")),
+          hasResultCanNotRetake = _.has(examInfo, "latestExamResult") &&
+            !(_.has(examInfo, "currentExam")),
+
           // 无考试，无考试预告，无上次成绩
-          noExamToTake = !_.has(examInfo, "currentExam") && !_.has(examInfo, "upcomingExam") && !_.has(examInfo, "latestExamResult"),
+          noExamToTake = !_.has(examInfo, "currentExam") &&
+            !_.has(examInfo, "upcomingExam") &&
+            !_.has(examInfo, "latestExamResult"),
 
           render;
 
@@ -327,6 +348,7 @@ YD.debug = true;
 
         // 考试成绩区块
         promise.done(doWhen(hasResultCanRetake, render("front_content", "start_scores.ejs")));
+
         // 考试成绩区块
         promise.done(doWhen(hasResultCanRetakeContinue, render("front_content", "start_current_continue.ejs")));
 
