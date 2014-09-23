@@ -335,29 +335,37 @@ YD.debug = true;
         render = _.partial(renderLocalData, examInfo);
 
         // 之前未考过任何考试，因此无latestResult，当前有考试
-        promise.done(doWhen(canTakeExamNolatestExamResult, render("front_content", "start_current_continue.ejs")));
+        promise.done(doWhen(canTakeExamNolatestExamResult,
+          render("front_content", "start_current_continue.ejs")));
 
         // 有之前未完成考试
-        promise.done(doWhen(canTakeExam, render("front_content", "start_current_continue.ejs")));
+        promise.done(doWhen(canTakeExam,
+          render("front_content", "start_current_continue.ejs")));
 
         // 有新考试可考
-        promise.done(doWhen(TookNoExam, render("front_content", "start_current.ejs")));
+        promise.done(doWhen(TookNoExam,
+          render("front_content", "start_current.ejs")));
 
         // 考试预告区块
-        promise.done(doWhen(hasUpcomingExam, render("front_content", "start_upcoming.ejs")));
+        promise.done(doWhen(hasUpcomingExam,
+          render("front_content", "start_upcoming.ejs")));
 
         // 考试成绩区块
-        promise.done(doWhen(hasResultCanRetake, render("front_content", "start_scores.ejs")));
+        promise.done(doWhen(hasResultCanRetake,
+          render("front_content", "start_scores.ejs")));
 
         // 考试成绩区块
-        promise.done(doWhen(hasResultCanRetakeContinue, render("front_content", "start_current_continue.ejs")));
+        promise.done(doWhen(hasResultCanRetakeContinue,
+          render("front_content", "start_current_continue.ejs")));
 
 
         // 有成绩，但无currentExam，可能有upcommings，可能没有
-        promise.done(doWhen(hasResultCanNotRetake, render("front_content", "start_scores_cant_retake_exam.ejs")));
+        promise.done(doWhen(hasResultCanNotRetake,
+          render("front_content", "start_scores_cant_retake_exam.ejs")));
 
         // 什么数据都没有
-        promise.done(doWhen(noExamToTake, render("front_content", "start_scores_cant_retake_exam.ejs")));
+        promise.done(doWhen(noExamToTake,
+          render("front_content", "start_scores_cant_retake_exam.ejs")));
       };
 
       onFailure = function onFailure() {
