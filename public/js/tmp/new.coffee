@@ -77,6 +77,11 @@ hasBlank = (arr) ->
 # ##  user.html 页面
 #
 YD.user = ->
+
+  userinfo = YD.conf.userInfo
+  photos = YD.conf.photos
+  grades = YD.conf.grades
+
   userInfoAndPhoto = $.when($.ajax(userinfo), $.ajax(photos)).then((a, b) ->
     data = (_.extend(a[0], b[0]))
     data
@@ -143,8 +148,10 @@ YD.user = ->
 
 # 渲染用户条
 YD.userBar = userBar = ->
-  userinfo = YD.conf.userinfo
+
+  userinfo = YD.conf.userInfo
   photos = YD.conf.photos
+
   if YD.userBarShow
     YD.userBarShow()
   else
@@ -155,7 +162,8 @@ YD.userBar = userBar = ->
       d
     )
     userInfoAndPhoto.done (data) ->
-      new EJS(url: YD.conf.tplDir + "user_bar.ejs").update "user_bar", data
+      new EJS url: "#{YD.conf.tplDir}user_bar.ejs"
+        .update "user_bar", data
 
 #
 # ## start.html 生成页面的主函数
