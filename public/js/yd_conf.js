@@ -1,6 +1,6 @@
 var YD;
 
-YD = {};
+YD = YD || {};
 
 YD.conf = {
   // static route

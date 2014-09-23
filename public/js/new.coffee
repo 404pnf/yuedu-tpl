@@ -1,12 +1,6 @@
-# ## jslint配置 不要删除
-# 星号和斜杠，指令间不要有空格
-#jslint browser: true , devel: true, nomen: true, indent: 2
-
-#global $, jQuery, EJS, _, alert, console, setInterval, window, setTimeout
-
 # ## 唯一暴露出来的全局变量。也是程序的命名空间
-YD = undefined
-YD = YD or {}
+root = global ? window
+root.YD ?= {}
 YD.debug = false
 
 #
@@ -14,21 +8,16 @@ YD.debug = false
 #
 
 # SIDE-EFFECT ONLY
-showStatusMsg = showStatusMsg = (data) ->
-
+showStatusMsg = (data) ->
   # 错误就是一个字符串，获取方法是读取 data.error 的值
   alert data.error
-  return
-
 
 # 模仿if (predict) {}，
 # 或者说模仿scheme中的when。
 # **注意：action必须是一个返回函数的函数，这样才能延迟执行**
 # 可以用functin () { func } 包裹一下，防止func作为参数时被立即求值
-doWhen = doWhen = (predict, action) ->
-  action()  if predict
-  return
-
+doWhen = (predict, action) ->
+  action() if predict
 
 # ## 提交表单内容到后台
 #
@@ -37,23 +26,21 @@ doWhen = doWhen = (predict, action) ->
 # 3. 提交json给后台api
 # 4. 如果后台返回带"error"的键名的对象，显示错误并停止提交，停留在编辑页面
 # 5. 如果后台会返回带有"success"键名的对象，表示提交成功，执行回调函数
-postJson = postJson = (url, cssID, callback) ->
+postJson = (url, cssID, callback) ->
   formData = data: $(cssID).serializeJSON()
   note formData
-  onSuccess = onSuccess = (data) ->
-    if _.has(data, "error")
+  onSuccess = (data) ->
+    if data?. error
       showStatusMsg data
     else
       callback()
-    return
 
-  onFailure = onFailure = (data, status, xhr) ->
-    showStatusMsg data + " " + status + " " + xhr
-    return
+  onFailure = (data, status, xhr) ->
+    showStatusMsg "#{data}, #{status}, #{xhr}"
 
-  $.post(url, formData).done(onSuccess).fail onFailure
-  return
-
+  $.post url, formData
+    .done onSuccess
+    .fail onFailure
 
 # 绑定数据到模版并将渲染结果插入到页面
 # 1. SIDE-EFFECT ONLY 做参数使用请包裹在 functin () {} 中
@@ -62,28 +49,22 @@ postJson = postJson = (url, cssID, callback) ->
 # 4. callback中修改的是数据的深拷贝。使用underscore-contrib中的snapshot方法
 #    因此不会影响原始数据。
 #    这里遵守不是自己创建的数据就不应该修改的原则。
-renderLocalData = renderLocalData = (data, cssID, tpl, callback) ->
+renderLocalData = (data, cssID, tpl, callback) ->
   ->
     cb = callback or _.identity
-    clonedData = _.snapshot(_.extend(data, YD.conf))
+    clonedData = _.snapshot _.extend(data, YD.conf)
     new EJS(url: YD.conf.tplDir + tpl).update cssID, cb(clonedData)
-    return
 
-redirectToUrl = redirectToUrl = (url) ->
+
+redirectToUrl = (url) ->
   window.location.replace url
-  return
 
-note = note = (msg) ->
 
-  # ie没有consoloe.log，会无法运行本js
-  # if (!window.console) {
-  #   console = {};
-  #   console.log = function () {};
-  # }
+note = (msg) ->
   console.log msg  if YD.debug
-  return
 
-hasBlank = hasBlank = (arr) ->
+
+hasBlank = (arr) ->
   isBlank = isBlank = (e) ->
     e is ""
 
@@ -91,7 +72,6 @@ hasBlank = hasBlank = (arr) ->
   _.reduce coll, ((a, e) ->
     a or e
   ), false
-
 
 #
 # ##  user.html 页面
@@ -101,56 +81,36 @@ YD.user = ->
     data = (_.extend(a[0], b[0]))
     data
   )
-  userInfoAll = $.when($.ajax(userinfo), $.ajax(grades), $.ajax(photos)).then((a, b, c) ->
-
-    # a1 and a2 are arguments resolved for the page1 and page2 ajax requests, respectively.
-    # Each argument is an array with the following structure: [ data, statusText, jqXHR ]
-    data = (_.extend(a[0], b[0], c[0]))
-    data
+  userInfoAll = $.when($.ajax(userinfo), $.ajax(grades), $.ajax(photos))
+    .then((a, b, c) ->
+      _.extend(a[0], b[0], c[0])
   )
-  userShow = userShow = ->
+
+  userShow = ->
     userInfoAndPhoto.then (data) ->
       new EJS(url: YD.conf.tplDir + "user_show.ejs").update "user_info", data
-      return
 
-    return
-
-  userBarShow = userBarShow = ->
+  userBarShow = ->
     userInfoAndPhoto.then (data) ->
       new EJS(url: YD.conf.tplDir + "user_bar.ejs").update "user_bar", data
-      return
 
-    return
-
-  userEdit = userEdit = ->
+  userEdit = ->
     userInfoAll.then (data) ->
       new EJS(url: YD.conf.tplDir + "user_edit.ejs").update "user_info", data
-      return
-
-    return
-
 
   # 这里不能简化，因为这里不但需要知道总共有多少图片可选还需知道用户当前选的是哪个
-  userPhotoEdit = userPhotoEdit = ->
+  userPhotoEdit = ->
     userInfoAndPhoto.then (data) ->
-      new EJS(url: YD.conf.tplDir + "user_photo_edit.ejs").update "user_info", data
-      return
+      new EJS url: "#{YD.conf.tplDir}user_photo_edit.ejs"
+        .update "user_info", data
 
-    return
-
-  userSave = userSave = ->
+  userSave = ->
     postJson YD.conf.userSave, "form#user_info", ->
       redirectToUrl YD.conf.userHomeUrl
-      return
 
-    return
-
-  userPhotoSave = userPhotoSave = ->
+  userPhotoSave = ->
     postJson YD.conf.userSave, "form#user_photo", ->
       redirectToUrl YD.conf.userHomeUrl
-      return
-
-    return
 
   (->
 
@@ -177,9 +137,7 @@ YD.user = ->
     # 监听取消编辑用户信息和取消编辑用户头像信息的按钮；
     $("#user_info").delegate "#user_cancel_edit", "click", ->
       redirectToUrl YD.conf.userHomeUrl
-      return
 
-    return
   )()
 
 
@@ -198,10 +156,6 @@ YD.userBar = userBar = ->
     )
     userInfoAndPhoto.done (data) ->
       new EJS(url: YD.conf.tplDir + "user_bar.ejs").update "user_bar", data
-      return
-
-  return
-
 
 #
 # ## start.html 生成页面的主函数
@@ -235,74 +189,91 @@ YD.startDispache = ->
 
       data
     )
+
     note promise
+
     onSuccess = onSuccess = (data) ->
 
       # 将判定抽象为函数
 
       # 将从后台获得的数据（从onSuccess函数的参数传进来）绑定到局部变量
-      examInfo = _.snapshot(data)
+      examInfo = _.snapshot data
 
       # 有考试，无上次考试成绩 学生状态为未考 0
-      canTakeExam = _.has(examInfo, "currentExam") and examInfo.currentExam.userExamState isnt "0" and not (_.has(examInfo, "latestExamResult"))
+      canTakeExam = examInfo?.currentExam isnt "0" and
+        examInfo?.latestExamResult
 
       # 有考试，无上次考试成绩，学生状态不为 0
-      canTakeExamNolatestExamResult = _.has(examInfo, "currentExam") and examInfo.currentExam.userExamState isnt "0"
+      canTakeExamNolatestExamResult = examInfo?.currentExam is "0"
 
       # 有考试，无上次考试成绩， 学生状态为未考，
-      TookNoExam = _.has(examInfo, "currentExam") and examInfo.currentExam.userExamState is "0" and not (_.has(examInfo, "latestExamResult"))
+      TookNoExam =  examInfo?.currentExam is "0" and
+        (not examInfo?.latestExamResult)
 
       # 有考试预告，无上次成绩,无当前考试
-      hasUpcomingExam = _.has(examInfo, "upcomingExam") and not _.has(examInfo, "latestExamResult") and not _.has(examInfo, "currentExam")
+      hasUpcomingExam = examInfo?.upcomingExam and
+        (not examInfo?.latestExamResult) and
+        (not examInfo?.currentExam)
 
-      # 有上次成绩，有当前考试（即可重测），学生状态为未考 0
-      hasResultCanRetake = _.has(examInfo, "latestExamResult") and _.has(examInfo, "currentExam") and examInfo.currentExam.userExamState is "0"
+       # 有上次成绩，有当前考试（即可重测），学生状态为未考 0
+      hasResultCanRetake = examInfo?.latestExamResult and
+        examInfo?.currentExam and
+        examInfo?.currentExam is "0"
 
-      # 有上次成绩，有当前考试（即可重测），学生状态为未考 0
-      hasResultCanRetakeContinue = _.has(examInfo, "latestExamResult") and _.has(examInfo, "currentExam") and examInfo.currentExam.userExamState isnt "0"
+       # 有上次成绩，有当前考试（即可重测），学生状态为未考 0
+      hasResultCanRetakeContinue = examInfo?.latestExamResult and
+        examInfo?.currentExam and
+        examInfo?.currentExam isnt "0"
 
-      # 有成绩，不可重测，有考试预告   有 latestExamResult 但无 curerntExam， 有 upcomingExam
-      hasResultCanNotRetake = _.has(examInfo, "latestExamResult") and not (_.has(examInfo, "currentExam"))
+       # 有成绩，不可重测，有考试预告   有 latestExamResult 但无 curerntExam， 有 upcomingExam
+      hasResultCanNotRetake = examInfo?.latestExamResult and
+        (not examInfo?.currentExam)
 
-      # 无考试，无考试预告，无上次成绩
-      noExamToTake = not _.has(examInfo, "currentExam") and not _.has(examInfo, "upcomingExam") and not _.has(examInfo, "latestExamResult")
-      render = _.partial(renderLocalData, examInfo)
+       # 无考试，无考试预告，无上次成绩
+      noExamToTake = examInfo is {}
+
+      render = _.partial renderLocalData, examInfo
 
       # 之前未考过任何考试，因此无latestResult，当前有考试
-      promise.done doWhen(canTakeExamNolatestExamResult, render("front_content", "start_current_continue.ejs"))
+      promise.done doWhen canTakeExamNolatestExamResult,
+        render "front_content", "start_current_continue.ejs"
 
       # 有之前未完成考试
-      promise.done doWhen(canTakeExam, render("front_content", "start_current_continue.ejs"))
+      promise.done doWhen canTakeExam,
+        render "front_content", "start_current_continue.ejs"
 
       # 有新考试可考
-      promise.done doWhen(TookNoExam, render("front_content", "start_current.ejs"))
+      promise.done doWhen TookNoExam,
+        render "front_content", "start_current.ejs"
 
       # 考试预告区块
-      promise.done doWhen(hasUpcomingExam, render("front_content", "start_upcoming.ejs"))
+      promise.done doWhen hasUpcomingExam,
+       render "front_content", "start_upcoming.ejs"
 
       # 考试成绩区块
-      promise.done doWhen(hasResultCanRetake, render("front_content", "start_scores.ejs"))
+      promise.done doWhen hasResultCanRetake,
+        render "front_content", "start_scores.ejs"
 
       # 考试成绩区块
-      promise.done doWhen(hasResultCanRetakeContinue, render("front_content", "start_current_continue.ejs"))
+      promise.done doWhen hasResultCanRetakeContinue,
+        render "front_content", "start_current_continue.ejs"
 
       # 有成绩，但无currentExam，可能有upcommings，可能没有
-      promise.done doWhen(hasResultCanNotRetake, render("front_content", "start_scores_cant_retake_exam.ejs"))
+      promise.done doWhen hasResultCanNotRetake,
+        render "front_content", "start_scores_cant_retake_exam.ejs"
 
       # 什么数据都没有
-      promise.done doWhen(noExamToTake, render("front_content", "start_scores_cant_retake_exam.ejs"))
-      return
+      promise.done doWhen noExamToTake,
+        render "front_content", "start_scores_cant_retake_exam.ejs"
 
-    onFailure = onFailure = ->
+
+    onFailure = ->
       note "链接后台失败。"
-      return
-
 
     # set data to cache
     promise.done (data) ->
       YD.exam = YD.exam or data
       note YD.exam
-      return
 
     promise.fail onFailure
     promise.done onSuccess
@@ -313,25 +284,19 @@ YD.startDispache = ->
       # 2. 有考试预告
       # 3. 考试预告中有今天的考试
       # 这样极大减少了不必要的对后台请求
-      shouldRetry = not _.has(YD.exam, "currentExam") and _.has(YD.exam, "upcomingExam") and _.find(YD.exam.upcomingExam, (e) ->
-        e.isTodayExam # 这里必须写return
-      )
+      shouldRetry = not YD.exam?.currentExam and
+        YD.exam?upcomingExam and
+        _.find YD.exam.upcomingExam, (e) -> e.isTodayExam
+
       if shouldRetry
-        note "满足刷新条件，页面将会刷新。 " + new Date()
+        note "满足刷新条件，页面将会刷新。 #{new Date()} "
         setTimeout next, 180000 # 3 mins
-      return
-
-    return
-
 
   # 马上开始第一次调用，实际上浏览器规范中要求最少4ms
   # 用setTimeout调用另一个setTimeout永远不会出现栈溢出
   # 直接 next() 调用会栈溢出的。比如10万次递归后。
   # 参见  effective javascript : tip 64，65, page 155
   setTimeout next, 0
-  return
-
-# end YD.startDispache
 
 #
 # ## 登陆页面
@@ -352,19 +317,14 @@ YD.userLogin = ->
       $("#password").val $.md5($("#password").val())
       postJson YD.conf.userLogin, "#login", ->
         redirectToUrl YD.conf.siteHomeUrl
-        return
 
-    return
-
-  return
-
-# end YD.userLogin
 YD.resetPass = ->
   $("#reset_pass_save").click (e) ->
     e.preventDefault()
     oldPass = $("#old_pass").val()
     newPass = $("#new_pass").val()
     newPassConfirm = $("#new_pass_confirm").val()
+
     dontMatch = (newPass isnt newPassConfirm)
     if hasBlank([
       oldPass
@@ -380,10 +340,3 @@ YD.resetPass = ->
       $("#new_pass_confirm").val $.md5($("#new_pass_confirm").val())
       postJson YD.conf.userResetPass, "#reset_pass_form", ->
         redirectToUrl YD.conf.userHomeUrl
-        return
-
-    return
-
-  return
-
-return
