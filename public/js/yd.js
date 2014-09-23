@@ -20,7 +20,6 @@ YD.debug = false;
     postJson,
     renderLocalData,
     redirectToUrl,
-    wrap,
     note,
     hasBlank;
 
@@ -37,7 +36,7 @@ YD.debug = false;
   // 模仿if (predict) {}，
   // 或者说模仿scheme中的when。
   // **注意：action必须是一个返回函数的函数，这样才能延迟执行**
-  // 可以用后面写的wrap函数包裹一下
+  // 可以用functin () { func } 包裹一下，防止func作为参数时被立即求值
   doWhen = function doWhen(predict, action) {
     if (predict) {
       action();
@@ -92,13 +91,6 @@ YD.debug = false;
 
   redirectToUrl = function redirectToUrl(url) {
     window.location.replace(url);
-  };
-
-  // 包裹那些有副作用的函数，防止它们在作为参数的时候先被求值了
-  wrap = function wrap(func) {
-    return function () {
-      func();
-    };
   };
 
   note = function note(msg) {
@@ -213,8 +205,6 @@ YD.debug = false;
       // 保存头像
       $("#user_info").delegate("#user_photo_save", "click", userPhotoSave);
       // 监听取消编辑用户信息和取消编辑用户头像信息的按钮；
-      // 这里不能用wrap，因为 redirect(conf.userHomeUrl) 作为参数传给 wrap 时已经被求值
-      // 即副作用redirect已经起作用了
       $("#user_info").delegate("#user_cancel_edit", "click", function () {
         redirectToUrl(YD.conf.userHomeUrl);
       });
