@@ -54,21 +54,24 @@ ydMakeChart = function () {
     // 请求数据并将图标显示在页面
   return (function () {
     var tryTimes,
+      sortedScore,
       highestScore;
 
     $.get('/resultsController/loginUser')
       .done(function (d) {
         tryTimes = d.length;
-        highestScore = _.reduce(d, function (a, e) {
-          return (a > e.value ? a : e.value);
-        });
+        sortedScore = (_.sortBy(d, function (e) {
+          return e.value;
+        }));
+        highestScore = _.last(sortedScore).value;
       })
       .done(function (d) {
         drawChart(d);
       })
       .done(function () {
 
-        $("#chart_info").text("一共考了" + tryTimes + "次。最佳成绩是" + highestScore + "。");
+        $("#chart_info").text("我共参加了" + tryTimes +
+          "次测试。目前最佳成绩是" + highestScore + "级。");
       })
       .fail(onFailure);
 
