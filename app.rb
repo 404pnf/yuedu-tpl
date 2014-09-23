@@ -114,7 +114,7 @@ get '/resultsController/loginUser' do
   chart_data = [
     {
       date: '214-08-14',
-      value: 10,
+      value: 19,
       url: '321'
     },
     {
@@ -134,7 +134,7 @@ get '/resultsController/loginUser' do
     },
     {
       date: '214-09-24',
-      value: 19,
+      value: 12,
       url: '73'
     }
   ]
