@@ -8,7 +8,7 @@ var YD;
 
 YD = YD || {};
 
-YD.debug = true;
+YD.debug = false;
 
 // ## 用匿名函数做为 let scope
 
@@ -57,7 +57,7 @@ YD.debug = true;
       onFailure;
 
     formData = { data: $(cssID).serializeJSON() };
-    // note(formData);
+    note(formData);
 
     onSuccess = function onSuccess(data) {
       if (_.has(data, "error")) {
@@ -103,10 +103,10 @@ YD.debug = true;
 
   note = function note(msg) {
     // ie没有consoloe.log，会无法运行本js
-    if (!window.console) {
-      console = {};
-      console.log = function () {};
-    }
+    // if (!window.console) {
+    //   console = {};
+    //   console.log = function () {};
+    // }
     if (YD.debug) {
       console.log(msg);
     }
@@ -229,10 +229,8 @@ YD.debug = true;
       userInfoAndPhoto;
 
     if (YD.userBarShow) {
-      note("from YD");
       YD.userBarShow();
     } else {
-      // note("re-render userBar");
       // 用户条
       userInfoAndPhoto = $.when($.ajax(userinfo), $.ajax(photos)).then(function (a, b) {
         var d = (_.extend(a[0], b[0])); // 这里如果也用data，会shadow函数onSuccess的输入，虽然不是错误，但避免吧
@@ -277,14 +275,14 @@ YD.debug = true;
         // 一次性将数据处理好
         if (data.upcomingExam) {
           _.extend(data, updateDateText(data), {hasUpcoming: true}); // 直接修改了examInfo
-          // note(data);
+          note(data);
         } else {
           _.extend(data, {hasUpcoming: false});
         }
         return data;
       });
 
-      // note(promise);
+      note(promise);
 
       onSuccess = function onSuccess(data) {
         // 将判定抽象为函数
@@ -369,13 +367,13 @@ YD.debug = true;
       };
 
       onFailure = function onFailure() {
-        // note("链接后台失败。");
+        note("链接后台失败。");
       };
 
       // set data to cache
       promise.done(function (data) {
         YD.exam = YD.exam || data;
-        // note(YD.exam);
+        note(YD.exam);
       });
 
       promise.fail(onFailure);
@@ -394,7 +392,7 @@ YD.debug = true;
             return e.isTodayExam; // 这里必须写return
           });
         if (shouldRetry) {
-          // note("满足刷新条件，页面将会刷新。 " + new Date());
+          note("满足刷新条件，页面将会刷新。 " + new Date());
           // setTimeout(function () {
           //   window.location.reload(1);
           // }, 18000); // 3 mins
@@ -450,7 +448,6 @@ YD.debug = true;
       newPass =  $("#new_pass").val();
       newPassConfirm = $("#new_pass_confirm").val();
       dontMatch = (newPass !== newPassConfirm);
-      // note($("#reset_pass_form").serializeJSON());
 
       if (hasBlank([oldPass, newPass, newPassConfirm])) {
         alert("所有输入框都必须填写。");
