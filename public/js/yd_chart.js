@@ -60,9 +60,9 @@ ydMakeChart = function () {
     $.get('/resultsController/loginUser')
       .done(function (d) {
         tryTimes = d.length;
-        sortedScore = (_.sortBy(d, function (e) {
+        sortedScore = _.sortBy(d, function (e) {
           return e.value;
-        }));
+        });
         highestScore = _.last(sortedScore).value;
       })
       .done(function (d) {
