@@ -15,7 +15,6 @@ end
 
 desc '用jslint和jshint检查js代码'
 task :lint do
-  # system('jslint yd*.js')
-  # system('jshint yd*.js')
-  system('coffeelint coffee/*.coffee')
+  system('jslint yd*.js')
+  system('jshint yd*.js')
 end
