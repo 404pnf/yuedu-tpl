@@ -334,6 +334,7 @@ YD.resetPass = ->
     newPassConfirm = $("#new_pass_confirm").val()
 
     dontMatch = (newPass isnt newPassConfirm)
+
     if hasBlank([
       oldPass
       newPass

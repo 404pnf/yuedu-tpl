@@ -15,9 +15,9 @@ showStatusMsg = (data) ->
 # 模仿if (predict) {}，
 # 或者说模仿scheme中的when。
 # **注意：action必须是一个返回函数的函数，这样才能延迟执行**
-# 可以用functin () { func } 包裹一下，防止func作为参数时被立即求值
+# 可以用functin  { func } 包裹一下，防止func作为参数时被立即求值
 doWhen = (predict, action) ->
-  action() if predict
+  action if predict
 
 # ## 提交表单内容到后台
 #
@@ -27,13 +27,13 @@ doWhen = (predict, action) ->
 # 4. 如果后台返回带"error"的键名的对象，显示错误并停止提交，停留在编辑页面
 # 5. 如果后台会返回带有"success"键名的对象，表示提交成功，执行回调函数
 postJson = (url, cssID, callback) ->
-  formData = data: $(cssID).serializeJSON()
+  formData = data: $(cssID).serializeJSON
   note formData
   onSuccess = (data) ->
     if data?. error
       showStatusMsg data
     else
-      callback()
+      callback
 
   onFailure = (data, status, xhr) ->
     showStatusMsg "#{data}, #{status}, #{xhr}"
@@ -43,7 +43,7 @@ postJson = (url, cssID, callback) ->
     .fail onFailure
 
 # 绑定数据到模版并将渲染结果插入到页面
-# 1. SIDE-EFFECT ONLY 做参数使用请包裹在 functin () {} 中
+# 1. SIDE-EFFECT ONLY 做参数使用请包裹在 functin  {} 中
 # 2. 从局部变量获得数据，绑定模版，插入到html页面中。
 # 3. 可以在使用数据前通过callback修饰数据。
 # 4. callback中修改的是数据的深拷贝。使用underscore-contrib中的snapshot方法
@@ -120,8 +120,8 @@ YD.user = ->
   (->
 
     # 直接显示用户信息和头像
-    userShow()
-    userBarShow()
+    userShow
+    userBarShow
 
     #
     # 通过jQuery的delegate监听尚未出现在页面的元素
@@ -153,7 +153,7 @@ YD.userBar = userBar = ->
   photos = YD.conf.photos
 
   if YD.userBarShow
-    YD.userBarShow()
+    YD.userBarShow
   else
 
     # 用户条
@@ -297,12 +297,12 @@ YD.startDispache = ->
         _.find YD.exam.upcomingExam, (e) -> e.isTodayExam
 
       if shouldRetry
-        note "满足刷新条件，页面将会刷新。 #{new Date()} "
+        note "满足刷新条件，页面将会刷新。 #{new Date} "
         setTimeout next, 180000 # 3 mins
 
   # 马上开始第一次调用，实际上浏览器规范中要求最少4ms
   # 用setTimeout调用另一个setTimeout永远不会出现栈溢出
-  # 直接 next() 调用会栈溢出的。比如10万次递归后。
+  # 直接 next 调用会栈溢出的。比如10万次递归后。
   # 参见  effective javascript : tip 64，65, page 155
   setTimeout next, 0
 
@@ -311,10 +311,10 @@ YD.startDispache = ->
 #
 YD.userLogin = ->
   $("form").submit (e) ->
-    e.preventDefault()
-    name = $("#username").val()
-    password = $("#password").val()
-    yz = $("#yz").val()
+    e.preventDefault
+    name = $("#username").val
+    password = $("#password").val
+    yz = $("#yz").val
     if hasBlank([
       name
       password
@@ -322,16 +322,16 @@ YD.userLogin = ->
     ])
       alert "所有输入框都必须填写。"
     else
-      $("#password").val $.md5($("#password").val())
+      $("#password").val $.md5($("#password").val)
       postJson YD.conf.userLogin, "#login", ->
         redirectToUrl YD.conf.siteHomeUrl
 
 YD.resetPass = ->
   $("#reset_pass_save").click (e) ->
-    e.preventDefault()
-    oldPass = $("#old_pass").val()
-    newPass = $("#new_pass").val()
-    newPassConfirm = $("#new_pass_confirm").val()
+    e.preventDefault
+    oldPass = $("#old_pass").val
+    newPass = $("#new_pass").val
+    newPassConfirm = $("#new_pass_confirm").val
 
     dontMatch = (newPass isnt newPassConfirm)
     if hasBlank([
@@ -343,8 +343,8 @@ YD.resetPass = ->
     else if dontMatch
       alert "两次输入的新密码不匹配。"
     else
-      $("#new_pass").val $.md5($("#new_pass").val())
-      $("#old_pass").val $.md5($("#old_pass").val())
-      $("#new_pass_confirm").val $.md5($("#new_pass_confirm").val())
+      $("#new_pass").val $.md5($("#new_pass").val)
+      $("#old_pass").val $.md5($("#old_pass").val)
+      $("#new_pass_confirm").val $.md5($("#new_pass_confirm").val)
       postJson YD.conf.userResetPass, "#reset_pass_form", ->
         redirectToUrl YD.conf.userHomeUrl

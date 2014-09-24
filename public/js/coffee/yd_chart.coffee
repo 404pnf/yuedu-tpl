@@ -11,7 +11,6 @@ root.ydMakeChart = ->
       rotate: false # 是否x轴和y轴互换
       categoryAxis: {}
 
-      #gridPosition: "start"
       graphs: [
         {
           type: "column"
