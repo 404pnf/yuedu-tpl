@@ -1,7 +1,7 @@
 # ## 唯一暴露出来的全局变量。也是程序的命名空间
 root = global ? window
 root.YD ?= {}
-YD.debug = false
+YD.debug = true
 
 #
 # ## 工具函数
@@ -27,13 +27,13 @@ doWhen = (predict, action) ->
 # 4. 如果后台返回带"error"的键名的对象，显示错误并停止提交，停留在编辑页面
 # 5. 如果后台会返回带有"success"键名的对象，表示提交成功，执行回调函数
 postJson = (url, cssID, callback) ->
-  formData = data: $(cssID).serializeJSON
+  formData = data: $(cssID).serializeJSON()
   note formData
   onSuccess = (data) ->
     if data?. error
       showStatusMsg data
     else
-      callback
+      callback()
 
   onFailure = (data, status, xhr) ->
     showStatusMsg "#{data}, #{status}, #{xhr}"
@@ -207,15 +207,20 @@ YD.startDispache = ->
       # 将从后台获得的数据（从onSuccess函数的参数传进来）绑定到局部变量
       examInfo = _.snapshot data
 
-      # 有考试，无上次考试成绩 学生状态为未考 0
-      canTakeExam = examInfo?.currentExam isnt "0" and
+      # 有考试，有上次考试成绩 学生状态为 0 ; 未考
+      canTakeExam = examInfo?.currentExam.userExamState isnt "0" and
         examInfo?.latestExamResult
 
-      # 有考试，无上次考试成绩，学生状态不为 0
-      canTakeExamNolatestExamResult = examInfo?.currentExam is "0"
+      # 有考试，有上次考试成绩，学生状态不为 0 ; 考过
+      canTakeExamNolatestExamResult = examInfo?.currentExam.userExamState is "0" and
+        not examInfo?.latestExamResult
 
-      # 有考试，无上次考试成绩， 学生状态为未考，
-      TookNoExam =  examInfo?.currentExam is "0" and
+      # 有考试，无上次考试成绩， 学生状态为 0 ; 未考，
+      TookNoExam =  examInfo?.currentExam.userExamState is "0" and
+        (not examInfo?.latestExamResult)
+
+      # 有考试，无上次考试成绩， 学生状态不为 0 ; 考过，
+      TookNoExam2 =  examInfo?.currentExam.userExamState isnt "0" and
         (not examInfo?.latestExamResult)
 
       # 有考试预告，无上次成绩,无当前考试
@@ -254,6 +259,10 @@ YD.startDispache = ->
       promise.done doWhen TookNoExam,
         render "front_content", "start_current.ejs"
 
+      #
+      promise.done doWhen TookNoExam2,
+        render "front_content", "start_current_continue.ejs"
+
       # 考试预告区块
       promise.done doWhen hasUpcomingExam,
        render "front_content", "start_upcoming.ejs"
@@ -264,7 +273,7 @@ YD.startDispache = ->
 
       # 考试成绩区块
       promise.done doWhen hasResultCanRetakeContinue,
-        render "front_content", "start_current_continue.ejs"
+          render "front_content", "start_current_continue.ejs"
 
       # 有成绩，但无currentExam，可能有upcommings，可能没有
       promise.done doWhen hasResultCanNotRetake,
@@ -275,8 +284,12 @@ YD.startDispache = ->
         render "front_content", "start_scores_cant_retake_exam.ejs"
 
 
+
     onFailure = ->
       note "链接后台失败。"
+
+
+    promise.done (data) -> note data
 
     # set data to cache
     promise.done (data) ->
@@ -311,10 +324,10 @@ YD.startDispache = ->
 #
 YD.userLogin = ->
   $("form").submit (e) ->
-    e.preventDefault
-    name = $("#username").val
-    password = $("#password").val
-    yz = $("#yz").val
+    e.preventDefault()
+    name = $("#username").val()
+    password = $("#password").val()
+    yz = $("#yz").val()
     if hasBlank([
       name
       password
@@ -322,16 +335,16 @@ YD.userLogin = ->
     ])
       alert "所有输入框都必须填写。"
     else
-      $("#password").val $.md5($("#password").val)
+      $("#password").val $.md5(password)
       postJson YD.conf.userLogin, "#login", ->
         redirectToUrl YD.conf.siteHomeUrl
 
 YD.resetPass = ->
   $("#reset_pass_save").click (e) ->
-    e.preventDefault
-    oldPass = $("#old_pass").val
-    newPass = $("#new_pass").val
-    newPassConfirm = $("#new_pass_confirm").val
+    e.preventDefault()
+    oldPass = $("#old_pass").val()
+    newPass = $("#new_pass").val()
+    newPassConfirm = $("#new_pass_confirm").val()
 
     dontMatch = (newPass isnt newPassConfirm)
     if hasBlank([
@@ -343,8 +356,8 @@ YD.resetPass = ->
     else if dontMatch
       alert "两次输入的新密码不匹配。"
     else
-      $("#new_pass").val $.md5($("#new_pass").val)
-      $("#old_pass").val $.md5($("#old_pass").val)
-      $("#new_pass_confirm").val $.md5($("#new_pass_confirm").val)
+      $("#new_pass").val $.md5(newPass)
+      $("#old_pass").val $.md5(oldPass)
+      $("#new_pass_confirm").val $.md5(newPassConfirm)
       postJson YD.conf.userResetPass, "#reset_pass_form", ->
         redirectToUrl YD.conf.userHomeUrl
