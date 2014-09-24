@@ -83,8 +83,7 @@ YD.user = ->
   grades = YD.conf.grades
 
   userInfoAndPhoto = $.when($.ajax(userinfo), $.ajax(photos)).then((a, b) ->
-    data = (_.extend(a[0], b[0]))
-    data
+    _.extend(a[0], b[0])
   )
   userInfoAll = $.when($.ajax(userinfo), $.ajax(grades), $.ajax(photos))
     .then((a, b, c) ->
@@ -120,8 +119,8 @@ YD.user = ->
   (->
 
     # 直接显示用户信息和头像
-    userShow
-    userBarShow
+    userShow()
+    userBarShow()
 
     #
     # 通过jQuery的delegate监听尚未出现在页面的元素
