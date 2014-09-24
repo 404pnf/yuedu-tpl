@@ -4,7 +4,13 @@
   <!--start-->
   <div>
     <div class="exam_setout fl exam_setout_margin1"><%= currentExam.endTime %></div>
-    <a href=<%= currentExam.id %> class="btn_start fl Arial">Start</a>
+    <a href=<%= currentExam.id %> class="btn_start fl Arial">
+      <% if (currentExam.userExamState === "0") { %>
+        Start
+      <% } else { %>
+        继续
+      <% } %>
+    </a>
   </div>
   <!--/start-->
 </div>
