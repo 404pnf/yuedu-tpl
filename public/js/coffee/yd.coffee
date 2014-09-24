@@ -207,44 +207,46 @@ YD.startDispache = ->
       # 将从后台获得的数据（从onSuccess函数的参数传进来）绑定到局部变量
       examInfo = _.snapshot data
 
+      # 将判定抽象为函数
+
+      # 将从后台获得的数据（从onSuccess函数的参数传进来）绑定到局部变量
+      examInfo = _.snapshot(data)
+
       # 有考试，无上次考试成绩 学生状态为未考 0
       canTakeExam = _.has(examInfo, "currentExam") and
         examInfo.currentExam.userExamState isnt "0" and
-        !_.has(examInfo, "latestExamResult")
+        not (_.has(examInfo, "latestExamResult"))
 
       # 有考试，无上次考试成绩，学生状态不为 0
       canTakeExamNolatestExamResult = _.has(examInfo, "currentExam") and
         examInfo.currentExam.userExamState isnt "0"
-        !_.has(examInfo, "latestExamResult")
 
       # 有考试，无上次考试成绩， 学生状态为未考，
       TookNoExam = _.has(examInfo, "currentExam") and
-        examInfo.currentExam.userExamState is "0"  and
-        !(_.has(examInfo, "latestExamResult"))
+        examInfo.currentExam.userExamState is "0" and
+        not (_.has(examInfo, "latestExamResult"))
 
       # 有考试预告，无上次成绩,无当前考试
       hasUpcomingExam = _.has(examInfo, "upcomingExam") and
-        !_.has(examInfo, "latestExamResult") and
-        !_.has(examInfo, "currentExam")
+        not _.has(examInfo, "latestExamResult") and not _.has(examInfo, "currentExam")
 
       # 有上次成绩，有当前考试（即可重测），学生状态为未考 0
       hasResultCanRetake = _.has(examInfo, "latestExamResult") and
-        _.has(examInfo, "currentExam") and
-        examInfo.currentExam.userExamState is "0"
+        _.has(examInfo, "currentExam") and examInfo.currentExam.userExamState is "0"
 
       # 有上次成绩，有当前考试（即可重测），学生状态为未考 0
       hasResultCanRetakeContinue = _.has(examInfo, "latestExamResult") and
-         _.has(examInfo, "currentExam") and
-         examInfo.currentExam.userExamState isnt "0"
+        _.has(examInfo, "currentExam") and
+        examInfo.currentExam.userExamState isnt "0"
 
       # 有成绩，不可重测，有考试预告   有 latestExamResult 但无 curerntExam， 有 upcomingExam
       hasResultCanNotRetake = _.has(examInfo, "latestExamResult") and
-        !(_.has(examInfo, "currentExam"))
+        not (_.has(examInfo, "currentExam"))
 
       # 无考试，无考试预告，无上次成绩
-      noExamToTake = !_.has(examInfo, "currentExam") and
-        !_.has(examInfo, "upcomingExam") and
-        !_.has(examInfo, "latestExamResult")
+      noExamToTake = not _.has(examInfo, "currentExam") and
+        not _.has(examInfo, "upcomingExam") and
+        not _.has(examInfo, "latestExamResult")
 
       render = _.partial renderLocalData, examInfo
 
@@ -272,8 +274,8 @@ YD.startDispache = ->
       promise.done doWhen hasResultCanNotRetake,
         render "front_content", "start_scores_cant_retake_exam.ejs"
 
-      # promise.done doWhen noExamToTake,
-      #   render "front_content", "start_scores_cant_retake_exam.ejs"
+      promise.done doWhen noExamToTake,
+        render "front_content", "start_scores_cant_retake_exam.ejs"
 
     onFailure = ->
       note "链接后台失败。"
