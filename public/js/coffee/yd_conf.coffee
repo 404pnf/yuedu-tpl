@@ -3,7 +3,7 @@ root = global ? window
 root.YD ?= {}
 
 YD.conf =
-  # static route
+  # 静态路由
   siteHomeUrl: '/'
   tplDir: '/tpl/'
   userLogout: '/log/out '
@@ -11,7 +11,7 @@ YD.conf =
   lastExamResult: '/test/personalReport/'
   userTrend: '/charts.html'
 
-  # api part
+  # api的uri
   userInfo: '/userController/show/loginUser'
   grades: '/userController/grades'
   photos: '/userController/photos'

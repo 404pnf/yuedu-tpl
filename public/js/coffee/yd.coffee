@@ -7,9 +7,8 @@ YD.debug = false
 # ## 工具函数
 #
 
-# SIDE-EFFECT ONLY
+# 错误就是一个字符串，获取方法是读取 data.error 的值
 showStatusMsg = (data) ->
-  # 错误就是一个字符串，获取方法是读取 data.error 的值
   alertBox data.error
 
 alertBox = (msg) ->
@@ -21,9 +20,11 @@ alertBox = (msg) ->
         $(this).dialog "close"
 
 # 模仿if (predict) {}，
+#
 # 或者说模仿scheme中的when。
+#
 # **注意：action必须是一个返回函数的函数，这样才能延迟执行**
-# 可以用functin  { func } 包裹一下，防止func作为参数时被立即求值
+# 可以用 -> 包裹一下，防止action作为参数时被立即求值
 doWhen = (predict, action) ->
   action if predict
 
@@ -58,17 +59,14 @@ postJson = (url, cssID, callback) ->
 # 3. 可以在使用数据前通过callback修饰数据。
 # 4. callback中修改的是数据的深拷贝。使用underscore-contrib中的snapshot方法
 #    因此不会影响原始数据。
-#    这里遵守不是自己创建的数据就不应该修改的原则。
 renderLocalData = (data, cssID, tpl, callback) ->
   ->
     cb = callback or _.identity
     clonedData = _.snapshot _.extend(data, YD.conf)
     new EJS(url: YD.conf.tplDir + tpl).update cssID, cb(clonedData)
 
-
 redirectToUrl = (url) ->
   window.location.replace url
-
 
 note = (msg) ->
   console.log msg  if YD.debug
@@ -84,10 +82,11 @@ hasBlank = (arr) ->
     false
 
 #
-# ##  user.html 页面
+# ## 用户页面
 #
 YD.user = ->
 
+  # 后台api的地址再YD.conf中配置
   userinfo = YD.conf.userInfo
   photos = YD.conf.photos
   grades = YD.conf.grades
@@ -114,7 +113,6 @@ YD.user = ->
     userInfoAll.then (data) ->
       new EJS(url: YD.conf.tplDir + "user_edit.ejs").update "user_info", data
 
-  # 这里不能简化，因为这里不但需要知道总共有多少图片可选还需知道用户当前选的是哪个
   userPhotoEdit = ->
     userInfoAndPhoto.then (data) ->
       new EJS url: "#{YD.conf.tplDir}user_photo_edit.ejs"
@@ -160,6 +158,7 @@ YD.user = ->
 # 渲染用户条
 YD.userBar = ->
 
+  # 后台api的地址再YD.conf中配置
   userinfo = YD.conf.userInfo
   photos = YD.conf.photos
 
@@ -176,7 +175,7 @@ YD.userBar = ->
         .update "user_bar", data
 
 #
-# ## start.html 生成页面的主函数
+# ## 用户登录后首页
 #
 # 每隔一段时间时间查看一下数据源并重新刷新页面。
 YD.startDispache = ->
@@ -194,6 +193,7 @@ YD.startDispache = ->
     )
     { upcomingExam: o }
 
+  # main funciont, might run recursively
   next = ->
     getExamInfo = $.get(YD.conf.getExamInfo)
 
@@ -247,28 +247,20 @@ YD.startDispache = ->
 
       # 无考试，无考试预告，无上次成绩
       # 用html的div中默认文字
-      # ex0up0res0 = not hasCurrentExam and
-      #   not hasUpcomingExam and
-      #   not haslatestExamResult
 
-      render = _.partial renderLocalData, examInfo
-
+      # partial function to save typing
       cssID = "front_content"
+      render = _.partial renderLocalData, examInfo, cssID
 
-      promise.done doWhen ex1up0res0,
-        render cssID, "start_current.ejs"
+      promise.done doWhen ex1up0res0, render "start_current.ejs"
 
-      promise.done doWhen ex1up0res1,
-          render cssID, "start_scores.ejs"
+      promise.done doWhen ex1up0res1, render "start_scores.ejs"
 
-      promise.done doWhen ex0up1res0,
-       render cssID, "start_upcoming.ejs"
+      promise.done doWhen ex0up1res0, render "start_upcoming.ejs"
 
-      promise.done doWhen ex0up0res1,
-        render cssID, "start_scores_with_upcoming.ejs"
+      promise.done doWhen ex0up0res1, render "start_scores_with_upcoming.ejs"
 
-      promise.done doWhen ex0up1res1,
-        render cssID, "start_scores_with_upcoming.ejs"
+      promise.done doWhen ex0up1res1, render "start_scores_with_upcoming.ejs"
 
     onFailure = ->
       note "链接后台失败。"
@@ -299,15 +291,19 @@ YD.startDispache = ->
         note "满足刷新条件，页面将会刷新。 #{new Date()} "
         setTimeout next, 180000 # 3 mins
 
-  # 马上开始第一次调用，实际上浏览器规范中要求最少4ms
-  # 用setTimeout调用另一个setTimeout永远不会出现栈溢出
-  # 直接 next 调用会栈溢出的。比如10万次递归后。
+  # 1. 马上开始第一次调用
+  # 1. 实际上浏览器规范中要求最少4ms
+  # 1. 用setTimeout调用另一个setTimeout永远不会出现栈溢出
+  # 1. 直接 next 调用会栈溢出的。比如10万次递归后。
   # 参见  effective javascript : tip 64，65, page 155
   setTimeout next, 0
 
 #
 # ## 登陆页面
 #
+
+# 1. 校验不能有input字段唯恐
+# 2. 密码用md5求值后再提交给后台
 YD.userLogin = ->
   $("form").submit (e) ->
     e.preventDefault()
@@ -315,6 +311,8 @@ YD.userLogin = ->
     name = $("#username").val()
     password = $("#password").val()
     yz = $("#yz").val()
+
+    # 是否有input为空
     notValid = hasBlank([
       name
       password
@@ -329,8 +327,12 @@ YD.userLogin = ->
         redirectToUrl YD.conf.siteHomeUrl
 
 #
-# ## reset password
+# ## 重设密码页面
 #
+
+# 1. 校验不能有input字段为空
+# 2. 校验两次输入新密码是否匹配
+# 3. 密码用md5求值后再提交给后台
 YD.resetPass = ->
   $("form").submit (e) ->
     e.preventDefault()
@@ -338,7 +340,11 @@ YD.resetPass = ->
     oldPass = $("#old_pass").val()
     newPass = $("#new_pass").val()
     newPassConfirm = $("#new_pass_confirm").val()
+
+    # 两次输入的新密码是否匹配
     dontMatch = newPass isnt newPassConfirm
+
+    # 是否有input为空
     notValid = hasBlank([
       oldPass
       newPass

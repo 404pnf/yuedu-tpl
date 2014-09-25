@@ -206,13 +206,13 @@
         ex0up1res0 = !hasCurrentExam && hasUpcomingExam && !haslatestExamResult;
         ex0up1res1 = !hasCurrentExam && hasUpcomingExam && haslatestExamResult;
         ex0up0res1 = !hasCurrentExam && !hasUpcomingExam && haslatestExamResult;
-        render = _.partial(renderLocalData, examInfo);
         cssID = "front_content";
-        promise.done(doWhen(ex1up0res0, render(cssID, "start_current.ejs")));
-        promise.done(doWhen(ex1up0res1, render(cssID, "start_scores.ejs")));
-        promise.done(doWhen(ex0up1res0, render(cssID, "start_upcoming.ejs")));
-        promise.done(doWhen(ex0up0res1, render(cssID, "start_scores_with_upcoming.ejs")));
-        return promise.done(doWhen(ex0up1res1, render(cssID, "start_scores_with_upcoming.ejs")));
+        render = _.partial(renderLocalData, examInfo, cssID);
+        promise.done(doWhen(ex1up0res0, render("start_current.ejs")));
+        promise.done(doWhen(ex1up0res1, render("start_scores.ejs")));
+        promise.done(doWhen(ex0up1res0, render("start_upcoming.ejs")));
+        promise.done(doWhen(ex0up0res1, render("start_scores_with_upcoming.ejs")));
+        return promise.done(doWhen(ex0up1res1, render("start_scores_with_upcoming.ejs")));
       };
       onFailure = function() {
         return note("链接后台失败。");
