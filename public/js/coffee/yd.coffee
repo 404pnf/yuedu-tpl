@@ -196,11 +196,9 @@ YD.startDispache = ->
       .then (data) ->
         # 一次性将数据处理好
         if data.upcomingExam
-          _.extend data, updateDateText(data),
-            hasUpcoming: true # 这是 _.extend 的第二个参数 设定键名hasUpcoming的值
+          _.extend data, updateDateText(data), hasUpcoming: true
         else
-          _.extend data,
-            hasUpcoming: false
+          _.extend data, hasUpcoming: false
 
     note promise
 

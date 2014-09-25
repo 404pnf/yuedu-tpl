@@ -490,11 +490,9 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
             </div>
             
             <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">if</span> data.upcomingExam
-          _.extend data, updateDateText(data),
-            <span class="hljs-attribute">hasUpcoming</span>: <span class="hljs-literal">true</span> <span class="hljs-comment"># 这是 _.extend 的第二个参数 设定键名hasUpcoming的值</span>
+          _.extend data, updateDateText(data), <span class="hljs-attribute">hasUpcoming</span>: <span class="hljs-literal">true</span>
         <span class="hljs-keyword">else</span>
-          _.extend data,
-            <span class="hljs-attribute">hasUpcoming</span>: <span class="hljs-literal">false</span>
+          _.extend data, <span class="hljs-attribute">hasUpcoming</span>: <span class="hljs-literal">false</span>
 
     note promise
 <span class="hljs-function">
