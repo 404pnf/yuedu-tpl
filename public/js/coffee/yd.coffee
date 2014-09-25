@@ -10,7 +10,15 @@ YD.debug = true
 # SIDE-EFFECT ONLY
 showStatusMsg = (data) ->
   # 错误就是一个字符串，获取方法是读取 data.error 的值
-  alert data.error
+  alertBox data.error
+
+alertBox = (msg) ->
+  $("#msg").text msg
+  $("#msg").dialog
+    modal: true
+    buttons:
+      Ok: ->
+        $(this).dialog "close"
 
 # 模仿if (predict) {}，
 # 或者说模仿scheme中的when。
@@ -311,7 +319,7 @@ YD.userLogin = ->
       password
       yz
     ])
-      alert "所有输入框都必须填写。"
+      alertBox "所有输入框都必须填写。"
     else
       $("#password").val $.md5(password)
       postJson YD.conf.userLogin, "#login", ->
@@ -330,9 +338,9 @@ YD.resetPass = ->
       newPass
       newPassConfirm
     ])
-      alert "所有输入框都必须填写。"
+      alertBox "所有输入框都必须填写。"
     else if dontMatch
-      alert "两次输入的新密码不匹配。"
+      alertBox "两次输入的新密码不匹配。"
     else
       $("#new_pass").val $.md5(newPass)
       $("#old_pass").val $.md5(oldPass)
