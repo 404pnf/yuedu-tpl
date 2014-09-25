@@ -213,22 +213,10 @@ YD.startDispache = ->
 
     onSuccess = (data) ->
 
-      # 将判定抽象为函数
-
       # 将从后台获得的数据（从onSuccess函数的参数传进来）绑定到局部变量
       examInfo = _.snapshot data
 
       # 将判定抽象为函数
-
-      # 将从后台获得的数据（从onSuccess函数的参数传进来）绑定到局部变量
-      examInfo = _.snapshot(data)
-
-      # hasCurrentExam =  _.has(examInfo, "currentExam")
-      # hasUpcomingExam = _.has(examInfo, "upcomingExam")
-      # haslatestExamResult = _.has(examInfo, "latestExamResult")
-      # userExamState = _.has(examInfo, "currentExam") and
-      #   examInfo.currentExam.userExamState
-
       hasCurrentExam =  "currentExam" of examInfo
       hasUpcomingExam = "upcomingExam" of examInfo
       haslatestExamResult = "latestExamResult" of examInfo
