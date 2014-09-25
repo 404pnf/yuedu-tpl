@@ -211,6 +211,11 @@ YD.startDispache = ->
       # 将从后台获得的数据（从onSuccess函数的参数传进来）绑定到局部变量
       examInfo = _.snapshot(data)
 
+      hasCurrentExam =  _.has(examInfo, "currentExam")
+      hasUpcomingExam = _.has(examInfo, "upcomingExam")
+      haslatestExamResult = _.has(examInfo, "latestExamResult")
+      userExamState = examInfo?.currentExam.userExamState
+
       # 有考试，无上次考试成绩 学生状态模版中判定
       ex1up0res0 = _.has(examInfo, "currentExam") and
         examInfo.currentExam.userExamState is "0" and
