@@ -156,7 +156,7 @@ YD.user = ->
 
 
 # 渲染用户条
-YD.userBar = userBar = ->
+YD.userBar = ->
 
   userinfo = YD.conf.userInfo
   photos = YD.conf.photos
@@ -181,7 +181,7 @@ YD.startDispache = ->
 
   # 帮助函数 如果考试预告中有考试是今天的
   # 就在模版中显示今天两个字
-  updateDateText = updateDateText = (d) ->
+  updateDateText = (d) ->
     o = _.map(d.upcomingExam, (e) ->
       if e.isTodayExam
         e.endTime = ""
@@ -192,7 +192,7 @@ YD.startDispache = ->
     )
     { upcomingExam: o }
 
-  next = next = ->
+  next = ->
     getExamInfo = $.get(YD.conf.getExamInfo)
 
     promise = getExamInfo.then((data) ->
