@@ -16,7 +16,10 @@
   <div class="again fl"></div><!--/.again-->
   <!--start-->
   <div class="start_box clear">
-    <div class="exam_setout fl exam_setout_margin1"><%= currentExam.endTime %></div>
+    <div class="exam_setout fl exam_setout_margin1">
+      <a href="#none" class="headset"></a>
+      <div><%= currentExam.endTime %></div>
+    </div>
     <a href=<%= currentExam.id %> class="btn_start fl Arial">
       <% if (currentExam.userExamState === "0") { %>
         Start

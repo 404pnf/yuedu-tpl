@@ -1,4 +1,4 @@
-﻿@charset "utf-8";
+@charset "utf-8";
 *{ margin:0; padding:0}
 .fl{ float:left}
 .clear{ clear:both}
@@ -6,40 +6,44 @@ ul li{ list-style:none}
 .hidden{ display:none}
 .tc{ text-align:center}
 .img_pr_di{position: relative; display:inline-block;}
+/*词汇探测题演示界面*/
+/* body {font-size: 62.5%;}
+fieldset { padding: 0; border: 0;margin-top: 25px;} */
 /*单选&填空*/
 .input_text{ line-height:200%;margin-left: 10px;width: 200px;}
 
-.one_que{ font-family:Arial, Helvetica, sans-serif; width:884px; margin:0 auto; position:relative}
+.one_que{ font-family:Arial, Helvetica, sans-serif; width:884px; margin:0 auto;position:relative}
 .one_que div{ line-height:200%;}
-
-
+.one_que p{ font-size:16px; color:#333333; line-height:170%;}
 .m_tit_name{ position:absolute; left:-54px; top:-3px; background-image:url(../images/m_tit_name.jpg); width:36px; height:109px;}
 .chtc_tit_name{ background-position:0 0;}
-.phonics_tit_name{ background-position:36px 0;}
-.ydcs_tit_name{ background-position:72px 0;}
-.explain{ font-size:20px; color:#af1e23; font-weight:bold; line-height:300%;}
+.ydcs_tit_name{ background-position:36px 0;}
+.phonics_tit_name{ background-position:72px 0;}
+.explain{ font-size:18px; color:#af1e23; font-weight:bold; line-height:300%; font-family:'微软雅黑'}
 .qid{background-color:#eaeaea; border-radius: 20px; padding:4px 14px 4px 20px; display:inline-block;}
 .qid span{ display:inline-block; width:22px; height:22px; border-radius: 20px; color:#FFF; font-size:14px; background:#cbcbcb; line-height:22px; text-align:center; margin-right:6px;}
 .qid span.current{ background:#009dd4;}
 .one_que .que_tit{ font-size:18px; font-weight:bold; line-height:40px;margin-top: 5px;}
 .con_text{ margin-bottom:40px;}
-.dan_selected{ background-color:#ffcc00; border-radius: 50px; display:inline-block; padding:10px 20px;}
-.dan_unselected{  border-radius: 20px; padding:10px 15px; line-height:120%;}
+.dan_selected,.dan_unselected:hover{ background-color:#ffcc00; border-radius: 50px; display:inline-block; padding:2px 20px; margin-bottom:5px}
+.dan_unselected{  border-radius: 50px; padding:2px 20px; line-height:120%; margin-bottom:5px}
+
 
 /*词汇探测题*/
 .que_wrapper{ width:700px;}
-.tct_one{ overflow:hidden;font-family:Arial, Helvetica, sans-serif; margin:20px 10px 0 0; width:390px; padding-bottom:15px; padding-left:25px; padding-top:15px; background:#eeeeee; border-radius:10px;}
-.tct_t li{ line-height:300%; width:190px; font-family:'微软雅黑'; font-size:16px;}
+.tct_one{ overflow:hidden;font-family:Arial, Helvetica, sans-serif; margin:25px 10px 0 10px; width:390px; padding-bottom:15px; padding-left:25px; padding-top:15px; background:#eeeeee; border-radius:10px;}
+.tct_t li{ line-height:300%; width:195px; font-family:'微软雅黑'; font-size:16px;}
 .tct_t li span{ font-weight:bold;}
-.tct_t li select{ margin-left:10px;}
+.tct_t li select{ margin-left:10px; font-size:13px!important;}
 .tct_a{ margin-left:20px}
 .tct_a li{ line-height:150%; font-family:Arial, Helvetica, sans-serif; font-size:18px;}
+
 
 /*配对题*/
 .line_droppable .pd_box{ border:1px solid #aaaaaa}
 
-.line_droppable .draggable_1{ overflow:hidden; height: 650px; width:200px;}
-.line_droppable .draggable_1 li{  border:1px solid #999; padding:5px; display:inline-block; border:none;}
+.text_img_an .line_droppable .draggable_1{ overflow:hidden; height: 650px; width:200px;}
+.text_img_an .line_droppable .draggable_1 li{  border:1px solid #999; padding:5px; display:inline-block; border:none;}
 .line_droppable .margin_auto{ display:inline-block; width:100%;text-align: center;}
 .line_droppable .margin_auto li{ margin:10px auto!important; float:none!important; display:inline-block!important;}
 .line_droppable .droppable{ clear:both; margin-top:20px;}
@@ -62,9 +66,19 @@ padding: 10px; font-family:'微软雅黑' }*/
 .text_img_que{ width:360px; margin-left:50px;}
 .text_img_an{ display:inline-block; width:200px; margin-left:100px;}
 .text_img_que .pd_text_box{ width:200px; height:140px;}
-.text_img_an ul{ }
 .text_img_an li { margin: 10px 20px 10px 0; text-align: center; cursor: move; border-radius:5px!important; background:#e6e6e6;border: none;
 padding: 10px; font-family:'微软雅黑' }
+
+.img_text_que{ width:360px; margin-left:160px;}
+.img_text_que .pd_text_box{ width:180px!important; height:200px;}
+.img_text_an{ display:inline-block; width:250px; margin-left:100px;}
+.img_text_an li {  text-align: center; cursor: move; border-radius:5px!important; background:#e6e6e6;border: none;
+padding:20px 10px; font-family:Arial, Helvetica, sans-serif; width:200px; margin:60px 0 160px 0; display:block}
+.img_text_an .line_droppable .draggable_1{ width:250px!important;}
+.ui-widget-content1{ background:none!important; border:none!important;}
+
+.text_img_an #selector,.img_text_an #selector{ height:800px; width:300px;}
+
 /*phonics*/
 .phonics_img{ margin:30px auto 15px auto; display:block}
 .phonics_anw1{ float:left; position:relative; left:50%; }
@@ -91,7 +105,14 @@ padding: 10px; font-family:'微软雅黑' }
 .phonics_anw4 li img{ height:144px;}
 .phonics_anw4 li.dan_tu_selected{ border:10px solid #ffcc00;}
 .phonics_anw4 li span{ position:absolute; left:1px; top:1px; height:32px; width:32px; color:#ffffff; font-size:22px; text-align:center; line-height:32px; background:#009dd4; border-radius: 50px;}
-.word_text{ color:#1d81bd; font-size:70px; width:100%; text-align:center; line-height:300%!important;}
+.phonics_anw5 li{ width:175px; height:110px; margin:25px 0 70px 0;border:10px solid #e6e6e6; margin:0px 15px 0 15px;position:relative;text-align:center;}
+.phonics_anw5 li.dan_tu_selected{ border:10px solid #ffcc00;}
+.phonics_anw5 li span{ position:absolute; left:1px; top:1px; height:32px; width:32px; color:#ffffff; font-size:22px; text-align:center; line-height:32px; background:#009dd4; border-radius: 50px;}
+.track_pos2{position:absolute; right:70px; bottom:35px;}
+.track_b2{ width:45px; height:45px; display:inline-block;}
+.phonics5_word{ display:block; line-height:100%!important; margin:20px 0 65px 0;}
+
+.word_text{ color:#1d81bd; font-size:65px; width:100%; text-align:center;}
 
 /*questions_stems*/
-.questions_stems p{ text-align:justify; font-size:17px; font-family:Arial, Helvetica, sans-serif; color:#333333; margin-bottom:16px; line-height:150%;letter-spacing: 0.2px; text-indent:39px;}
+.questions_stems p{ text-align:justify; font-size:19px; font-family:Arial, Helvetica, sans-serif; color:#333333; margin-top:16px; line-height:150%; text-indent:46px;}

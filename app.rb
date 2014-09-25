@@ -99,13 +99,13 @@ get '/examController/studentLogin' do
     #     isTodayExam: false
     #   }],
 
-    latestExamResult: {
-      examGradeResult: '4级，还不错',
-      vocabularySize: '22000',
-      personalEndTime: '2014-08-26',
-      duration: '15', # 分钟
-      id: 'exam_result_id'
-    }
+    # latestExamResult: {
+    #   examGradeResult: '4级，还不错',
+    #   vocabularySize: '22000',
+    #   personalEndTime: '2014-08-26',
+    #   duration: '15', # 分钟
+    #   id: 'exam_result_id'
+    # }
 
   }
   JSONP r
