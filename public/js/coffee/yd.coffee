@@ -334,14 +334,13 @@ YD.userLogin = ->
 # ## reset password
 #
 YD.resetPass = ->
-
   $("form").submit (e) ->
     e.preventDefault()
 
     oldPass = $("#old_pass").val()
     newPass = $("#new_pass").val()
     newPassConfirm = $("#new_pass_confirm").val()
-    dontMatch = (newPass isnt newPassConfirm)
+    dontMatch = newPass isnt newPassConfirm
     notValid = hasBlank([
       oldPass
       newPass
