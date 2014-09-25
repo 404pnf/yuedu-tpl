@@ -29,7 +29,7 @@ alertBox = (msg) ->
 doWhen = (predict, action) ->
   action if predict
 
-# ## 提交表单内容到后台
+# ### 提交表单内容到后台
 #
 # 1. 从表单获取数据
 # 2. 用jquery插件将数据转为json
@@ -54,7 +54,7 @@ postJson = (url, cssID, callback) ->
     .done onSuccess
     .fail onFailure
 
-# 绑定数据到模版并将渲染结果插入到页面
+# ### 绑定数据到模版并将渲染结果插入到页面
 # 1. SIDE-EFFECT ONLY 做参数使用请包裹在 functin  {} 中
 # 2. 从局部变量获得数据，绑定模版，插入到html页面中。
 # 3. 可以在使用数据前通过callback修饰数据。
@@ -66,6 +66,7 @@ renderLocalData = (data, cssID, tpl, callback) ->
     clonedData = _.snapshot _.extend(data, YD.conf)
     new EJS(url: YD.conf.tplDir + tpl).update cssID, cb(clonedData)
 
+#
 redirectToUrl = (url) ->
   window.location.replace url
 
@@ -256,10 +257,11 @@ YD.startDispache = ->
     onFailure = ->
       note "链接后台失败。"
 
+    # 获得数据后执行的函数
     promise.fail onFailure
 
     promise.done (data) ->
-      note data
+      note data # for debugging
 
     # 存后台数据到本地
     promise.done (data) ->
