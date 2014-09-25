@@ -36,7 +36,9 @@ doWhen = (predict, action) ->
 # 5. 如果后台会返回带有"success"键名的对象，表示提交成功，执行回调函数
 postJson = (url, cssID, callback) ->
   formData = data: $(cssID).serializeJSON()
+
   note formData
+
   onSuccess = (data) ->
     if data?. error
       showStatusMsg data
