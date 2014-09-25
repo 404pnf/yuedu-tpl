@@ -1,7 +1,7 @@
 # ## 唯一暴露出来的全局变量。也是程序的命名空间
 root = global ? window
 root.YD ?= {}
-YD.debug = false
+YD.debug = true
 
 #
 # ## 工具函数
@@ -77,6 +77,7 @@ hasBlank = (arr) ->
     e is ""
 
   coll = _.map(arr, isBlank)
+
   _.reduce coll, ((a, e) ->
     a or e
   ), false
@@ -220,7 +221,8 @@ YD.startDispache = ->
       hasCurrentExam =  _.has(examInfo, "currentExam")
       hasUpcomingExam = _.has(examInfo, "upcomingExam")
       haslatestExamResult = _.has(examInfo, "latestExamResult")
-      userExamState = _.has(examInfo, "currentExam") and examInfo.currentExam.userExamState
+      userExamState = _.has(examInfo, "currentExam") and
+        examInfo.currentExam.userExamState
 
       # 有考试，无上次考试成绩 学生状态模版中判定
       ex1up0res0 = hasCurrentExam and
@@ -311,33 +313,43 @@ YD.startDispache = ->
 YD.userLogin = ->
   $("form").submit (e) ->
     e.preventDefault()
+
     name = $("#username").val()
     password = $("#password").val()
     yz = $("#yz").val()
-    if hasBlank([
+    notValid = hasBlank([
       name
       password
       yz
     ])
+
+    if notValid
       alertBox "所有输入框都必须填写。"
     else
       $("#password").val $.md5(password)
       postJson YD.conf.userLogin, "#login", ->
         redirectToUrl YD.conf.siteHomeUrl
 
+#
+# ## reset password
+#
 YD.resetPass = ->
-  $("#reset_pass_save").click (e) ->
+
+  $("form").submit (e) ->
     e.preventDefault()
+
     oldPass = $("#old_pass").val()
     newPass = $("#new_pass").val()
     newPassConfirm = $("#new_pass_confirm").val()
-
     dontMatch = (newPass isnt newPassConfirm)
-    if hasBlank([
+    notValid = hasBlank([
       oldPass
       newPass
       newPassConfirm
     ])
+    alertBox "所有输入框都必须填写。"
+    note notValid
+    if notValid
       alertBox "所有输入框都必须填写。"
     else if dontMatch
       alertBox "两次输入的新密码不匹配。"

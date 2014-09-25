@@ -8,7 +8,7 @@
     root.YD = {};
   }
 
-  YD.debug = false;
+  YD.debug = true;
 
   showStatusMsg = function(data) {
     return alertBox(data.error);
@@ -246,12 +246,13 @@
 
   YD.userLogin = function() {
     return $("form").submit(function(e) {
-      var name, password, yz;
+      var name, notValid, password, yz;
       e.preventDefault();
       name = $("#username").val();
       password = $("#password").val();
       yz = $("#yz").val();
-      if (hasBlank([name, password, yz])) {
+      notValid = hasBlank([name, password, yz]);
+      if (notValid) {
         return alertBox("所有输入框都必须填写。");
       } else {
         $("#password").val($.md5(password));
@@ -263,14 +264,17 @@
   };
 
   YD.resetPass = function() {
-    return $("#reset_pass_save").click(function(e) {
-      var dontMatch, newPass, newPassConfirm, oldPass;
+    return $("form").submit(function(e) {
+      var dontMatch, newPass, newPassConfirm, notValid, oldPass;
       e.preventDefault();
       oldPass = $("#old_pass").val();
       newPass = $("#new_pass").val();
       newPassConfirm = $("#new_pass_confirm").val();
       dontMatch = newPass !== newPassConfirm;
-      if (hasBlank([oldPass, newPass, newPassConfirm])) {
+      notValid = hasBlank([oldPass, newPass, newPassConfirm]);
+      alertBox("所有输入框都必须填写。");
+      note(notValid);
+      if (notValid) {
         return alertBox("所有输入框都必须填写。");
       } else if (dontMatch) {
         return alertBox("两次输入的新密码不匹配。");
