@@ -147,18 +147,14 @@
     var photos, userInfoAndPhoto, userinfo;
     userinfo = YD.conf.userInfo;
     photos = YD.conf.photos;
-    if (YD.userBarShow) {
-      return YD.userBarShow;
-    } else {
-      userInfoAndPhoto = $.when($.ajax(userinfo), $.ajax(photos)).then(function(a, b) {
-        return _.extend(a[0], b[0]);
-      });
-      return userInfoAndPhoto.done(function(data) {
-        return new EJS({
-          url: "" + YD.conf.tplDir + "user_bar.ejs"
-        }).update("user_bar", data);
-      });
-    }
+    userInfoAndPhoto = $.when($.ajax(userinfo), $.ajax(photos)).then(function(a, b) {
+      return _.extend(a[0], b[0]);
+    });
+    return userInfoAndPhoto.done(function(data) {
+      return new EJS({
+        url: "" + YD.conf.tplDir + "user_bar.ejs"
+      }).update("user_bar", data);
+    });
   };
 
   YD.startDispache = function() {

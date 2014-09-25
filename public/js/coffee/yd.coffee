@@ -1,4 +1,5 @@
-# ## 唯一暴露出来的全局变量。也是程序的命名空间
+# ## 唯一的全局变量
+# 也是程序的命名空间
 root = global ? window
 root.YD or= {}
 YD.debug = false
@@ -16,15 +17,15 @@ alertBox = (msg) ->
   $("#msg").dialog
     modal: true
     buttons:
-      Ok: ->
+      Ok: -> # do NOT use fat arror!! or the dialog won't close
         $(this).dialog "close"
 
 # 模仿if (predict) {}，
 #
 # 或者说模仿scheme中的when。
 #
-# **注意：action必须是一个返回函数的函数，这样才能延迟执行**
-# 可以用 -> 包裹一下，防止action作为参数时被立即求值
+# 注意：action必须是一个返回函数的函数，这样才能延迟执行。
+# 可以用 -> 包裹一下，防止action作为参数时被立即求值。
 doWhen = (predict, action) ->
   action if predict
 
@@ -85,7 +86,6 @@ hasBlank = (arr) ->
 # ## 用户页面
 #
 YD.user = ->
-
   # 后台api的地址再YD.conf中配置
   userinfo = YD.conf.userInfo
   photos = YD.conf.photos
@@ -154,7 +154,6 @@ YD.user = ->
 
   )()
 
-
 # 渲染用户条
 YD.userBar = ->
 
@@ -162,26 +161,23 @@ YD.userBar = ->
   userinfo = YD.conf.userInfo
   photos = YD.conf.photos
 
-  if YD.userBarShow
-    YD.userBarShow
-  else
-    userInfoAndPhoto = $
-      .when $.ajax(userinfo), $.ajax(photos)
-      .then (a, b) ->
-        _.extend a[0], b[0]
+  userInfoAndPhoto = $
+    .when $.ajax(userinfo), $.ajax(photos)
+    .then (a, b) ->
+      _.extend a[0], b[0]
 
-    userInfoAndPhoto.done (data) ->
-      new EJS url: "#{YD.conf.tplDir}user_bar.ejs"
-        .update "user_bar", data
+  userInfoAndPhoto.done (data) ->
+    new EJS url: "#{YD.conf.tplDir}user_bar.ejs"
+      .update "user_bar", data
 
 #
 # ## 用户登录后首页
 #
 # 每隔一段时间时间查看一下数据源并重新刷新页面。
 YD.startDispache = ->
-
-  # 帮助函数 如果考试预告中有考试是今天的
-  # 就在模版中显示今天两个字
+  # 帮助函数
+  # 1. 如果考试预告中有考试是今天的就在模版中显示今天两个字
+  # 1. 直接修改了examInfo
   updateDateText = (d) ->
     o = _.map(d.upcomingExam, (e) ->
       if e.isTodayExam
@@ -191,23 +187,20 @@ YD.startDispache = ->
         e.isTodayExam = ""
       e
     )
-    { upcomingExam: o }
 
-  # main funciont, might run recursively
+  # 主函数，可能递归调用
   next = ->
-    getExamInfo = $.get(YD.conf.getExamInfo)
+    getExamInfo = $.get YD.conf.getExamInfo
 
-    promise = getExamInfo.then((data) ->
-      # 一次性将数据处理好
-      if data.upcomingExam
-        _.extend data, updateDateText(data), # 直接修改了examInfo
-          hasUpcoming: true
-      else
-        _.extend data,
-          hasUpcoming: false
-
-      data
-    )
+    promise = getExamInfo
+      .then (data) ->
+        # 一次性将数据处理好
+        if data.upcomingExam
+          _.extend data, updateDateText(data),
+            hasUpcoming: true ＃ 这是 _.extend 的第二个参数 设定键名hasUpcoming的值
+        else
+          _.extend data,
+            hasUpcoming: false
 
     note promise
 
@@ -224,7 +217,7 @@ YD.startDispache = ->
 
       # 有考试，无上次考试成绩 学生状态模版中判定
       ex1up0res0 = hasCurrentExam and
-        not (haslatestExamResult)
+        not haslatestExamResult
 
       # 有考试，有上次考试成绩， 学生状态在模版中判定
       ex1up0res1 = hasCurrentExam and
@@ -283,9 +276,9 @@ YD.startDispache = ->
       # 2. 有考试预告
       # 3. 考试预告中有今天的考试
       # 这样极大减少了不必要的对后台请求
-      shouldRetry = not _.has(YD.exam, "currentExam")and
-        _.has(YD.exam, "upcomingExam") and
-        _.find YD.exam.upcomingExam, (e) -> e.isTodayExam
+      shouldRetry = not ("currentExam" of YD.exam) and
+        ("upcomingExam" of YD.exam) and
+        _.find YD.exam.upcomingExam, (e) -> e.isTodayExam # isTodayExam 的值是 true / false
 
       if shouldRetry
         note "满足刷新条件，页面将会刷新。 #{new Date()} "
@@ -301,7 +294,6 @@ YD.startDispache = ->
 #
 # ## 登陆页面
 #
-
 # 1. 校验不能有input字段唯恐
 # 2. 密码用md5求值后再提交给后台
 YD.userLogin = ->
@@ -329,7 +321,6 @@ YD.userLogin = ->
 #
 # ## 重设密码页面
 #
-
 # 1. 校验不能有input字段为空
 # 2. 校验两次输入新密码是否匹配
 # 3. 密码用md5求值后再提交给后台

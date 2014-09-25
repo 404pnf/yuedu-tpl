@@ -53,7 +53,8 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              <h2 id="-">唯一暴露出来的全局变量。也是程序的命名空间</h2>
+              <h2 id="-">唯一的全局变量</h2>
+<p>也是程序的命名空间</p>
 
             </div>
             
@@ -95,7 +96,7 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
   $(<span class="hljs-string">"#msg"</span>).dialog
     <span class="hljs-attribute">modal</span>: <span class="hljs-literal">true</span>
     <span class="hljs-attribute">buttons</span>:
-      <span class="hljs-attribute">Ok</span>:<span class="hljs-function"> -&gt;</span>
+      <span class="hljs-attribute">Ok</span>:<span class="hljs-function"> -&gt;</span> <span class="hljs-comment"># do NOT use fat arror!! or the dialog won't close</span>
         $(<span class="hljs-keyword">this</span>).dialog <span class="hljs-string">"close"</span></pre></div></div>
             
         </li>
@@ -109,8 +110,8 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
               </div>
               <p>模仿if (predict) {}，</p>
 <p>或者说模仿scheme中的when。</p>
-<p><strong>注意：action必须是一个返回函数的函数，这样才能延迟执行</strong>
-可以用 -&gt; 包裹一下，防止action作为参数时被立即求值</p>
+<p>注意：action必须是一个返回函数的函数，这样才能延迟执行。
+可以用 -&gt; 包裹一下，防止action作为参数时被立即求值。</p>
 
             </div>
             
@@ -404,17 +405,14 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
             <div class="content"><div class='highlight'><pre>  userinfo = YD.conf.userInfo
   photos = YD.conf.photos
 
-  <span class="hljs-keyword">if</span> YD.userBarShow
-    YD.userBarShow
-  <span class="hljs-keyword">else</span>
-    userInfoAndPhoto = $
-      .<span class="hljs-keyword">when</span> $.ajax(userinfo), $.ajax(photos)
-      .<span class="hljs-keyword">then</span> <span class="hljs-function"><span class="hljs-params">(a, b)</span> -&gt;</span>
-        _.extend a[<span class="hljs-number">0</span>], b[<span class="hljs-number">0</span>]
+  userInfoAndPhoto = $
+    .<span class="hljs-keyword">when</span> $.ajax(userinfo), $.ajax(photos)
+    .<span class="hljs-keyword">then</span> <span class="hljs-function"><span class="hljs-params">(a, b)</span> -&gt;</span>
+      _.extend a[<span class="hljs-number">0</span>], b[<span class="hljs-number">0</span>]
 
-    userInfoAndPhoto.done <span class="hljs-function"><span class="hljs-params">(data)</span> -&gt;</span>
-      <span class="hljs-keyword">new</span> EJS <span class="hljs-attribute">url</span>: <span class="hljs-string">"<span class="hljs-subst">#{YD.conf.tplDir}</span>user_bar.ejs"</span>
-        .update <span class="hljs-string">"user_bar"</span>, data</pre></div></div>
+  userInfoAndPhoto.done <span class="hljs-function"><span class="hljs-params">(data)</span> -&gt;</span>
+    <span class="hljs-keyword">new</span> EJS <span class="hljs-attribute">url</span>: <span class="hljs-string">"<span class="hljs-subst">#{YD.conf.tplDir}</span>user_bar.ejs"</span>
+      .update <span class="hljs-string">"user_bar"</span>, data</pre></div></div>
             
         </li>
         
@@ -757,19 +755,7 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
                 <a class="pilcrow" href="#section-35">&#182;</a>
               </div>
               <h2 id="-">登陆页面</h2>
-
-            </div>
-            
-        </li>
-        
-        
-        <li id="section-36">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-36">&#182;</a>
-              </div>
-              <ol>
+<ol>
 <li>校验不能有input字段唯恐</li>
 <li>密码用md5求值后再提交给后台</li>
 </ol>
@@ -787,11 +773,11 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
         </li>
         
         
-        <li id="section-37">
+        <li id="section-36">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-37">&#182;</a>
+                <a class="pilcrow" href="#section-36">&#182;</a>
               </div>
               <p>是否有input为空</p>
 
@@ -813,26 +799,14 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
         </li>
         
         
-        <li id="section-38">
+        <li id="section-37">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-38">&#182;</a>
+                <a class="pilcrow" href="#section-37">&#182;</a>
               </div>
               <h2 id="-">重设密码页面</h2>
-
-            </div>
-            
-        </li>
-        
-        
-        <li id="section-39">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-39">&#182;</a>
-              </div>
-              <ol>
+<ol>
 <li>校验不能有input字段为空</li>
 <li>校验两次输入新密码是否匹配</li>
 <li>密码用md5求值后再提交给后台</li>
@@ -851,11 +825,11 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
         </li>
         
         
-        <li id="section-40">
+        <li id="section-38">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-40">&#182;</a>
+                <a class="pilcrow" href="#section-38">&#182;</a>
               </div>
               <p>两次输入的新密码是否匹配</p>
 
@@ -866,11 +840,11 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
         </li>
         
         
-        <li id="section-41">
+        <li id="section-39">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-41">&#182;</a>
+                <a class="pilcrow" href="#section-39">&#182;</a>
               </div>
               <p>是否有input为空</p>
 
