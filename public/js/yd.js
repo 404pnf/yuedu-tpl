@@ -195,13 +195,13 @@
       });
       note(promise);
       onSuccess = function(data) {
-        var cssID, ex0up0res1, ex0up1res0, ex0up1res1, ex1up0res0, ex1up0res1, examInfo, hasCurrentExam, hasUpcomingExam, haslatestExamResult, render, userExamState;
+        var cssID, ex0up0res1, ex0up1res0, ex0up1res1, ex1up0res0, ex1up0res1, examInfo, hasCurrentExam, hasUpcomingExam, haslatestExamResult, render, userExamState, _ref;
         examInfo = _.snapshot(data);
         examInfo = _.snapshot(data);
-        hasCurrentExam = _.has(examInfo, "currentExam");
-        hasUpcomingExam = _.has(examInfo, "upcomingExam");
-        haslatestExamResult = _.has(examInfo, "latestExamResult");
-        userExamState = _.has(examInfo, "currentExam") && examInfo.currentExam.userExamState;
+        hasCurrentExam = "currentExam" in examInfo;
+        hasUpcomingExam = "upcomingExam" in examInfo;
+        haslatestExamResult = "latestExamResult" in examInfo;
+        userExamState = examInfo != null ? (_ref = examInfo.currentExam) != null ? _ref.userExamState : void 0 : void 0;
         ex1up0res0 = hasCurrentExam && !haslatestExamResult;
         ex1up0res1 = hasCurrentExam && haslatestExamResult;
         ex0up1res0 = !hasCurrentExam && hasUpcomingExam && !haslatestExamResult;
