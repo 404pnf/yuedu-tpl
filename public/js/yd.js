@@ -8,7 +8,7 @@
     root.YD = {};
   }
 
-  YD.debug = true;
+  YD.debug = false;
 
   showStatusMsg = function(data) {
     return alertBox(data.error);
@@ -272,8 +272,6 @@
       newPassConfirm = $("#new_pass_confirm").val();
       dontMatch = newPass !== newPassConfirm;
       notValid = hasBlank([oldPass, newPass, newPassConfirm]);
-      alertBox("所有输入框都必须填写。");
-      note(notValid);
       if (notValid) {
         return alertBox("所有输入框都必须填写。");
       } else if (dontMatch) {
