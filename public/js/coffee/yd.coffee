@@ -10,7 +10,15 @@ YD.debug = false
 # SIDE-EFFECT ONLY
 showStatusMsg = (data) ->
   # 错误就是一个字符串，获取方法是读取 data.error 的值
-  alert data.error
+  alertBox data.error
+
+alertBox = (msg) ->
+  $("#msg").text msg
+  $("#msg").dialog
+    modal: true
+    buttons:
+      Ok: ->
+        $(this).dialog "close"
 
 # 模仿if (predict) {}，
 # 或者说模仿scheme中的when。
@@ -170,26 +178,24 @@ YD.userBar = userBar = ->
 # 每隔一段时间时间查看一下数据源并重新刷新页面。
 YD.startDispache = ->
   next = next = ->
+    updateDateText = updateDateText = (d) ->
+      o = _.map(d.upcomingExam, (e) ->
+        if e.isTodayExam
+          e.endTime = ""
+          e.isTodayExam = "今天"
+        else
+          e.isTodayExam = ""
+        e
+      )
+      upcomingExam: o
+
     getExamInfo = $.get(YD.conf.getExamInfo)
+
     promise = getExamInfo.then((data) ->
-      updateDateText = updateDateText = (d) ->
-        o = _.map(d.upcomingExam, (e) ->
-          if e.isTodayExam
-            e.endTime = ""
-            e.isTodayExam = "今天"
-          else
-            e.isTodayExam = ""
-          e
-        )
-        upcomingExam: o
-
-
       # 一次性将数据处理好
       if data.upcomingExam
         _.extend data, updateDateText(data), # 直接修改了examInfo
           hasUpcoming: true
-
-        note data
       else
         _.extend data,
           hasUpcoming: false
@@ -214,38 +220,38 @@ YD.startDispache = ->
       hasCurrentExam =  _.has(examInfo, "currentExam")
       hasUpcomingExam = _.has(examInfo, "upcomingExam")
       haslatestExamResult = _.has(examInfo, "latestExamResult")
-      userExamState = examInfo?.currentExam.userExamState
+      userExamState = _.has(examInfo, "currentExam") and examInfo.currentExam.userExamState
 
       # 有考试，无上次考试成绩 学生状态模版中判定
-      ex1up0res0 = _.has(examInfo, "currentExam") and
-        examInfo.currentExam.userExamState is "0" and
-        not (_.has(examInfo, "latestExamResult"))
+      ex1up0res0 = hasCurrentExam and
+        userExamState is "0" and
+        not (haslatestExamResult)
 
       # 有考试，有上次考试成绩， 学生状态在模版中判定
-      ex1up0res1 = _.has(examInfo, "currentExam") and
-        examInfo.currentExam.userExamState is "0" and
-        _.has(examInfo, "latestExamResult")
+      ex1up0res1 = hasCurrentExam and
+        userExamState  is "0" and
+        haslatestExamResult
 
       # 无考试，有考试预告，无上次考试成绩
-      ex0up1res0 = not _.has(examInfo, "currentExam") and
-        _.has(examInfo, "upcomingExam") and
-        not _.has(examInfo, "latestExamResult")
+      ex0up1res0 = not hasCurrentExam and
+        hasUpcomingExam and
+        not haslatestExamResult
 
       # 无考试，有考试预告，有上次考试成绩
-      ex0up1res1 = not (_.has(examInfo, "currentExam")) and
-        _.has(examInfo, "upcomingExam") and
-        _.has(examInfo, "latestExamResult")
+      ex0up1res1 = not (hasCurrentExam) and
+        hasUpcomingExam and
+        haslatestExamResult
 
       # 无考试，无考试预告，有上次考试成绩
-      ex0up0res1 = not (_.has(examInfo, "currentExam")) and
-        not _.has(examInfo, "upcomingExam") and
-        _.has(examInfo, "latestExamResult")
+      ex0up0res1 = not (hasCurrentExam) and
+        not hasUpcomingExam and
+        haslatestExamResult
 
       # 无考试，无考试预告，无上次成绩
       # 用html的div中默认文字
-      ex0up0res0 = not _.has(examInfo, "currentExam") and
-        not _.has(examInfo, "upcomingExam") and
-        not _.has(examInfo, "latestExamResult")
+      ex0up0res0 = not hasCurrentExam and
+        not hasUpcomingExam and
+        not haslatestExamResult
 
       render = _.partial renderLocalData, examInfo
 
@@ -268,17 +274,18 @@ YD.startDispache = ->
       note "链接后台失败。"
 
 
-    promise.done (data) -> note data
+    promise.fail onFailure
+
+    promise.done (data) ->
+      note data
 
     # set data to cache
     promise.done (data) ->
       YD.exam = YD.exam or data
-      note YD.exam
 
-    promise.fail onFailure
     promise.done onSuccess
-    promise.done ->
 
+    promise.done ->
       # 只有在以下情况都满足时候才不断反复请求后台服务器
       # 1. 没有当前考试
       # 2. 有考试预告
@@ -312,7 +319,7 @@ YD.userLogin = ->
       password
       yz
     ])
-      alert "所有输入框都必须填写。"
+      alertBox "所有输入框都必须填写。"
     else
       $("#password").val $.md5(password)
       postJson YD.conf.userLogin, "#login", ->
@@ -331,9 +338,9 @@ YD.resetPass = ->
       newPass
       newPassConfirm
     ])
-      alert "所有输入框都必须填写。"
+      alertBox "所有输入框都必须填写。"
     else if dontMatch
-      alert "两次输入的新密码不匹配。"
+      alertBox "两次输入的新密码不匹配。"
     else
       $("#new_pass").val $.md5(newPass)
       $("#old_pass").val $.md5(oldPass)
