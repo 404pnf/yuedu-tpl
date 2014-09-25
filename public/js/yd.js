@@ -17,11 +17,9 @@
     return $("#msg").dialog({
       modal: true,
       buttons: {
-        Ok: (function(_this) {
-          return function() {
-            return $(_this).dialog("close");
-          };
-        })(this)
+        Ok: function() {
+          return $(this).dialog("close");
+        }
       }
     });
   };
@@ -153,9 +151,7 @@
       return YD.userBarShow;
     } else {
       userInfoAndPhoto = $.when($.ajax(userinfo), $.ajax(photos)).then(function(a, b) {
-        var d;
-        d = _.extend(a[0], b[0]);
-        return d;
+        return _.extend(a[0], b[0]);
       });
       return userInfoAndPhoto.done(function(data) {
         return new EJS({

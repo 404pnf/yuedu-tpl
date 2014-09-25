@@ -17,7 +17,7 @@ alertBox = (msg) ->
   $("#msg").dialog
     modal: true
     buttons:
-      Ok: =>
+      Ok: ->
         $(this).dialog "close"
 
 # 模仿if (predict) {}，
@@ -71,7 +71,6 @@ redirectToUrl = (url) ->
 note = (msg) ->
   console.log msg  if YD.debug
 
-
 hasBlank = (arr) ->
   isBlank = isBlank = (e) ->
     e is ""
@@ -79,8 +78,8 @@ hasBlank = (arr) ->
   coll = _.map(arr, isBlank)
 
   _.reduce coll, ((a, e) ->
-    a or e
-  ), false
+    a or e),
+    false
 
 #
 # ##  user.html 页面
@@ -91,13 +90,15 @@ YD.user = ->
   photos = YD.conf.photos
   grades = YD.conf.grades
 
-  userInfoAndPhoto = $.when($.ajax(userinfo), $.ajax(photos)).then((a, b) ->
-    _.extend(a[0], b[0])
-  )
-  userInfoAll = $.when($.ajax(userinfo), $.ajax(grades), $.ajax(photos))
-    .then((a, b, c) ->
-      _.extend(a[0], b[0], c[0])
-  )
+  userInfoAndPhoto = $
+    .when $.ajax(userinfo), $.ajax(photos)
+    .then (a, b) ->
+      _.extend a[0], b[0]
+
+  userInfoAll = $
+    .when $.ajax(userinfo), $.ajax(grades), $.ajax(photos)
+    .then (a, b, c) ->
+      _.extend a[0], b[0], c[0]
 
   userShow = ->
     userInfoAndPhoto.then (data) ->
@@ -163,12 +164,11 @@ YD.userBar = userBar = ->
   if YD.userBarShow
     YD.userBarShow
   else
+    userInfoAndPhoto = $
+      .when $.ajax(userinfo), $.ajax(photos)
+      .then (a, b) ->
+        _.extend a[0], b[0]
 
-    # 用户条
-    userInfoAndPhoto = $.when($.ajax(userinfo), $.ajax(photos)).then((a, b) ->
-      d = (_.extend(a[0], b[0])) # 这里如果也用data，会shadow函数onSuccess的输入，虽然不是错误，但避免吧
-      d
-    )
     userInfoAndPhoto.done (data) ->
       new EJS url: "#{YD.conf.tplDir}user_bar.ejs"
         .update "user_bar", data
@@ -285,12 +285,13 @@ YD.startDispache = ->
     promise.done (data) ->
       note data
 
-    # set data to cache
+    # 存后台数据到本地
     promise.done (data) ->
       YD.exam = YD.exam or data
 
     promise.done onSuccess
 
+    # 决定是否定时检查后台数据
     promise.done ->
       # 只有在以下情况都满足时候才不断反复请求后台服务器
       # 1. 没有当前考试
