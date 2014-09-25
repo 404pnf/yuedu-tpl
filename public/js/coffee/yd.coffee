@@ -178,18 +178,21 @@ YD.userBar = userBar = ->
 #
 # 每隔一段时间时间查看一下数据源并重新刷新页面。
 YD.startDispache = ->
-  next = next = ->
-    updateDateText = updateDateText = (d) ->
-      o = _.map(d.upcomingExam, (e) ->
-        if e.isTodayExam
-          e.endTime = ""
-          e.isTodayExam = "今天"
-        else
-          e.isTodayExam = ""
-        e
-      )
-      upcomingExam: o
 
+  # 帮助函数 如果考试预告中有考试是今天的
+  # 就在模版中显示今天两个字
+  updateDateText = updateDateText = (d) ->
+    o = _.map(d.upcomingExam, (e) ->
+      if e.isTodayExam
+        e.endTime = ""
+        e.isTodayExam = "今天"
+      else
+        e.isTodayExam = ""
+      e
+    )
+    { upcomingExam: o }
+
+  next = next = ->
     getExamInfo = $.get(YD.conf.getExamInfo)
 
     promise = getExamInfo.then((data) ->

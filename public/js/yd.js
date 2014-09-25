@@ -166,24 +166,24 @@
   };
 
   YD.startDispache = function() {
-    var next;
-    next = next = function() {
-      var getExamInfo, onFailure, onSuccess, promise, updateDateText;
-      updateDateText = updateDateText = function(d) {
-        var o;
-        o = _.map(d.upcomingExam, function(e) {
-          if (e.isTodayExam) {
-            e.endTime = "";
-            e.isTodayExam = "今天";
-          } else {
-            e.isTodayExam = "";
-          }
-          return e;
-        });
-        return {
-          upcomingExam: o
-        };
+    var next, updateDateText;
+    updateDateText = updateDateText = function(d) {
+      var o;
+      o = _.map(d.upcomingExam, function(e) {
+        if (e.isTodayExam) {
+          e.endTime = "";
+          e.isTodayExam = "今天";
+        } else {
+          e.isTodayExam = "";
+        }
+        return e;
+      });
+      return {
+        upcomingExam: o
       };
+    };
+    next = next = function() {
+      var getExamInfo, onFailure, onSuccess, promise;
       getExamInfo = $.get(YD.conf.getExamInfo);
       promise = getExamInfo.then(function(data) {
         if (data.upcomingExam) {
