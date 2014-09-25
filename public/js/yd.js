@@ -199,19 +199,18 @@
       });
       note(promise);
       onSuccess = onSuccess = function(data) {
-        var ex0up0res0, ex0up0res1, ex0up1res0, ex0up1res1, ex1up0res0, ex1up0res1, examInfo, hasCurrentExam, hasUpcomingExam, haslatestExamResult, render, userExamState;
+        var ex0up0res1, ex0up1res0, ex0up1res1, ex1up0res0, ex1up0res1, examInfo, hasCurrentExam, hasUpcomingExam, haslatestExamResult, render, userExamState;
         examInfo = _.snapshot(data);
         examInfo = _.snapshot(data);
         hasCurrentExam = _.has(examInfo, "currentExam");
         hasUpcomingExam = _.has(examInfo, "upcomingExam");
         haslatestExamResult = _.has(examInfo, "latestExamResult");
         userExamState = _.has(examInfo, "currentExam") && examInfo.currentExam.userExamState;
-        ex1up0res0 = hasCurrentExam && userExamState === "0" && !haslatestExamResult;
-        ex1up0res1 = hasCurrentExam && userExamState === "0" && haslatestExamResult;
+        ex1up0res0 = hasCurrentExam && !haslatestExamResult;
+        ex1up0res1 = hasCurrentExam && haslatestExamResult;
         ex0up1res0 = !hasCurrentExam && hasUpcomingExam && !haslatestExamResult;
         ex0up1res1 = !hasCurrentExam && hasUpcomingExam && haslatestExamResult;
         ex0up0res1 = !hasCurrentExam && !hasUpcomingExam && haslatestExamResult;
-        ex0up0res0 = !hasCurrentExam && !hasUpcomingExam && !haslatestExamResult;
         render = _.partial(renderLocalData, examInfo);
         promise.done(doWhen(ex1up0res0, render("front_content", "start_current.ejs")));
         promise.done(doWhen(ex1up0res1, render("front_content", "start_scores.ejs")));

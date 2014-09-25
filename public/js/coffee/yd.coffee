@@ -226,12 +226,12 @@ YD.startDispache = ->
 
       # 有考试，无上次考试成绩 学生状态模版中判定
       ex1up0res0 = hasCurrentExam and
-        userExamState is "0" and
+        # userExamState is "0" and
         not (haslatestExamResult)
 
       # 有考试，有上次考试成绩， 学生状态在模版中判定
       ex1up0res1 = hasCurrentExam and
-        userExamState  is "0" and
+        # userExamState  isnt "0" and
         haslatestExamResult
 
       # 无考试，有考试预告，无上次考试成绩
@@ -251,9 +251,9 @@ YD.startDispache = ->
 
       # 无考试，无考试预告，无上次成绩
       # 用html的div中默认文字
-      ex0up0res0 = not hasCurrentExam and
-        not hasUpcomingExam and
-        not haslatestExamResult
+      # ex0up0res0 = not hasCurrentExam and
+      #   not hasUpcomingExam and
+      #   not haslatestExamResult
 
       render = _.partial renderLocalData, examInfo
 
