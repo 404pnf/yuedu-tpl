@@ -4,9 +4,7 @@
 
   root = typeof global !== "undefined" && global !== null ? global : window;
 
-  if (root.YD == null) {
-    root.YD = {};
-  }
+  root.YD || (root.YD = {});
 
   YD.debug = false;
 
@@ -19,9 +17,11 @@
     return $("#msg").dialog({
       modal: true,
       buttons: {
-        Ok: function() {
-          return $(this).dialog("close");
-        }
+        Ok: (function(_this) {
+          return function() {
+            return $(_this).dialog("close");
+          };
+        })(this)
       }
     });
   };
@@ -198,8 +198,8 @@
         return data;
       });
       note(promise);
-      onSuccess = onSuccess = function(data) {
-        var ex0up0res1, ex0up1res0, ex0up1res1, ex1up0res0, ex1up0res1, examInfo, hasCurrentExam, hasUpcomingExam, haslatestExamResult, render, userExamState;
+      onSuccess = function(data) {
+        var cssID, ex0up0res1, ex0up1res0, ex0up1res1, ex1up0res0, ex1up0res1, examInfo, hasCurrentExam, hasUpcomingExam, haslatestExamResult, render, userExamState;
         examInfo = _.snapshot(data);
         examInfo = _.snapshot(data);
         hasCurrentExam = _.has(examInfo, "currentExam");
@@ -212,11 +212,12 @@
         ex0up1res1 = !hasCurrentExam && hasUpcomingExam && haslatestExamResult;
         ex0up0res1 = !hasCurrentExam && !hasUpcomingExam && haslatestExamResult;
         render = _.partial(renderLocalData, examInfo);
-        promise.done(doWhen(ex1up0res0, render("front_content", "start_current.ejs")));
-        promise.done(doWhen(ex1up0res1, render("front_content", "start_scores.ejs")));
-        promise.done(doWhen(ex0up1res0, render("front_content", "start_upcoming.ejs")));
-        promise.done(doWhen(ex0up0res1, render("front_content", "start_scores_with_upcoming.ejs")));
-        return promise.done(doWhen(ex0up1res1, render("front_content", "start_scores_with_upcoming.ejs")));
+        cssID = "front_content";
+        promise.done(doWhen(ex1up0res0, render(cssID, "start_current.ejs")));
+        promise.done(doWhen(ex1up0res1, render(cssID, "start_scores.ejs")));
+        promise.done(doWhen(ex0up1res0, render(cssID, "start_upcoming.ejs")));
+        promise.done(doWhen(ex0up0res1, render(cssID, "start_scores_with_upcoming.ejs")));
+        return promise.done(doWhen(ex0up1res1, render(cssID, "start_scores_with_upcoming.ejs")));
       };
       onFailure = function() {
         return note("链接后台失败。");
@@ -235,7 +236,7 @@
           return e.isTodayExam;
         });
         if (shouldRetry) {
-          note("满足刷新条件，页面将会刷新。 " + (new Date) + " ");
+          note("满足刷新条件，页面将会刷新。 " + (new Date()) + " ");
           return setTimeout(next, 180000);
         }
       });

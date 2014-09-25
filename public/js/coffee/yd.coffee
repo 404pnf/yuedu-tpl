@@ -1,6 +1,6 @@
 # ## 唯一暴露出来的全局变量。也是程序的命名空间
 root = global ? window
-root.YD ?= {}
+root.YD or= {}
 YD.debug = false
 
 #
@@ -17,7 +17,7 @@ alertBox = (msg) ->
   $("#msg").dialog
     modal: true
     buttons:
-      Ok: ->
+      Ok: =>
         $(this).dialog "close"
 
 # 模仿if (predict) {}，
@@ -206,7 +206,7 @@ YD.startDispache = ->
 
     note promise
 
-    onSuccess = onSuccess = (data) ->
+    onSuccess = (data) ->
 
       # 将判定抽象为函数
 
@@ -257,24 +257,25 @@ YD.startDispache = ->
 
       render = _.partial renderLocalData, examInfo
 
+      cssID = "front_content"
+
       promise.done doWhen ex1up0res0,
-        render "front_content", "start_current.ejs"
+        render cssID, "start_current.ejs"
 
       promise.done doWhen ex1up0res1,
-          render "front_content", "start_scores.ejs"
+          render cssID, "start_scores.ejs"
 
       promise.done doWhen ex0up1res0,
-       render "front_content", "start_upcoming.ejs"
+       render cssID, "start_upcoming.ejs"
 
       promise.done doWhen ex0up0res1,
-        render "front_content", "start_scores_with_upcoming.ejs"
+        render cssID, "start_scores_with_upcoming.ejs"
 
       promise.done doWhen ex0up1res1,
-        render "front_content", "start_scores_with_upcoming.ejs"
+        render cssID, "start_scores_with_upcoming.ejs"
 
     onFailure = ->
       note "链接后台失败。"
-
 
     promise.fail onFailure
 
@@ -298,7 +299,7 @@ YD.startDispache = ->
         _.find YD.exam.upcomingExam, (e) -> e.isTodayExam
 
       if shouldRetry
-        note "满足刷新条件，页面将会刷新。 #{new Date} "
+        note "满足刷新条件，页面将会刷新。 #{new Date()} "
         setTimeout next, 180000 # 3 mins
 
   # 马上开始第一次调用，实际上浏览器规范中要求最少4ms

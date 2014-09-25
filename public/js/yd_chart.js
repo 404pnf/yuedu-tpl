@@ -23,7 +23,7 @@
             valueField: "value",
             urlField: "url",
             fillAlphas: 1,
-            balloonText: "[[date]]<br> <b><span style='font-size:24px;'>[[value]]</span></b><br> <b><span style='font-size:24px;'>点击查看详情</span></b>"
+            balloonText: "[[date]]<br> <b><span style='font-size: 24px;'>[[value]]</span></b><br> <b><span style='font-size: 24px;'>点击查看详情</span></b>"
           }, {
             type: "line",
             title: "",
@@ -32,7 +32,7 @@
             lineThickness: 6,
             bullet: "round",
             bulletSize: 20,
-            balloonText: "[[date]]<br> <b><span style='font-size:24px;'>[[value]]</span></b><br> <b><span style='font-size:24px;'>点击查看详情</span></b>"
+            balloonText: "[[date]]<br> <b><span style='font-size: 24px;'>[[value]]</span></b><br> <b><span style='font-size: 24px;'>点击查看详情</span></b>"
           }
         ],
         creditsPosition: "top-right"
