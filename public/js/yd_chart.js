@@ -51,7 +51,7 @@
           return e.value;
         });
         highestScore = _.last(sortedScore).value;
-        return $("#chart_info").text("我共参加了" + tryTimes + "次测试。 目前最佳成绩是" + highestScore + "级。");
+        return $("#chart_info").text("我共参加了" + tryTimes + "次测试，目前最佳成绩是" + highestScore + "级。");
       }).fail(onFailure);
     })();
   };
