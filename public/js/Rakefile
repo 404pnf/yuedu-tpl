@@ -15,6 +15,13 @@ end
 
 desc '用jslint和jshint检查js代码'
 task :lint do
-  system('jslint yd*.js')
-  system('jshint yd*.js')
+  # system('jslint yd*.js')
+  # system('jshint yd*.js')
+  system('coffeelint coffee/')
 end
+
+desc '监视coffeescript代码并在有修改的时候自动编译为js'
+task :watch do
+  system('coffee -cwo . coffee &')
+end
+
