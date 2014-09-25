@@ -25,3 +25,7 @@ task :watch do
   system('coffee -cwo . coffee &')
 end
 
+desc '启动server'
+task :server do
+  system('shotgun -p4567 ../../app.rb &')
+end
