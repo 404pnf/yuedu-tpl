@@ -439,8 +439,11 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-19">&#182;</a>
               </div>
-              <p>帮助函数 如果考试预告中有考试是今天的
-就在模版中显示今天两个字</p>
+              <p>帮助函数</p>
+<ol>
+<li>如果考试预告中有考试是今天的就在模版中显示今天两个字</li>
+<li>直接修改了examInfo</li>
+</ol>
 
             </div>
             
@@ -452,8 +455,7 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
       <span class="hljs-keyword">else</span>
         e.isTodayExam = <span class="hljs-string">""</span>
       e
-    )
-    { <span class="hljs-attribute">upcomingExam</span>: o }</pre></div></div>
+    )</pre></div></div>
             
         </li>
         
@@ -464,14 +466,15 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-20">&#182;</a>
               </div>
-              <p>main funciont, might run recursively</p>
+              <p>主函数，可能递归调用</p>
 
             </div>
             
             <div class="content"><div class='highlight'><pre><span class="hljs-function">  <span class="hljs-title">next</span> = -&gt;</span>
-    getExamInfo = $.get(YD.conf.getExamInfo)
+    getExamInfo = $.get YD.conf.getExamInfo
 
-    promise = getExamInfo.<span class="hljs-keyword">then</span>(<span class="hljs-function"><span class="hljs-params">(data)</span> -&gt;</span></pre></div></div>
+    promise = getExamInfo
+      .<span class="hljs-keyword">then</span> <span class="hljs-function"><span class="hljs-params">(data)</span> -&gt;</span></pre></div></div>
             
         </li>
         
@@ -486,15 +489,12 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span> data.upcomingExam
-        _.extend data, updateDateText(data), <span class="hljs-comment"># 直接修改了examInfo</span>
-          <span class="hljs-attribute">hasUpcoming</span>: <span class="hljs-literal">true</span>
-      <span class="hljs-keyword">else</span>
-        _.extend data,
-          <span class="hljs-attribute">hasUpcoming</span>: <span class="hljs-literal">false</span>
-
-      data
-    )
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">if</span> data.upcomingExam
+          _.extend data, updateDateText(data),
+            <span class="hljs-attribute">hasUpcoming</span>: <span class="hljs-literal">true</span> <span class="hljs-comment"># 这是 _.extend 的第二个参数 设定键名hasUpcoming的值</span>
+        <span class="hljs-keyword">else</span>
+          _.extend data,
+            <span class="hljs-attribute">hasUpcoming</span>: <span class="hljs-literal">false</span>
 
     note promise
 <span class="hljs-function">
@@ -547,7 +547,7 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
             </div>
             
             <div class="content"><div class='highlight'><pre>      ex1up0res0 = hasCurrentExam <span class="hljs-keyword">and</span>
-        <span class="hljs-keyword">not</span> (haslatestExamResult)</pre></div></div>
+        <span class="hljs-keyword">not</span> haslatestExamResult</pre></div></div>
             
         </li>
         
@@ -713,12 +713,14 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
 <li>考试预告中有今天的考试
 这样极大减少了不必要的对后台请求</li>
 </ol>
+<p>isTodayExam 的值是 true / false</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      shouldRetry = <span class="hljs-keyword">not</span> _.has(YD.exam, <span class="hljs-string">"currentExam"</span>)<span class="hljs-keyword">and</span>
-        _.has(YD.exam, <span class="hljs-string">"upcomingExam"</span>) <span class="hljs-keyword">and</span>
+            <div class="content"><div class='highlight'><pre>      shouldRetry = <span class="hljs-keyword">not</span> (<span class="hljs-string">"currentExam"</span> <span class="hljs-keyword">of</span> YD.exam) <span class="hljs-keyword">and</span>
+        (<span class="hljs-string">"upcomingExam"</span> <span class="hljs-keyword">of</span> YD.exam) <span class="hljs-keyword">and</span>
         _.find YD.exam.upcomingExam, <span class="hljs-function"><span class="hljs-params">(e)</span> -&gt;</span> e.isTodayExam
+
 
       <span class="hljs-keyword">if</span> shouldRetry
         note <span class="hljs-string">"满足刷新条件，页面将会刷新。 <span class="hljs-subst">#{<span class="hljs-keyword">new</span> Date()}</span> "</span>

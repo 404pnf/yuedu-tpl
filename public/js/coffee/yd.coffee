@@ -197,7 +197,7 @@ YD.startDispache = ->
         # 一次性将数据处理好
         if data.upcomingExam
           _.extend data, updateDateText(data),
-            hasUpcoming: true ＃ 这是 _.extend 的第二个参数 设定键名hasUpcoming的值
+            hasUpcoming: true # 这是 _.extend 的第二个参数 设定键名hasUpcoming的值
         else
           _.extend data,
             hasUpcoming: false
@@ -276,9 +276,12 @@ YD.startDispache = ->
       # 2. 有考试预告
       # 3. 考试预告中有今天的考试
       # 这样极大减少了不必要的对后台请求
+      #
+      # isTodayExam 的值是 true / false
       shouldRetry = not ("currentExam" of YD.exam) and
         ("upcomingExam" of YD.exam) and
-        _.find YD.exam.upcomingExam, (e) -> e.isTodayExam # isTodayExam 的值是 true / false
+        _.find YD.exam.upcomingExam, (e) -> e.isTodayExam
+
 
       if shouldRetry
         note "满足刷新条件，页面将会刷新。 #{new Date()} "

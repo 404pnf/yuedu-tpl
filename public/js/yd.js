@@ -161,7 +161,7 @@
     var next, updateDateText;
     updateDateText = function(d) {
       var o;
-      o = _.map(d.upcomingExam, function(e) {
+      return o = _.map(d.upcomingExam, function(e) {
         if (e.isTodayExam) {
           e.endTime = "";
           e.isTodayExam = "今天";
@@ -170,24 +170,20 @@
         }
         return e;
       });
-      return {
-        upcomingExam: o
-      };
     };
     next = function() {
       var getExamInfo, onFailure, onSuccess, promise;
       getExamInfo = $.get(YD.conf.getExamInfo);
       promise = getExamInfo.then(function(data) {
         if (data.upcomingExam) {
-          _.extend(data, updateDateText(data), {
+          return _.extend(data, updateDateText(data), {
             hasUpcoming: true
           });
         } else {
-          _.extend(data, {
+          return _.extend(data, {
             hasUpcoming: false
           });
         }
-        return data;
       });
       note(promise);
       onSuccess = function(data) {
@@ -223,7 +219,7 @@
       promise.done(onSuccess);
       return promise.done(function() {
         var shouldRetry;
-        shouldRetry = !_.has(YD.exam, "currentExam") && _.has(YD.exam, "upcomingExam") && _.find(YD.exam.upcomingExam, function(e) {
+        shouldRetry = !("currentExam" in YD.exam) && ("upcomingExam" in YD.exam) && _.find(YD.exam.upcomingExam, function(e) {
           return e.isTodayExam;
         });
         if (shouldRetry) {
