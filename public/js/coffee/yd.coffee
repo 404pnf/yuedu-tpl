@@ -132,7 +132,7 @@ YD.user = ->
   do ->
     # 直接显示用户信息和头像
     userShow()
-    # userBarShow()
+    userBarShow()
     #
     # **通过jQuery的delegate监听尚未出现在页面的元素**，因为内容动态从单独模版文件中加载。
     #

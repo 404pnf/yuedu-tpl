@@ -126,6 +126,7 @@
     };
     return (function() {
       userShow();
+      userBarShow();
       $("#user_info").delegate("#user_info_edit", "click", userEdit);
       $("#user_info").delegate("#user_photo_edit", "click", userPhotoEdit);
       $("#user_info").delegate("#user_info_save", "click", userSave);
