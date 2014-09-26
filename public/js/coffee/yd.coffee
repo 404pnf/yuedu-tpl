@@ -92,12 +92,8 @@ YD.user = ->
   photos = YD.conf.photos
   grades = YD.conf.grades
 
-  # 不值得为了省一个年级请求，而初始化两次ajax
-  # userInfoAndPhoto = $
-  #   .when $.ajax(userinfo), $.ajax(photos)
-  #   .then (a, b) ->
-  #     _.extend a[0], b[0]
-
+  # 一次将用户数据全部拿到。这样在编辑用户信息和编辑用户头像页面的时候，
+  # 就不用再发请求了
   userInfoAll = $
     .when $.ajax(userinfo), $.ajax(grades), $.ajax(photos)
     .then (a, b, c) ->
