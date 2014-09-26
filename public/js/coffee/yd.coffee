@@ -103,25 +103,24 @@ YD.user = ->
       _.extend a[0], b[0], c[0]
 
   # partial application to save typing
-  # renderLocalData = (data, cssID, tpl, callback) ->
-  userRender = (tpl, cssID) ->
+  userRender = (tpl, cssID, data) ->
     new EJS(url: YD.conf.tplDir + tpl).update cssID, data
 
   userShow = ->
     userInfoAndPhoto.done (data) ->
-      new EJS(url: YD.conf.tplDir + "user_show.ejs").update "user_info", data
+      userRender "user_show.ejs", "user_info", data
 
   userBarShow = ->
     userInfoAndPhoto.done (data) ->
-      new EJS(url: YD.conf.tplDir + "user_bar.ejs").update "user_bar", data
+      userRender "user_bar.ejs", "user_bar", data
 
   userEdit = ->
     userInfoAll.done (data) ->
-      new EJS(url: YD.conf.tplDir + "user_edit.ejs").update "user_info", data
+     userRender "user_edit.ejs", "user_info", data
 
   userPhotoEdit = ->
     userInfoAndPhoto.done (data) ->
-      new EJS(url: YD.conf.tplDir + "user_photo_edit.ejs").update "user_info", data
+      userRender "user_photo_edit.ejs", "user_info", data
 
   userSave = ->
     postJson YD.conf.userSave, "form#user_info", ->
@@ -154,7 +153,6 @@ YD.user = ->
 
 # ## 渲染用户条
 YD.userBar = ->
-
   # 后台api的地址再YD.conf中配置
   userinfo = YD.conf.userInfo
   photos = YD.conf.photos

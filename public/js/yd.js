@@ -92,37 +92,29 @@
     userInfoAll = $.when($.ajax(userinfo), $.ajax(grades), $.ajax(photos)).then(function(a, b, c) {
       return _.extend(a[0], b[0], c[0]);
     });
-    userRender = function(tpl, cssID) {
+    userRender = function(tpl, cssID, data) {
       return new EJS({
         url: YD.conf.tplDir + tpl
       }).update(cssID, data);
     };
     userShow = function() {
       return userInfoAndPhoto.done(function(data) {
-        return new EJS({
-          url: YD.conf.tplDir + "user_show.ejs"
-        }).update("user_info", data);
+        return userRender("user_show.ejs", "user_info", data);
       });
     };
     userBarShow = function() {
       return userInfoAndPhoto.done(function(data) {
-        return new EJS({
-          url: YD.conf.tplDir + "user_bar.ejs"
-        }).update("user_bar", data);
+        return userRender("user_bar.ejs", "user_bar", data);
       });
     };
     userEdit = function() {
       return userInfoAll.done(function(data) {
-        return new EJS({
-          url: YD.conf.tplDir + "user_edit.ejs"
-        }).update("user_info", data);
+        return userRender("user_edit.ejs", "user_info", data);
       });
     };
     userPhotoEdit = function() {
       return userInfoAndPhoto.done(function(data) {
-        return new EJS({
-          url: YD.conf.tplDir + "user_photo_edit.ejs"
-        }).update("user_info", data);
+        return userRender("user_photo_edit.ejs", "user_info", data);
       });
     };
     userSave = function() {
