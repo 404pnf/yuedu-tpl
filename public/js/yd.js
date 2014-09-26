@@ -9,12 +9,12 @@
   YD.debug = false;
 
   showStatusMsg = function(data) {
-    return alertBox(data.error);
+    alertBox(data.error);
   };
 
   alertBox = function(msg) {
     $("#msg").text(msg);
-    return $("#msg").dialog({
+    $("#msg").dialog({
       modal: true,
       buttons: {
         Ok: function() {
@@ -46,7 +46,7 @@
     onFailure = function(data, status, xhr) {
       return showStatusMsg("" + data + ", " + status + ", " + xhr);
     };
-    return $.post(url, formData).done(onSuccess).fail(onFailure);
+    $.post(url, formData).done(onSuccess).fail(onFailure);
   };
 
   renderLocalData = function(data, cssID, tpl, callback) {
@@ -54,14 +54,14 @@
       var cb, clonedData;
       cb = callback || _.identity;
       clonedData = _.snapshot(_.extend(data, YD.conf));
-      return new EJS({
+      new EJS({
         url: "" + YD.conf.tplDir + tpl
       }).update(cssID, cb(clonedData));
     };
   };
 
   redirectToUrl = function(url) {
-    return window.location.replace(url);
+    window.location.replace(url);
   };
 
   note = function(msg) {
@@ -141,7 +141,7 @@
     userInfoAndPhoto = $.when($.ajax(userinfo), $.ajax(photos)).then(function(a, b) {
       return _.extend(a[0], b[0]);
     });
-    return userInfoAndPhoto.done(function(data) {
+    userInfoAndPhoto.done(function(data) {
       return new EJS({
         url: "" + YD.conf.tplDir + "user_bar.ejs"
       }).update("user_bar", data);
@@ -207,7 +207,7 @@
         return YD.exam = YD.exam || data;
       });
       promise.done(onSuccess);
-      return promise.done(function() {
+      promise.done(function() {
         var shouldRetry;
         shouldRetry = !("currentExam" in YD.exam) && ("upcomingExam" in YD.exam) && _.find(YD.exam.upcomingExam, function(e) {
           return e.isTodayExam;
