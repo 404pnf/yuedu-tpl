@@ -13,7 +13,6 @@ YD.debug = false
 # 错误就是一个字符串，获取方法是读取 data.error 的值
 showStatusMsg = (data) ->
   alertBox data.error
-  return
 
 alertBox = (msg) ->
   $("#msg").text msg
@@ -22,7 +21,6 @@ alertBox = (msg) ->
     buttons:
       Ok: -> # do NOT use fat arror!! or the dialog won't close
         $(this).dialog "close"
-  return
 
 # 模仿if (predict) {}，
 #
@@ -42,6 +40,7 @@ doWhen = (predict, action) ->
 # 5. 如果后台会返回带有"success"键名的对象，表示提交成功，执行回调函数
 postJson = (url, cssID, callback) ->
   formData = data: $(cssID).serializeJSON()
+
   note formData
 
   onSuccess = (data) ->
@@ -56,7 +55,6 @@ postJson = (url, cssID, callback) ->
   $.post url, formData
     .done onSuccess
     .fail onFailure
-  return
 
 # ### 绑定数据到模版并将渲染结果插入到页面
 # 1. SIDE-EFFECT ONLY 做参数使用请包裹在 functin  {} 中
@@ -70,15 +68,12 @@ renderLocalData = (data, cssID, tpl, callback) ->
     clonedData = _.snapshot (_.extend data, YD.conf)
     new EJS url: "#{YD.conf.tplDir}#{tpl}"
       .update cssID, cb(clonedData)
-  return
 
 redirectToUrl = (url) ->
   window.location.replace url
-  return
 
 note = (msg) ->
   console.log msg  if YD.debug
-  return
 
 hasBlank = (arr) ->
   isBlank = (e) ->
@@ -120,7 +115,7 @@ YD.user = ->
 
   userEdit = ->
     userInfoAll.done (data) ->
-      userRender "user_edit.ejs", "user_info", data
+     userRender "user_edit.ejs", "user_info", data
 
   userPhotoEdit = ->
     userInfoAll.done (data) ->
@@ -168,8 +163,7 @@ YD.userBar = ->
 
   userInfoAndPhoto.done (data) ->
     new EJS url: "#{YD.conf.tplDir}user_bar.ejs"
-    .update "user_bar", data
-  return
+      .update "user_bar", data
 
 #
 # ## 用户登录后首页
@@ -286,7 +280,6 @@ YD.startDispache = ->
         note "满足刷新条件，页面将会刷新。 #{new Date()} "
         setTimeout next, 180000 # 3 mins
 
-    return
   # 1. 马上开始第一次调用
   # 1. 实际上浏览器规范中要求最少4ms
   # 1. 用setTimeout调用另一个setTimeout永远不会出现栈溢出
