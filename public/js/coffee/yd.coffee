@@ -42,7 +42,7 @@ postJson = (url, cssID, callback) ->
   note formData
 
   onSuccess = (data) ->
-    if data?. error
+    if "error" of data
       showStatusMsg data
     else
       callback()
@@ -63,8 +63,9 @@ postJson = (url, cssID, callback) ->
 renderLocalData = (data, cssID, tpl, callback) ->
   ->
     cb = callback or _.identity
-    clonedData = _.snapshot _.extend(data, YD.conf)
-    new EJS(url: YD.conf.tplDir + tpl).update cssID, cb(clonedData)
+    clonedData = _.snapshot (_.extend data, YD.conf)
+    new EJS url: "#{YD.conf.tplDir}#{tpl}"
+      .update cssID, cb(clonedData)
 
 redirectToUrl = (url) ->
   window.location.replace url
@@ -73,13 +74,13 @@ note = (msg) ->
   console.log msg  if YD.debug
 
 hasBlank = (arr) ->
-  isBlank = isBlank = (e) ->
+  isBlank = (e) ->
     e is ""
 
   coll = _.map(arr, isBlank)
 
-  _.reduce coll, ((a, e) ->
-    a or e),
+  _.reduce coll,
+    (a, e) -> a or e,
     false
 
 #
