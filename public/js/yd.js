@@ -155,18 +155,17 @@
       return o = _.map(d.upcomingExam, function(e) {
         if (e.isTodayExam) {
           e.endTime = "";
-          e.isTodayExam = "今天";
+          return e.isTodayExam = "今天";
         } else {
-          e.isTodayExam = "";
+          return e.isTodayExam = "";
         }
-        return e;
       });
     };
     next = function() {
       var getExamInfo, onFailure, onSuccess, promise;
       getExamInfo = $.get(YD.conf.getExamInfo);
       promise = getExamInfo.then(function(data) {
-        if (data.upcomingExam) {
+        if ("upcomingExam" in data) {
           return _.extend(data, updateDateText(data), {
             hasUpcoming: true
           });

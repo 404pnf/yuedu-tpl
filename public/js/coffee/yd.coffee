@@ -175,14 +175,12 @@ YD.startDispache = ->
   # 1. 如果考试预告中有考试是今天的就在模版中显示今天两个字
   # 1. 直接修改了examInfo
   updateDateText = (d) ->
-    o = _.map(d.upcomingExam, (e) ->
+    o = _.map d.upcomingExam, (e) ->
       if e.isTodayExam
         e.endTime = ""
         e.isTodayExam = "今天"
       else
         e.isTodayExam = ""
-      e
-    )
 
   # 主函数，可能递归调用
   next = ->
@@ -191,7 +189,7 @@ YD.startDispache = ->
     promise = getExamInfo
       .then (data) ->
         # 一次性将数据处理好
-        if data.upcomingExam
+        if ("upcomingExam" of data)
           _.extend data, updateDateText(data), hasUpcoming: true
         else
           _.extend data, hasUpcoming: false
