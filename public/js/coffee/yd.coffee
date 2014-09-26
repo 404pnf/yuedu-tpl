@@ -102,22 +102,26 @@ YD.user = ->
     .then (a, b, c) ->
       _.extend a[0], b[0], c[0]
 
+  # partial application to save typing
+  # renderLocalData = (data, cssID, tpl, callback) ->
+  userRender = (tpl, cssID) ->
+    new EJS(url: YD.conf.tplDir + tpl).update cssID, data
+
   userShow = ->
-    userInfoAndPhoto.then (data) ->
+    userInfoAndPhoto.done (data) ->
       new EJS(url: YD.conf.tplDir + "user_show.ejs").update "user_info", data
 
   userBarShow = ->
-    userInfoAndPhoto.then (data) ->
+    userInfoAndPhoto.done (data) ->
       new EJS(url: YD.conf.tplDir + "user_bar.ejs").update "user_bar", data
 
   userEdit = ->
-    userInfoAll.then (data) ->
+    userInfoAll.done (data) ->
       new EJS(url: YD.conf.tplDir + "user_edit.ejs").update "user_info", data
 
   userPhotoEdit = ->
-    userInfoAndPhoto.then (data) ->
-      new EJS url: "#{YD.conf.tplDir}user_photo_edit.ejs"
-        .update "user_info", data
+    userInfoAndPhoto.done (data) ->
+      new EJS(url: YD.conf.tplDir + "user_photo_edit.ejs").update "user_info", data
 
   userSave = ->
     postJson YD.conf.userSave, "form#user_info", ->

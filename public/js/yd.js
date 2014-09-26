@@ -37,7 +37,7 @@
     };
     note(formData);
     onSuccess = function(data) {
-      if (data != null ? data.error : void 0) {
+      if ("error" in data) {
         return showStatusMsg(data);
       } else {
         return callback();
@@ -55,7 +55,7 @@
       cb = callback || _.identity;
       clonedData = _.snapshot(_.extend(data, YD.conf));
       return new EJS({
-        url: YD.conf.tplDir + tpl
+        url: "" + YD.conf.tplDir + tpl
       }).update(cssID, cb(clonedData));
     };
   };
@@ -72,17 +72,17 @@
 
   hasBlank = function(arr) {
     var coll, isBlank;
-    isBlank = isBlank = function(e) {
+    isBlank = function(e) {
       return e === "";
     };
     coll = _.map(arr, isBlank);
-    return _.reduce(coll, (function(a, e) {
+    return _.reduce(coll, function(a, e) {
       return a || e;
-    }), false);
+    }, false);
   };
 
   YD.user = function() {
-    var grades, photos, userBarShow, userEdit, userInfoAll, userInfoAndPhoto, userPhotoEdit, userPhotoSave, userSave, userShow, userinfo;
+    var grades, photos, userBarShow, userEdit, userInfoAll, userInfoAndPhoto, userPhotoEdit, userPhotoSave, userRender, userSave, userShow, userinfo;
     userinfo = YD.conf.userInfo;
     photos = YD.conf.photos;
     grades = YD.conf.grades;
@@ -92,31 +92,36 @@
     userInfoAll = $.when($.ajax(userinfo), $.ajax(grades), $.ajax(photos)).then(function(a, b, c) {
       return _.extend(a[0], b[0], c[0]);
     });
+    userRender = function(tpl, cssID) {
+      return new EJS({
+        url: YD.conf.tplDir + tpl
+      }).update(cssID, data);
+    };
     userShow = function() {
-      return userInfoAndPhoto.then(function(data) {
+      return userInfoAndPhoto.done(function(data) {
         return new EJS({
           url: YD.conf.tplDir + "user_show.ejs"
         }).update("user_info", data);
       });
     };
     userBarShow = function() {
-      return userInfoAndPhoto.then(function(data) {
+      return userInfoAndPhoto.done(function(data) {
         return new EJS({
           url: YD.conf.tplDir + "user_bar.ejs"
         }).update("user_bar", data);
       });
     };
     userEdit = function() {
-      return userInfoAll.then(function(data) {
+      return userInfoAll.done(function(data) {
         return new EJS({
           url: YD.conf.tplDir + "user_edit.ejs"
         }).update("user_info", data);
       });
     };
     userPhotoEdit = function() {
-      return userInfoAndPhoto.then(function(data) {
+      return userInfoAndPhoto.done(function(data) {
         return new EJS({
-          url: "" + YD.conf.tplDir + "user_photo_edit.ejs"
+          url: YD.conf.tplDir + "user_photo_edit.ejs"
         }).update("user_info", data);
       });
     };
