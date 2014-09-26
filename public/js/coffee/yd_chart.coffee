@@ -45,7 +45,7 @@ root.ydMakeChart = ->
     alert "暂时无法获取数据。请稍后再试。会向机房老师反应。"
 
   # 请求数据并将图标显示在页面
-  (->
+  do ->
     $.get("/resultsController/loginUser")
       .done (d) ->
         drawChart d
@@ -56,4 +56,4 @@ root.ydMakeChart = ->
         $("#chart_info").text "我共参加了#{tryTimes}次测试。
           目前最佳成绩是#{highestScore}级。"
       .fail onFailure
-  )()
+

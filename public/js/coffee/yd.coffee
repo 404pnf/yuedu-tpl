@@ -66,7 +66,6 @@ renderLocalData = (data, cssID, tpl, callback) ->
     clonedData = _.snapshot _.extend(data, YD.conf)
     new EJS(url: YD.conf.tplDir + tpl).update cssID, cb(clonedData)
 
-#
 redirectToUrl = (url) ->
   window.location.replace url
 
@@ -127,16 +126,13 @@ YD.user = ->
     postJson YD.conf.userSave, "form#user_photo", ->
       redirectToUrl YD.conf.userHomeUrl
 
-  (->
-
+  do ->
     # 直接显示用户信息和头像
     userShow()
     userBarShow()
-
     #
     # 通过jQuery的delegate监听尚未出现在页面的元素
     #
-
     # 编辑用户
     $("#user_info").delegate "#user_info_edit", "click", userEdit
 
@@ -149,13 +145,8 @@ YD.user = ->
     # 保存头像
     $("#user_info").delegate "#user_photo_save", "click", userPhotoSave
 
-    # 监听取消编辑用户信息和取消编辑用户头像信息的按钮；
-    # $("#user_info").delegate "#user_cancel_edit", "click", ->
-    #   redirectToUrl YD.conf.userHomeUrl
 
-  )()
-
-# 渲染用户条
+# ## 渲染用户条
 YD.userBar = ->
 
   # 后台api的地址再YD.conf中配置
@@ -174,7 +165,8 @@ YD.userBar = ->
 #
 # ## 用户登录后首页
 #
-# 每隔一段时间时间查看一下数据源并重新刷新页面。
+# 1. 根据后台的数据决定显示哪个模版
+# 2. 如果无当前考试，且考试预告有今天的考试，定期刷后台，当有当前考试的时候，显示考试
 YD.startDispache = ->
   # 帮助函数
   # 1. 如果考试预告中有考试是今天的就在模版中显示今天两个字
@@ -205,42 +197,42 @@ YD.startDispache = ->
 
     onSuccess = (data) ->
 
-      # 将从后台获得的数据（从onSuccess函数的参数传进来）绑定到局部变量
+      # 将从后台获得的数据（从onSuccess函数的参数传进来）绑定到局部变量。
       examInfo = _.snapshot data
 
-      # 将判定抽象为函数
+      # 将判定抽象为函数。
       hasCurrentExam =  "currentExam" of examInfo
       hasUpcomingExam = "upcomingExam" of examInfo
       haslatestExamResult = "latestExamResult" of examInfo
       userExamState = examInfo?.currentExam?.userExamState
 
-      # 有考试，无上次考试成绩 学生状态模版中判定
+      # 有考试，无上次考试成绩 学生状态模版中判定。
       ex1up0res0 = hasCurrentExam and
         not haslatestExamResult
 
-      # 有考试，有上次考试成绩， 学生状态在模版中判定
+      # 有考试，有上次考试成绩， 学生状态在模版中判定。
       ex1up0res1 = hasCurrentExam and
         haslatestExamResult
 
-      # 无考试，有考试预告，无上次考试成绩
+      # 无考试，有考试预告，无上次考试成绩。
       ex0up1res0 = not hasCurrentExam and
         hasUpcomingExam and
         not haslatestExamResult
 
-      # 无考试，有考试预告，有上次考试成绩
+      # 无考试，有考试预告，有上次考试成绩。
       ex0up1res1 = not (hasCurrentExam) and
         hasUpcomingExam and
         haslatestExamResult
 
-      # 无考试，无考试预告，有上次考试成绩
+      # 无考试，无考试预告，有上次考试成绩。
       ex0up0res1 = not (hasCurrentExam) and
         not hasUpcomingExam and
         haslatestExamResult
 
-      # 无考试，无考试预告，无上次成绩
-      # 用html的div中默认文字
+      # 无考试，无考试预告，无上次成绩，
+      # 用html的div中默认文字。
 
-      # partial function to save typing
+      # partial function to save typing.
       cssID = "front_content"
       render = _.partial renderLocalData, examInfo, cssID
 
