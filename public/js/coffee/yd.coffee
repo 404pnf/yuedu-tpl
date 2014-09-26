@@ -115,7 +115,7 @@ YD.user = ->
 
   userEdit = ->
     userInfoAll.done (data) ->
-     userRender "user_edit.ejs", "user_info", data
+      userRender "user_edit.ejs", "user_info", data
 
   userPhotoEdit = ->
     userInfoAll.done (data) ->

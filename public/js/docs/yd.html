@@ -278,7 +278,7 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
 <span class="hljs-function">
   <span class="hljs-title">userEdit</span> = -&gt;</span>
     userInfoAll.done <span class="hljs-function"><span class="hljs-params">(data)</span> -&gt;</span>
-     userRender <span class="hljs-string">"user_edit.ejs"</span>, <span class="hljs-string">"user_info"</span>, data
+      userRender <span class="hljs-string">"user_edit.ejs"</span>, <span class="hljs-string">"user_info"</span>, data
 <span class="hljs-function">
   <span class="hljs-title">userPhotoEdit</span> = -&gt;</span>
     userInfoAll.done <span class="hljs-function"><span class="hljs-params">(data)</span> -&gt;</span>
@@ -460,14 +460,12 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
             </div>
             
             <div class="content"><div class='highlight'><pre><span class="hljs-function">  <span class="hljs-title">updateDateText</span> = <span class="hljs-params">(d)</span> -&gt;</span>
-    o = _.map(d.upcomingExam, <span class="hljs-function"><span class="hljs-params">(e)</span> -&gt;</span>
+    o = _.map d.upcomingExam, <span class="hljs-function"><span class="hljs-params">(e)</span> -&gt;</span>
       <span class="hljs-keyword">if</span> e.isTodayExam
         e.endTime = <span class="hljs-string">""</span>
         e.isTodayExam = <span class="hljs-string">"今天"</span>
       <span class="hljs-keyword">else</span>
-        e.isTodayExam = <span class="hljs-string">""</span>
-      e
-    )</pre></div></div>
+        e.isTodayExam = <span class="hljs-string">""</span></pre></div></div>
             
         </li>
         
@@ -501,7 +499,7 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">if</span> data.upcomingExam
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">if</span> (<span class="hljs-string">"upcomingExam"</span> <span class="hljs-keyword">of</span> data)
           _.extend data, updateDateText(data), <span class="hljs-attribute">hasUpcoming</span>: <span class="hljs-literal">true</span>
         <span class="hljs-keyword">else</span>
           _.extend data, <span class="hljs-attribute">hasUpcoming</span>: <span class="hljs-literal">false</span>
