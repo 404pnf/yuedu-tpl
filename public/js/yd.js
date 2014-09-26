@@ -9,12 +9,12 @@
   YD.debug = false;
 
   showStatusMsg = function(data) {
-    return alertBox(data.error);
+    alertBox(data.error);
   };
 
   alertBox = function(msg) {
     $("#msg").text(msg);
-    return $("#msg").dialog({
+    $("#msg").dialog({
       modal: true,
       buttons: {
         Ok: function() {
@@ -50,23 +50,23 @@
   };
 
   renderLocalData = function(data, cssID, tpl, callback) {
-    return function() {
+    (function() {
       var cb, clonedData;
       cb = callback || _.identity;
       clonedData = _.snapshot(_.extend(data, YD.conf));
       return new EJS({
         url: "" + YD.conf.tplDir + tpl
       }).update(cssID, cb(clonedData));
-    };
+    });
   };
 
   redirectToUrl = function(url) {
-    return window.location.replace(url);
+    window.location.replace(url);
   };
 
   note = function(msg) {
     if (YD.debug) {
-      return console.log(msg);
+      console.log(msg);
     }
   };
 

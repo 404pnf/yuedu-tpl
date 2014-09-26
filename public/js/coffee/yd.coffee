@@ -13,6 +13,7 @@ YD.debug = false
 # 错误就是一个字符串，获取方法是读取 data.error 的值
 showStatusMsg = (data) ->
   alertBox data.error
+  return
 
 alertBox = (msg) ->
   $("#msg").text msg
@@ -21,6 +22,7 @@ alertBox = (msg) ->
     buttons:
       Ok: -> # do NOT use fat arror!! or the dialog won't close
         $(this).dialog "close"
+  return
 
 # 模仿if (predict) {}，
 #
@@ -70,12 +72,15 @@ renderLocalData = (data, cssID, tpl, callback) ->
     clonedData = _.snapshot (_.extend data, YD.conf)
     new EJS url: "#{YD.conf.tplDir}#{tpl}"
       .update cssID, cb(clonedData)
+  return
 
 redirectToUrl = (url) ->
   window.location.replace url
+  return
 
 note = (msg) ->
   console.log msg  if YD.debug
+  return
 
 hasBlank = (arr) ->
   isBlank = (e) ->
