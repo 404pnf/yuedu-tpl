@@ -82,13 +82,10 @@
   };
 
   YD.user = function() {
-    var grades, photos, userBarShow, userEdit, userInfoAll, userInfoAndPhoto, userPhotoEdit, userPhotoSave, userRender, userSave, userShow, userinfo;
+    var grades, photos, userBarShow, userEdit, userInfoAll, userPhotoEdit, userPhotoSave, userRender, userSave, userShow, userinfo;
     userinfo = YD.conf.userInfo;
     photos = YD.conf.photos;
     grades = YD.conf.grades;
-    userInfoAndPhoto = $.when($.ajax(userinfo), $.ajax(photos)).then(function(a, b) {
-      return _.extend(a[0], b[0]);
-    });
     userInfoAll = $.when($.ajax(userinfo), $.ajax(grades), $.ajax(photos)).then(function(a, b, c) {
       return _.extend(a[0], b[0], c[0]);
     });
@@ -98,12 +95,12 @@
       }).update(cssID, data);
     };
     userShow = function() {
-      return userInfoAndPhoto.done(function(data) {
+      return userInfoAll.done(function(data) {
         return userRender("user_show.ejs", "user_info", data);
       });
     };
     userBarShow = function() {
-      return userInfoAndPhoto.done(function(data) {
+      return userInfoAll.done(function(data) {
         return userRender("user_bar.ejs", "user_bar", data);
       });
     };
@@ -113,7 +110,7 @@
       });
     };
     userPhotoEdit = function() {
-      return userInfoAndPhoto.done(function(data) {
+      return userInfoAll.done(function(data) {
         return userRender("user_photo_edit.ejs", "user_info", data);
       });
     };
@@ -129,7 +126,6 @@
     };
     return (function() {
       userShow();
-      userBarShow();
       $("#user_info").delegate("#user_info_edit", "click", userEdit);
       $("#user_info").delegate("#user_photo_edit", "click", userPhotoEdit);
       $("#user_info").delegate("#user_info_save", "click", userSave);

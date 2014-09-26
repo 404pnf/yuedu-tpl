@@ -92,10 +92,11 @@ YD.user = ->
   photos = YD.conf.photos
   grades = YD.conf.grades
 
-  userInfoAndPhoto = $
-    .when $.ajax(userinfo), $.ajax(photos)
-    .then (a, b) ->
-      _.extend a[0], b[0]
+  # 不值得为了省一个年级请求，而初始化两次ajax
+  # userInfoAndPhoto = $
+  #   .when $.ajax(userinfo), $.ajax(photos)
+  #   .then (a, b) ->
+  #     _.extend a[0], b[0]
 
   userInfoAll = $
     .when $.ajax(userinfo), $.ajax(grades), $.ajax(photos)
@@ -107,11 +108,11 @@ YD.user = ->
     new EJS(url: YD.conf.tplDir + tpl).update cssID, data
 
   userShow = ->
-    userInfoAndPhoto.done (data) ->
+    userInfoAll.done (data) ->
       userRender "user_show.ejs", "user_info", data
 
   userBarShow = ->
-    userInfoAndPhoto.done (data) ->
+    userInfoAll.done (data) ->
       userRender "user_bar.ejs", "user_bar", data
 
   userEdit = ->
@@ -119,7 +120,7 @@ YD.user = ->
      userRender "user_edit.ejs", "user_info", data
 
   userPhotoEdit = ->
-    userInfoAndPhoto.done (data) ->
+    userInfoAll.done (data) ->
       userRender "user_photo_edit.ejs", "user_info", data
 
   userSave = ->
@@ -133,7 +134,7 @@ YD.user = ->
   do ->
     # 直接显示用户信息和头像
     userShow()
-    userBarShow()
+    # userBarShow()
     #
     # **通过jQuery的delegate监听尚未出现在页面的元素**，因为内容动态从单独模版文件中加载。
     #
