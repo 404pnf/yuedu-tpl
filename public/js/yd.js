@@ -46,7 +46,7 @@
     onFailure = function(data, status, xhr) {
       return showStatusMsg("" + data + ", " + status + ", " + xhr);
     };
-    return $.post(url, formData).done(onSuccess).fail(onFailure);
+    $.post(url, formData).done(onSuccess).fail(onFailure);
   };
 
   renderLocalData = function(data, cssID, tpl, callback) {
@@ -194,7 +194,7 @@
         promise.done(doWhen(ex1up0res1, render("start_scores.ejs")));
         promise.done(doWhen(ex0up1res0, render("start_upcoming.ejs")));
         promise.done(doWhen(ex0up0res1, render("start_scores_with_upcoming.ejs")));
-        return promise.done(doWhen(ex0up1res1, render("start_scores_with_upcoming.ejs")));
+        promise.done(doWhen(ex0up1res1, render("start_scores_with_upcoming.ejs")));
       };
       onFailure = function() {
         return note("链接后台失败。");

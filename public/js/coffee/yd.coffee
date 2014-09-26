@@ -56,6 +56,8 @@ postJson = (url, cssID, callback) ->
     .done onSuccess
     .fail onFailure
 
+  return
+
 # ### 绑定数据到模版并将渲染结果插入到页面
 # 1. SIDE-EFFECT ONLY 做参数使用请包裹在 functin  {} 中
 # 2. 从局部变量获得数据，绑定模版，插入到html页面中。
@@ -246,6 +248,8 @@ YD.startDispache = ->
       promise.done doWhen ex0up0res1, render "start_scores_with_upcoming.ejs"
 
       promise.done doWhen ex0up1res1, render "start_scores_with_upcoming.ejs"
+
+      return # 现形声明此函数求值后应该是undefined，我们只用副作用
 
     onFailure = ->
       note "链接后台失败。"
