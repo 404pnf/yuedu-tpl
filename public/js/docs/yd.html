@@ -144,6 +144,7 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
             
             <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-title">postJson</span> = <span class="hljs-params">(url, cssID, callback)</span> -&gt;</span>
   formData = <span class="hljs-attribute">data</span>: $(cssID).serializeJSON()
+
   note formData
 <span class="hljs-function">
   <span class="hljs-title">onSuccess</span> = <span class="hljs-params">(data)</span> -&gt;</span>
@@ -158,6 +159,7 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
   $.post url, formData
     .done onSuccess
     .fail onFailure
+
   <span class="hljs-keyword">return</span></pre></div></div>
             
         </li>
@@ -426,7 +428,7 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
 
   userInfoAndPhoto.done <span class="hljs-function"><span class="hljs-params">(data)</span> -&gt;</span>
     <span class="hljs-keyword">new</span> EJS <span class="hljs-attribute">url</span>: <span class="hljs-string">"<span class="hljs-subst">#{YD.conf.tplDir}</span>user_bar.ejs"</span>
-    .update <span class="hljs-string">"user_bar"</span>, data</pre></div></div>
+      .update <span class="hljs-string">"user_bar"</span>, data</pre></div></div>
             
         </li>
         

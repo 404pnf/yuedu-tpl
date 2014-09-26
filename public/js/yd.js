@@ -141,7 +141,7 @@
     userInfoAndPhoto = $.when($.ajax(userinfo), $.ajax(photos)).then(function(a, b) {
       return _.extend(a[0], b[0]);
     });
-    return userInfoAndPhoto.done(function(data) {
+    userInfoAndPhoto.done(function(data) {
       return new EJS({
         url: "" + YD.conf.tplDir + "user_bar.ejs"
       }).update("user_bar", data);
@@ -194,7 +194,7 @@
         promise.done(doWhen(ex1up0res1, render("start_scores.ejs")));
         promise.done(doWhen(ex0up1res0, render("start_upcoming.ejs")));
         promise.done(doWhen(ex0up0res1, render("start_scores_with_upcoming.ejs")));
-        promise.done(doWhen(ex0up1res1, render("start_scores_with_upcoming.ejs")));
+        return promise.done(doWhen(ex0up1res1, render("start_scores_with_upcoming.ejs")));
       };
       onFailure = function() {
         return note("链接后台失败。");
@@ -207,7 +207,7 @@
         return YD.exam = YD.exam || data;
       });
       promise.done(onSuccess);
-      return promise.done(function() {
+      promise.done(function() {
         var shouldRetry;
         shouldRetry = !("currentExam" in YD.exam) && ("upcomingExam" in YD.exam) && _.find(YD.exam.upcomingExam, function(e) {
           return e.isTodayExam;

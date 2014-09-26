@@ -169,6 +169,7 @@ YD.userBar = ->
   userInfoAndPhoto.done (data) ->
     new EJS url: "#{YD.conf.tplDir}user_bar.ejs"
     .update "user_bar", data
+  return
 
 #
 # ## 用户登录后首页
@@ -252,8 +253,6 @@ YD.startDispache = ->
 
       promise.done doWhen ex0up1res1, render "start_scores_with_upcoming.ejs"
 
-      return # 现形声明此函数求值后应该是undefined，我们只用副作用
-
     onFailure = ->
       note "链接后台失败。"
 
@@ -287,6 +286,7 @@ YD.startDispache = ->
         note "满足刷新条件，页面将会刷新。 #{new Date()} "
         setTimeout next, 180000 # 3 mins
 
+    return
   # 1. 马上开始第一次调用
   # 1. 实际上浏览器规范中要求最少4ms
   # 1. 用setTimeout调用另一个setTimeout永远不会出现栈溢出
