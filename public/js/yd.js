@@ -136,10 +136,7 @@
       $("#user_info").delegate("#user_info_edit", "click", userEdit);
       $("#user_info").delegate("#user_photo_edit", "click", userPhotoEdit);
       $("#user_info").delegate("#user_info_save", "click", userSave);
-      $("#user_info").delegate("#user_photo_save", "click", userPhotoSave);
-      return $("#user_info").delegate("#user_cancel_edit", "click", function() {
-        return redirectToUrl(YD.conf.userHomeUrl);
-      });
+      return $("#user_info").delegate("#user_photo_save", "click", userPhotoSave);
     })();
   };
 

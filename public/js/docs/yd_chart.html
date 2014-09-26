@@ -115,7 +115,7 @@ root.y<span class="hljs-function"><span class="hljs-title">dMakeChart</span> = -
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  (<span class="hljs-function">-&gt;</span>
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">do</span> <span class="hljs-function">-&gt;</span>
     $.get(<span class="hljs-string">"/resultsController/loginUser"</span>)
       .done <span class="hljs-function"><span class="hljs-params">(d)</span> -&gt;</span>
         drawChart d
@@ -125,8 +125,7 @@ root.y<span class="hljs-function"><span class="hljs-title">dMakeChart</span> = -
         highestScore = _.last(sortedScore).value
         $(<span class="hljs-string">"#chart_info"</span>).text <span class="hljs-string">"我共参加了<span class="hljs-subst">#{tryTimes}</span>次测试。
           目前最佳成绩是<span class="hljs-subst">#{highestScore}</span>级。"</span>
-      .fail onFailure
-  )()</pre></div></div>
+      .fail onFailure</pre></div></div>
             
         </li>
         
