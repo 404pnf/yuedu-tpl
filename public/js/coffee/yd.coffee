@@ -131,8 +131,9 @@ YD.user = ->
     userShow()
     userBarShow()
     #
-    # 通过jQuery的delegate监听尚未出现在页面的元素
+    # **通过jQuery的delegate监听尚未出现在页面的元素**，因为内容动态从单独模版文件中加载。
     #
+
     # 编辑用户
     $("#user_info").delegate "#user_info_edit", "click", userEdit
 
