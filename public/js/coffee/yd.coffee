@@ -1,7 +1,9 @@
 # ## 唯一的全局变量
 # 也是程序的命名空间
 root = global ? window
+
 root.YD or= {}
+
 YD.debug = false
 
 #
