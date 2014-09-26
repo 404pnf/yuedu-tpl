@@ -150,8 +150,8 @@ YD.user = ->
     $("#user_info").delegate "#user_photo_save", "click", userPhotoSave
 
     # 监听取消编辑用户信息和取消编辑用户头像信息的按钮；
-    $("#user_info").delegate "#user_cancel_edit", "click", ->
-      redirectToUrl YD.conf.userHomeUrl
+    # $("#user_info").delegate "#user_cancel_edit", "click", ->
+    #   redirectToUrl YD.conf.userHomeUrl
 
   )()
 
