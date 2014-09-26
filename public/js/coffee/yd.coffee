@@ -42,7 +42,6 @@ doWhen = (predict, action) ->
 # 5. 如果后台会返回带有"success"键名的对象，表示提交成功，执行回调函数
 postJson = (url, cssID, callback) ->
   formData = data: $(cssID).serializeJSON()
-
   note formData
 
   onSuccess = (data) ->
@@ -57,7 +56,6 @@ postJson = (url, cssID, callback) ->
   $.post url, formData
     .done onSuccess
     .fail onFailure
-
   return
 
 # ### 绑定数据到模版并将渲染结果插入到页面
@@ -170,7 +168,7 @@ YD.userBar = ->
 
   userInfoAndPhoto.done (data) ->
     new EJS url: "#{YD.conf.tplDir}user_bar.ejs"
-      .update "user_bar", data
+    .update "user_bar", data
 
 #
 # ## 用户登录后首页
