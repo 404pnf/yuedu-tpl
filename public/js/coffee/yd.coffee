@@ -34,31 +34,50 @@ doWhen = (predict, action) ->
 # ### 通用的 ajax promise 的回调函数
 # 1. 如果后台返回带"error"的键名的对象，显示错误并停止提交，停留在当前页面
 # 1. 如果后台会返回带有"success"键名的对象，表示提交成功，执行回调函数
-onSuccess = (data) ->
-  if "error" of data
-    showStatusMsg data
-  else
-    callback()
 
-onFailure = (data, status, xhr) ->
-  showStatusMsg "#{data}, #{status}, #{xhr}"
 
 # ### 提交表单内容到后台
 #
 # 1. 从表单获取数据
 # 1. 用jquery插件将数据转为json
 # 1. 提交json给后台api
-# 1. 调用通用的ajax回调函数
+# 1. 调用回调函数
+#
 
+
+# postJson 适用表单数据可以直接提交的情况。
 postJson = (url, cssID, callback) ->
   formData = data: $(cssID).serializeJSON()
-
   note formData
+
+  onSuccess = (data) ->
+    if "error" of data
+      showStatusMsg data
+    else
+      callback()
+  onFailure = (data, status, xhr) ->
+    showStatusMsg "#{data}, #{status}, #{xhr}"
 
   $.post url, formData
     .done onSuccess
     .fail onFailure
-  return
+
+# postHelper 适用表单数据需要处理一下才能提交的情况。
+postHelper = (url, data, callback) ->
+  note data
+  onSuccess = (data) ->
+    if "error" of data
+      showStatusMsg data
+    else
+      callback()
+  onFailure = (data, status, xhr) ->
+    showStatusMsg "#{data}, #{status}, #{xhr}"
+
+  $.post url, data
+    .done onSuccess
+    .fail onFailure
+
+
 
 # ### 绑定数据到模版并将渲染结果插入到页面
 # 1. SIDE-EFFECT ONLY 做参数使用请包裹在 functin  {} 中
@@ -81,16 +100,17 @@ redirectToUrl = (url) ->
 note = (msg) ->
   console.log msg  if YD.debug
 
+# ### 检查表单数据是否为空
 # 输入：input 框 cssID 的数组。
 #
 # 输出： true / false
 #
 # 副作用：所有为空的输入框会被加上 "error" 这个css类
 hasBlank = (arrayOfCssElement) ->
+  notValid = false
+
   isBlank = (e) ->
     e is ""
-
-  notValid = false
 
   for e in arrayOfCssElement
     if (isBlank $(e).val())
@@ -99,7 +119,7 @@ hasBlank = (arrayOfCssElement) ->
 
   notValid
 
-#
+
 # ## 用户页面
 #
 # 1. 后台api的地址在YD.conf中配置
@@ -109,7 +129,6 @@ YD.user = ->
   userinfo = YD.conf.userInfo
   photos = YD.conf.photos
   grades = YD.conf.grades
-
 
   userInfoAll = $
     .when $.ajax(userinfo), $.ajax(grades), $.ajax(photos)
@@ -334,9 +353,7 @@ YD.userLogin = ->
         password: $.md5(password)
         yz: yz
       }
-      $.post YD.conf.userLogin, data
-        .done onSuccess
-        .fail onFailure
+      postHelper YD.conf.userLogin, data, -> redirectToUrl(YD.conf.siteHomeUrl)
 
 #
 # ## 重设密码页面
@@ -374,6 +391,4 @@ YD.resetPass = ->
         newPass: $.md5(newPass)
         newPassConfirm: $.md5(newPassConfirm)
       }
-      $.post YD.conf.userResetPass, data
-        .done onSuccess
-        .fail onFailure
+      postHelper YD.conf.userResetPass, data,  -> redirectToUrl(YD.conf.userHomeUrl)
