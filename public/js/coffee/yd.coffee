@@ -56,15 +56,6 @@ postJson = (url, cssID, callback) ->
 
   note formData
 
-  # onSuccess = (data) ->
-  #   if "error" of data
-  #     showStatusMsg data
-  #   else
-  #     callback()
-
-  # onFailure = (data, status, xhr) ->
-  #   showStatusMsg "#{data}, #{status}, #{xhr}"
-
   $.post url, formData
     .done onSuccess
     .fail onFailure
@@ -339,10 +330,6 @@ YD.userLogin = ->
         .done onSuccess
         .fail onFailure
 
-      # $("#password").val $.md5(password)
-      # postJson YD.conf.userLogin, "#login", ->
-      #   redirectToUrl YD.conf.siteHomeUrl
-
 #
 # ## 重设密码页面
 #
@@ -380,10 +367,3 @@ YD.resetPass = ->
       $.post YD.conf.userResetPass, data
         .done onSuccess
         .fail onFailure
-
-      # $("#new_pass").val $.md5(newPass)
-      # $("#old_pass").val $.md5(oldPass)
-      # $("#new_pass_confirm").val $.md5(newPassConfirm)
-
-      # postJson YD.conf.userResetPass, "#reset_pass_form", ->
-      #   redirectToUrl YD.conf.userHomeUrl
