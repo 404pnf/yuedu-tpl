@@ -86,7 +86,7 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <p>错误就是一个字符串，获取方法是读取 data.error 的值</p>
+              <p>与后台约定，错误就是一个字符串，获取方法是读取ajax返回对象的error属性。</p>
 
             </div>
             
@@ -112,9 +112,9 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
-              <p>模仿if (predict) {}，</p>
-<p>或者说模仿scheme中的when。</p>
-<p>注意：action必须是一个返回函数的函数，这样才能延迟执行。
+              <p>简化 if (predict) {}，
+或者说模仿scheme中的when。
+注意：action必须是一个返回函数的函数，这样才能延迟执行。
 可以用 -&gt; 包裹一下，防止action作为参数时被立即求值。</p>
 
             </div>
@@ -465,10 +465,7 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
             </div>
             
             <div class="content"><div class='highlight'><pre><span class="hljs-function">  <span class="hljs-title">next</span> = -&gt;</span>
-    getExamInfo = $.get YD.conf.getExamInfo
-
-    promise = getExamInfo
-      .<span class="hljs-keyword">then</span> <span class="hljs-function"><span class="hljs-params">(data)</span> -&gt;</span></pre></div></div>
+    getExamInfo = $.get YD.conf.getExamInfo</pre></div></div>
             
         </li>
         
@@ -483,7 +480,9 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">if</span> (<span class="hljs-string">"upcomingExam"</span> <span class="hljs-keyword">of</span> data)
+            <div class="content"><div class='highlight'><pre>    promise = getExamInfo
+      .<span class="hljs-keyword">then</span> <span class="hljs-function"><span class="hljs-params">(data)</span> -&gt;</span>
+        <span class="hljs-keyword">if</span> (<span class="hljs-string">"upcomingExam"</span> <span class="hljs-keyword">of</span> data)
           _.extend data, updateDateText(data), <span class="hljs-attribute">hasUpcoming</span>: <span class="hljs-literal">true</span>
         <span class="hljs-keyword">else</span>
           _.extend data, <span class="hljs-attribute">hasUpcoming</span>: <span class="hljs-literal">false</span>
@@ -500,7 +499,8 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-21">&#182;</a>
               </div>
-              <ol>
+              <p>ajax成功获得数据后的回调</p>
+<ol>
 <li>将从后台获得的数据（从onSuccess函数的参数传进来）绑定到局部变量。</li>
 <li>将判定抽象为函数。</li>
 <li>将所有可能的情况都加入到promise.done doWhen和判定会选择执行哪个</li>
@@ -639,8 +639,8 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
 
       promise.done doWhen ex0up1res1, render <span class="hljs-string">"start_scores_with_upcoming.ejs"</span>
 <span class="hljs-function">
-    <span class="hljs-title">onFailure</span> = -&gt;</span>
-      note <span class="hljs-string">"链接后台失败。"</span></pre></div></div>
+    <span class="hljs-title">onFailure</span> = <span class="hljs-params">(data, status, xhr)</span> -&gt;</span>
+      showStatusMsg <span class="hljs-string">"<span class="hljs-subst">#{data}</span>, <span class="hljs-subst">#{status}</span>, <span class="hljs-subst">#{xhr}</span>"</span></pre></div></div>
             
         </li>
         
@@ -652,13 +652,22 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
                 <a class="pilcrow" href="#section-29">&#182;</a>
               </div>
               <h3 id="-">获得数据后执行的函数</h3>
+<ol>
+<li>存后台数据到本地</li>
+<li>决定是否循环检查后台数据</li>
+</ol>
 
             </div>
             
             <div class="content"><div class='highlight'><pre>    promise.fail onFailure
 
     promise.done <span class="hljs-function"><span class="hljs-params">(data)</span> -&gt;</span>
-      note data <span class="hljs-comment"># for debugging</span></pre></div></div>
+      note data <span class="hljs-comment"># for debugging</span>
+
+    promise.done <span class="hljs-function"><span class="hljs-params">(data)</span> -&gt;</span>
+      YD.exam = YD.exam <span class="hljs-keyword">or</span> data
+
+    promise.done onSuccess</pre></div></div>
             
         </li>
         
@@ -669,14 +678,27 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-30">&#182;</a>
               </div>
-              <p>存后台数据到本地</p>
+              <p><strong>决定是否循环检查后台数据</strong></p>
+<p>只有在以下情况都满足时候才反复请求后台服务器</p>
+<ol>
+<li>没有当前考试</li>
+<li>有考试预告</li>
+<li>考试预告中有今天的考试
+这样极大减少了不必要的对后台请求</li>
+</ol>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    promise.done <span class="hljs-function"><span class="hljs-params">(data)</span> -&gt;</span>
-      YD.exam = YD.exam <span class="hljs-keyword">or</span> data
+            <div class="content"><div class='highlight'><pre>    promise.done <span class="hljs-function">-&gt;</span>
+      shouldRetry = <span class="hljs-keyword">not</span> (<span class="hljs-string">"currentExam"</span> <span class="hljs-keyword">of</span> YD.exam) <span class="hljs-keyword">and</span>
+        (<span class="hljs-string">"upcomingExam"</span> <span class="hljs-keyword">of</span> YD.exam) <span class="hljs-keyword">and</span>
+        _.find YD.exam.upcomingExam, <span class="hljs-function"><span class="hljs-params">(e)</span> -&gt;</span> e.isTodayExam <span class="hljs-comment"># isTodayExam 的值是 true / false</span>
 
-    promise.done onSuccess</pre></div></div>
+      <span class="hljs-keyword">if</span> shouldRetry
+        note <span class="hljs-string">"满足刷新条件，页面将会刷新。 <span class="hljs-subst">#{<span class="hljs-keyword">new</span> Date()}</span> "</span>
+        setTimeout next, <span class="hljs-number">180000</span> <span class="hljs-comment"># 3 mins</span>
+
+    <span class="hljs-keyword">return</span> <span class="hljs-comment"># 明确函数 next 返回值是 undefined。</span></pre></div></div>
             
         </li>
         
@@ -687,57 +709,11 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-31">&#182;</a>
               </div>
-              <h3 id="-">决定是否循环检查后台数据</h3>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    promise.done <span class="hljs-function">-&gt;</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-32">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-32">&#182;</a>
-              </div>
-              <p>只有在以下情况都满足时候才不断反复请求后台服务器</p>
-<ol>
-<li>没有当前考试</li>
-<li>有考试预告</li>
-<li>考试预告中有今天的考试
-这样极大减少了不必要的对后台请求</li>
-</ol>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>      shouldRetry = <span class="hljs-keyword">not</span> (<span class="hljs-string">"currentExam"</span> <span class="hljs-keyword">of</span> YD.exam) <span class="hljs-keyword">and</span>
-        (<span class="hljs-string">"upcomingExam"</span> <span class="hljs-keyword">of</span> YD.exam) <span class="hljs-keyword">and</span>
-        _.find YD.exam.upcomingExam, <span class="hljs-function"><span class="hljs-params">(e)</span> -&gt;</span> e.isTodayExam <span class="hljs-comment"># isTodayExam 的值是 true / false</span>
-
-
-      <span class="hljs-keyword">if</span> shouldRetry
-        note <span class="hljs-string">"满足刷新条件，页面将会刷新。 <span class="hljs-subst">#{<span class="hljs-keyword">new</span> Date()}</span> "</span>
-        setTimeout next, <span class="hljs-number">180000</span> <span class="hljs-comment"># 3 mins</span>
-
-    <span class="hljs-keyword">return</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-33">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-33">&#182;</a>
-              </div>
               <ol>
-<li>马上开始第一次调用</li>
-<li>实际上浏览器规范中要求最少4ms</li>
-<li>用setTimeout调用另一个setTimeout永远不会出现栈溢出</li>
+<li>马上开始第一次调用。实际上浏览器规范中要求最少4ms。</li>
+<li>用setTimeout调用另一个setTimeout永远不会出现栈溢出。</li>
 <li>直接 next 调用会栈溢出的。比如10万次递归后。
-参见  effective javascript : tip 64，65, page 155</li>
+参见  effective javascript : tip 64，65, page 155。</li>
 </ol>
 
             </div>
@@ -747,11 +723,11 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
         </li>
         
         
-        <li id="section-34">
+        <li id="section-32">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-34">&#182;</a>
+                <a class="pilcrow" href="#section-32">&#182;</a>
               </div>
               <h2 id="-">登陆页面</h2>
 <ol>
@@ -767,22 +743,9 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
 
     name = $(<span class="hljs-string">"#username"</span>).val()
     password = $(<span class="hljs-string">"#password"</span>).val()
-    yz = $(<span class="hljs-string">"#yz"</span>).val()</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-35">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-35">&#182;</a>
-              </div>
-              <p>是否有input为空</p>
+    yz = $(<span class="hljs-string">"#yz"</span>).val()
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    notValid = hasBlank([
+    notValid = hasBlank([
       name
       password
       yz
@@ -803,11 +766,11 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
         </li>
         
         
-        <li id="section-36">
+        <li id="section-33">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-36">&#182;</a>
+                <a class="pilcrow" href="#section-33">&#182;</a>
               </div>
               <h2 id="-">重设密码页面</h2>
 <ol>
@@ -824,41 +787,14 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
 
     oldPass = $(<span class="hljs-string">"#old_pass"</span>).val()
     newPass = $(<span class="hljs-string">"#new_pass"</span>).val()
-    newPassConfirm = $(<span class="hljs-string">"#new_pass_confirm"</span>).val()</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-37">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-37">&#182;</a>
-              </div>
-              <p>两次输入的新密码是否匹配</p>
+    newPassConfirm = $(<span class="hljs-string">"#new_pass_confirm"</span>).val()
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    dontMatch = newPass <span class="hljs-keyword">isnt</span> newPassConfirm</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-38">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-38">&#182;</a>
-              </div>
-              <p>是否有input为空</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    notValid = hasBlank([
+    notValid = hasBlank([
       oldPass
       newPass
       newPassConfirm
     ])
+    dontMatch = newPass <span class="hljs-keyword">isnt</span> newPassConfirm
 
     <span class="hljs-keyword">if</span> notValid
       alertBox <span class="hljs-string">"所有输入框都必须填写。"</span>

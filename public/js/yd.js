@@ -200,8 +200,8 @@
         promise.done(doWhen(ex0up0res1, render("start_scores_with_upcoming.ejs")));
         return promise.done(doWhen(ex0up1res1, render("start_scores_with_upcoming.ejs")));
       };
-      onFailure = function() {
-        return note("链接后台失败。");
+      onFailure = function(data, status, xhr) {
+        return showStatusMsg("" + data + ", " + status + ", " + xhr);
       };
       promise.fail(onFailure);
       promise.done(function(data) {
@@ -253,8 +253,8 @@
       oldPass = $("#old_pass").val();
       newPass = $("#new_pass").val();
       newPassConfirm = $("#new_pass_confirm").val();
-      dontMatch = newPass !== newPassConfirm;
       notValid = hasBlank([oldPass, newPass, newPassConfirm]);
+      dontMatch = newPass !== newPassConfirm;
       if (notValid) {
         return alertBox("所有输入框都必须填写。");
       } else if (dontMatch) {

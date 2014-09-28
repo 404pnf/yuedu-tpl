@@ -10,7 +10,7 @@ YD.debug = false
 # ## 工具函数
 #
 
-# 错误就是一个字符串，获取方法是读取 data.error 的值
+# 与后台约定，错误就是一个字符串，获取方法是读取ajax返回对象的error属性。
 showStatusMsg = (data) ->
   alertBox data.error
   return
@@ -24,10 +24,8 @@ alertBox = (msg) ->
         $(this).dialog "close"
   return
 
-# 模仿if (predict) {}，
-#
+# 简化 if (predict) {}，
 # 或者说模仿scheme中的when。
-#
 # 注意：action必须是一个返回函数的函数，这样才能延迟执行。
 # 可以用 -> 包裹一下，防止action作为参数时被立即求值。
 doWhen = (predict, action) ->
@@ -196,9 +194,9 @@ YD.startDispache = ->
   next = ->
     getExamInfo = $.get YD.conf.getExamInfo
 
+    # 一次性将数据处理好
     promise = getExamInfo
       .then (data) ->
-        # 一次性将数据处理好
         if ("upcomingExam" of data)
           _.extend data, updateDateText(data), hasUpcoming: true
         else
@@ -207,7 +205,7 @@ YD.startDispache = ->
 
     note promise
 
-
+    # ajax成功获得数据后的回调
     # 1. 将从后台获得的数据（从onSuccess函数的参数传进来）绑定到局部变量。
     # 1. 将判定抽象为函数。
     # 1. 将所有可能的情况都加入到promise.done doWhen和判定会选择执行哪个
@@ -259,44 +257,44 @@ YD.startDispache = ->
 
       promise.done doWhen ex0up1res1, render "start_scores_with_upcoming.ejs"
 
-    onFailure = ->
-      note "链接后台失败。"
+    onFailure = (data, status, xhr) ->
+      showStatusMsg "#{data}, #{status}, #{xhr}"
 
     # ### 获得数据后执行的函数
+    # 1. 存后台数据到本地
+    # 1. 决定是否循环检查后台数据
     promise.fail onFailure
 
     promise.done (data) ->
       note data # for debugging
 
-    # 存后台数据到本地
     promise.done (data) ->
       YD.exam = YD.exam or data
 
     promise.done onSuccess
 
-    # ### 决定是否循环检查后台数据
+    # **决定是否循环检查后台数据**
+    #
+    # 只有在以下情况都满足时候才反复请求后台服务器
+    # 1. 没有当前考试
+    # 2. 有考试预告
+    # 3. 考试预告中有今天的考试
+    # 这样极大减少了不必要的对后台请求
     promise.done ->
-      # 只有在以下情况都满足时候才不断反复请求后台服务器
-      # 1. 没有当前考试
-      # 2. 有考试预告
-      # 3. 考试预告中有今天的考试
-      # 这样极大减少了不必要的对后台请求
       shouldRetry = not ("currentExam" of YD.exam) and
         ("upcomingExam" of YD.exam) and
         _.find YD.exam.upcomingExam, (e) -> e.isTodayExam # isTodayExam 的值是 true / false
-
 
       if shouldRetry
         note "满足刷新条件，页面将会刷新。 #{new Date()} "
         setTimeout next, 180000 # 3 mins
 
-    return
+    return # 明确函数 next 返回值是 undefined。
 
-  # 1. 马上开始第一次调用
-  # 1. 实际上浏览器规范中要求最少4ms
-  # 1. 用setTimeout调用另一个setTimeout永远不会出现栈溢出
+  # 1. 马上开始第一次调用。实际上浏览器规范中要求最少4ms。
+  # 1. 用setTimeout调用另一个setTimeout永远不会出现栈溢出。
   # 1. 直接 next 调用会栈溢出的。比如10万次递归后。
-  # 参见  effective javascript : tip 64，65, page 155
+  # 参见  effective javascript : tip 64，65, page 155。
   setTimeout next, 0
 
 #
@@ -312,7 +310,6 @@ YD.userLogin = ->
     password = $("#password").val()
     yz = $("#yz").val()
 
-    # 是否有input为空
     notValid = hasBlank([
       name
       password
@@ -345,15 +342,12 @@ YD.resetPass = ->
     newPass = $("#new_pass").val()
     newPassConfirm = $("#new_pass_confirm").val()
 
-    # 两次输入的新密码是否匹配
-    dontMatch = newPass isnt newPassConfirm
-
-    # 是否有input为空
     notValid = hasBlank([
       oldPass
       newPass
       newPassConfirm
     ])
+    dontMatch = newPass isnt newPassConfirm
 
     if notValid
       alertBox "所有输入框都必须填写。"
