@@ -95,14 +95,15 @@ hasBlank = (arr) ->
 #
 # ## 用户页面
 #
+# 1. 后台api的地址再YD.conf中配置
+# 2. 一次将用户数据全部拿到。这样在编辑用户信息和编辑用户头像页面的时候，就不用再发请求了
 YD.user = ->
-  # 后台api的地址再YD.conf中配置
+
   userinfo = YD.conf.userInfo
   photos = YD.conf.photos
   grades = YD.conf.grades
 
-  # 一次将用户数据全部拿到。这样在编辑用户信息和编辑用户头像页面的时候，
-  # 就不用再发请求了
+
   userInfoAll = $
     .when $.ajax(userinfo), $.ajax(grades), $.ajax(photos)
     .then (a, b, c) ->
@@ -157,9 +158,10 @@ YD.user = ->
     $("#user_info").delegate "#user_photo_save", "click", userPhotoSave
 
 
+
 # ## 渲染用户条
+# 后台api的地址再YD.conf中配置
 YD.userBar = ->
-  # 后台api的地址再YD.conf中配置
   userinfo = YD.conf.userInfo
   photos = YD.conf.photos
 
@@ -205,12 +207,13 @@ YD.startDispache = ->
 
     note promise
 
-    onSuccess = (data) ->
 
-      # 将从后台获得的数据（从onSuccess函数的参数传进来）绑定到局部变量。
+    # 1. 将从后台获得的数据（从onSuccess函数的参数传进来）绑定到局部变量。
+    # 1. 将判定抽象为函数。
+    # 1. 将所有可能的情况都加入到promise.done doWhen和判定会选择执行哪个
+    onSuccess = (data) ->
       examInfo = _.snapshot data
 
-      # 将判定抽象为函数。
       hasCurrentExam =  "currentExam" of examInfo
       hasUpcomingExam = "upcomingExam" of examInfo
       haslatestExamResult = "latestExamResult" of examInfo
@@ -259,7 +262,7 @@ YD.startDispache = ->
     onFailure = ->
       note "链接后台失败。"
 
-    # 获得数据后执行的函数
+    # ### 获得数据后执行的函数
     promise.fail onFailure
 
     promise.done (data) ->
@@ -271,18 +274,16 @@ YD.startDispache = ->
 
     promise.done onSuccess
 
-    # 决定是否定时检查后台数据
+    # ### 决定是否循环检查后台数据
     promise.done ->
       # 只有在以下情况都满足时候才不断反复请求后台服务器
       # 1. 没有当前考试
       # 2. 有考试预告
       # 3. 考试预告中有今天的考试
       # 这样极大减少了不必要的对后台请求
-      #
-      # isTodayExam 的值是 true / false
       shouldRetry = not ("currentExam" of YD.exam) and
         ("upcomingExam" of YD.exam) and
-        _.find YD.exam.upcomingExam, (e) -> e.isTodayExam
+        _.find YD.exam.upcomingExam, (e) -> e.isTodayExam # isTodayExam 的值是 true / false
 
 
       if shouldRetry

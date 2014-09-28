@@ -229,10 +229,24 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
                 <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
               <h2 id="-">用户页面</h2>
+<ol>
+<li>后台api的地址再YD.conf中配置</li>
+<li>一次将用户数据全部拿到。这样在编辑用户信息和编辑用户头像页面的时候，就不用再发请求了</li>
+</ol>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>YD.u<span class="hljs-function"><span class="hljs-title">ser</span> = -&gt;</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>YD.u<span class="hljs-function"><span class="hljs-title">ser</span> = -&gt;</span>
+
+  userinfo = YD.conf.userInfo
+  photos = YD.conf.photos
+  grades = YD.conf.grades
+
+
+  userInfoAll = $
+    .<span class="hljs-keyword">when</span> $.ajax(userinfo), $.ajax(grades), $.ajax(photos)
+    .<span class="hljs-keyword">then</span> <span class="hljs-function"><span class="hljs-params">(a, b, c)</span> -&gt;</span>
+      _.extend a[<span class="hljs-number">0</span>], b[<span class="hljs-number">0</span>], c[<span class="hljs-number">0</span>]</pre></div></div>
             
         </li>
         
@@ -242,42 +256,6 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-9">&#182;</a>
-              </div>
-              <p>后台api的地址再YD.conf中配置</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>  userinfo = YD.conf.userInfo
-  photos = YD.conf.photos
-  grades = YD.conf.grades</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-10">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-10">&#182;</a>
-              </div>
-              <p>一次将用户数据全部拿到。这样在编辑用户信息和编辑用户头像页面的时候，
-就不用再发请求了</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>  userInfoAll = $
-    .<span class="hljs-keyword">when</span> $.ajax(userinfo), $.ajax(grades), $.ajax(photos)
-    .<span class="hljs-keyword">then</span> <span class="hljs-function"><span class="hljs-params">(a, b, c)</span> -&gt;</span>
-      _.extend a[<span class="hljs-number">0</span>], b[<span class="hljs-number">0</span>], c[<span class="hljs-number">0</span>]</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-11">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-11">&#182;</a>
               </div>
               <p>partial application to save typing</p>
 
@@ -315,11 +293,11 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
         </li>
         
         
-        <li id="section-12">
+        <li id="section-10">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-12">&#182;</a>
+                <a class="pilcrow" href="#section-10">&#182;</a>
               </div>
               <p>直接显示用户信息和头像</p>
 
@@ -331,11 +309,11 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
         </li>
         
         
-        <li id="section-13">
+        <li id="section-11">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-13">&#182;</a>
+                <a class="pilcrow" href="#section-11">&#182;</a>
               </div>
               <p><strong>通过jQuery的delegate监听尚未出现在页面的元素</strong>，因为内容动态从单独模版文件中加载。</p>
 
@@ -344,11 +322,11 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
         </li>
         
         
-        <li id="section-14">
+        <li id="section-12">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-14">&#182;</a>
+                <a class="pilcrow" href="#section-12">&#182;</a>
               </div>
               <p>编辑用户</p>
 
@@ -359,11 +337,11 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
         </li>
         
         
-        <li id="section-15">
+        <li id="section-13">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-15">&#182;</a>
+                <a class="pilcrow" href="#section-13">&#182;</a>
               </div>
               <p>编辑头像</p>
 
@@ -374,11 +352,11 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
         </li>
         
         
-        <li id="section-16">
+        <li id="section-14">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-16">&#182;</a>
+                <a class="pilcrow" href="#section-14">&#182;</a>
               </div>
               <p>保存用户</p>
 
@@ -389,11 +367,11 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
         </li>
         
         
-        <li id="section-17">
+        <li id="section-15">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-17">&#182;</a>
+                <a class="pilcrow" href="#section-15">&#182;</a>
               </div>
               <p>保存头像</p>
 
@@ -404,32 +382,19 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
         </li>
         
         
-        <li id="section-18">
+        <li id="section-16">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-18">&#182;</a>
+                <a class="pilcrow" href="#section-16">&#182;</a>
               </div>
               <h2 id="-">渲染用户条</h2>
+<p>后台api的地址再YD.conf中配置</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>YD.u<span class="hljs-function"><span class="hljs-title">serBar</span> = -&gt;</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-19">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-19">&#182;</a>
-              </div>
-              <p>后台api的地址再YD.conf中配置</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>  userinfo = YD.conf.userInfo
+            <div class="content"><div class='highlight'><pre>YD.u<span class="hljs-function"><span class="hljs-title">serBar</span> = -&gt;</span>
+  userinfo = YD.conf.userInfo
   photos = YD.conf.photos
 
   userInfoAndPhoto = $
@@ -445,11 +410,11 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
         </li>
         
         
-        <li id="section-20">
+        <li id="section-17">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-20">&#182;</a>
+                <a class="pilcrow" href="#section-17">&#182;</a>
               </div>
               <h2 id="-">用户登录后首页</h2>
 <ol>
@@ -464,11 +429,11 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
         </li>
         
         
-        <li id="section-21">
+        <li id="section-18">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-21">&#182;</a>
+                <a class="pilcrow" href="#section-18">&#182;</a>
               </div>
               <p>帮助函数</p>
 <ol>
@@ -489,11 +454,11 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
         </li>
         
         
-        <li id="section-22">
+        <li id="section-19">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-22">&#182;</a>
+                <a class="pilcrow" href="#section-19">&#182;</a>
               </div>
               <p>主函数，可能递归调用</p>
 
@@ -508,11 +473,11 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
         </li>
         
         
-        <li id="section-23">
+        <li id="section-20">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-23">&#182;</a>
+                <a class="pilcrow" href="#section-20">&#182;</a>
               </div>
               <p>一次性将数据处理好</p>
 
@@ -524,39 +489,29 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
           _.extend data, <span class="hljs-attribute">hasUpcoming</span>: <span class="hljs-literal">false</span>
 
 
-    note promise
-<span class="hljs-function">
-    <span class="hljs-title">onSuccess</span> = <span class="hljs-params">(data)</span> -&gt;</span></pre></div></div>
+    note promise</pre></div></div>
             
         </li>
         
         
-        <li id="section-24">
+        <li id="section-21">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-24">&#182;</a>
+                <a class="pilcrow" href="#section-21">&#182;</a>
               </div>
-              <p>将从后台获得的数据（从onSuccess函数的参数传进来）绑定到局部变量。</p>
+              <ol>
+<li>将从后台获得的数据（从onSuccess函数的参数传进来）绑定到局部变量。</li>
+<li>将判定抽象为函数。</li>
+<li>将所有可能的情况都加入到promise.done doWhen和判定会选择执行哪个</li>
+</ol>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      examInfo = _.snapshot data</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-25">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-25">&#182;</a>
-              </div>
-              <p>将判定抽象为函数。</p>
+            <div class="content"><div class='highlight'><pre><span class="hljs-function">    <span class="hljs-title">onSuccess</span> = <span class="hljs-params">(data)</span> -&gt;</span>
+      examInfo = _.snapshot data
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>      hasCurrentExam =  <span class="hljs-string">"currentExam"</span> <span class="hljs-keyword">of</span> examInfo
+      hasCurrentExam =  <span class="hljs-string">"currentExam"</span> <span class="hljs-keyword">of</span> examInfo
       hasUpcomingExam = <span class="hljs-string">"upcomingExam"</span> <span class="hljs-keyword">of</span> examInfo
       haslatestExamResult = <span class="hljs-string">"latestExamResult"</span> <span class="hljs-keyword">of</span> examInfo
       userExamState = examInfo.currentExam?.userExamState</pre></div></div>
@@ -564,11 +519,11 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
         </li>
         
         
-        <li id="section-26">
+        <li id="section-22">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-26">&#182;</a>
+                <a class="pilcrow" href="#section-22">&#182;</a>
               </div>
               <p>有考试，无上次考试成绩 学生状态模版中判定。</p>
 
@@ -580,11 +535,11 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
         </li>
         
         
-        <li id="section-27">
+        <li id="section-23">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-27">&#182;</a>
+                <a class="pilcrow" href="#section-23">&#182;</a>
               </div>
               <p>有考试，有上次考试成绩， 学生状态在模版中判定。</p>
 
@@ -596,11 +551,11 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
         </li>
         
         
-        <li id="section-28">
+        <li id="section-24">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-28">&#182;</a>
+                <a class="pilcrow" href="#section-24">&#182;</a>
               </div>
               <p>无考试，有考试预告，无上次考试成绩。</p>
 
@@ -613,11 +568,11 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
         </li>
         
         
-        <li id="section-29">
+        <li id="section-25">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-29">&#182;</a>
+                <a class="pilcrow" href="#section-25">&#182;</a>
               </div>
               <p>无考试，有考试预告，有上次考试成绩。</p>
 
@@ -630,11 +585,11 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
         </li>
         
         
-        <li id="section-30">
+        <li id="section-26">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-30">&#182;</a>
+                <a class="pilcrow" href="#section-26">&#182;</a>
               </div>
               <p>无考试，无考试预告，有上次考试成绩。</p>
 
@@ -647,11 +602,11 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
         </li>
         
         
-        <li id="section-31">
+        <li id="section-27">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-31">&#182;</a>
+                <a class="pilcrow" href="#section-27">&#182;</a>
               </div>
               <p>无考试，无考试预告，无上次成绩，
 用html的div中默认文字。</p>
@@ -661,11 +616,11 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
         </li>
         
         
-        <li id="section-32">
+        <li id="section-28">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-32">&#182;</a>
+                <a class="pilcrow" href="#section-28">&#182;</a>
               </div>
               <p>partial function to save typing.</p>
 
@@ -690,13 +645,13 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
         </li>
         
         
-        <li id="section-33">
+        <li id="section-29">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-33">&#182;</a>
+                <a class="pilcrow" href="#section-29">&#182;</a>
               </div>
-              <p>获得数据后执行的函数</p>
+              <h3 id="-">获得数据后执行的函数</h3>
 
             </div>
             
@@ -708,11 +663,11 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
         </li>
         
         
-        <li id="section-34">
+        <li id="section-30">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-34">&#182;</a>
+                <a class="pilcrow" href="#section-30">&#182;</a>
               </div>
               <p>存后台数据到本地</p>
 
@@ -726,13 +681,13 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
         </li>
         
         
-        <li id="section-35">
+        <li id="section-31">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-35">&#182;</a>
+                <a class="pilcrow" href="#section-31">&#182;</a>
               </div>
-              <p>决定是否定时检查后台数据</p>
+              <h3 id="-">决定是否循环检查后台数据</h3>
 
             </div>
             
@@ -741,11 +696,11 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
         </li>
         
         
-        <li id="section-36">
+        <li id="section-32">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-36">&#182;</a>
+                <a class="pilcrow" href="#section-32">&#182;</a>
               </div>
               <p>只有在以下情况都满足时候才不断反复请求后台服务器</p>
 <ol>
@@ -754,13 +709,12 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
 <li>考试预告中有今天的考试
 这样极大减少了不必要的对后台请求</li>
 </ol>
-<p>isTodayExam 的值是 true / false</p>
 
             </div>
             
             <div class="content"><div class='highlight'><pre>      shouldRetry = <span class="hljs-keyword">not</span> (<span class="hljs-string">"currentExam"</span> <span class="hljs-keyword">of</span> YD.exam) <span class="hljs-keyword">and</span>
         (<span class="hljs-string">"upcomingExam"</span> <span class="hljs-keyword">of</span> YD.exam) <span class="hljs-keyword">and</span>
-        _.find YD.exam.upcomingExam, <span class="hljs-function"><span class="hljs-params">(e)</span> -&gt;</span> e.isTodayExam
+        _.find YD.exam.upcomingExam, <span class="hljs-function"><span class="hljs-params">(e)</span> -&gt;</span> e.isTodayExam <span class="hljs-comment"># isTodayExam 的值是 true / false</span>
 
 
       <span class="hljs-keyword">if</span> shouldRetry
@@ -772,11 +726,11 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
         </li>
         
         
-        <li id="section-37">
+        <li id="section-33">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-37">&#182;</a>
+                <a class="pilcrow" href="#section-33">&#182;</a>
               </div>
               <ol>
 <li>马上开始第一次调用</li>
@@ -793,11 +747,11 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
         </li>
         
         
-        <li id="section-38">
+        <li id="section-34">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-38">&#182;</a>
+                <a class="pilcrow" href="#section-34">&#182;</a>
               </div>
               <h2 id="-">登陆页面</h2>
 <ol>
@@ -818,11 +772,11 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
         </li>
         
         
-        <li id="section-39">
+        <li id="section-35">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-39">&#182;</a>
+                <a class="pilcrow" href="#section-35">&#182;</a>
               </div>
               <p>是否有input为空</p>
 
@@ -849,11 +803,11 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
         </li>
         
         
-        <li id="section-40">
+        <li id="section-36">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-40">&#182;</a>
+                <a class="pilcrow" href="#section-36">&#182;</a>
               </div>
               <h2 id="-">重设密码页面</h2>
 <ol>
@@ -875,11 +829,11 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
         </li>
         
         
-        <li id="section-41">
+        <li id="section-37">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-41">&#182;</a>
+                <a class="pilcrow" href="#section-37">&#182;</a>
               </div>
               <p>两次输入的新密码是否匹配</p>
 
@@ -890,11 +844,11 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
         </li>
         
         
-        <li id="section-42">
+        <li id="section-38">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-42">&#182;</a>
+                <a class="pilcrow" href="#section-38">&#182;</a>
               </div>
               <p>是否有input为空</p>
 
