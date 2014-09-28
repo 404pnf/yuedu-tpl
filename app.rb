@@ -153,8 +153,8 @@ post '/userController/login' do
   username = params[:username]
   password = params[:password]
   yanzhengma = params[:yz]
-  r = { error: '用户名和密码不对。' }
-  # r = {success: '成功啦'}
+  # r = { error: '用户名和密码不对。' }
+  r = {success: '成功啦'}
   JSONP r
 end
 

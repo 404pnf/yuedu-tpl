@@ -101,15 +101,6 @@ YD.debug = <span class="hljs-literal">false</span></pre></div>
 </ol>
 
         
-          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-title">onSuccess</span> = <span class="hljs-params">(data)</span> -&gt;</span>
-  <span class="hljs-keyword">if</span> <span class="hljs-string">"error"</span> <span class="hljs-keyword">of</span> data
-    showStatusMsg data
-  <span class="hljs-keyword">else</span>
-    callback()
-<span class="hljs-function">
-<span class="hljs-title">onFailure</span> = <span class="hljs-params">(data, status, xhr)</span> -&gt;</span>
-  showStatusMsg <span class="hljs-string">"<span class="hljs-subst">#{data}</span>, <span class="hljs-subst">#{status}</span>, <span class="hljs-subst">#{xhr}</span>"</span></pre></div>
-        
       
         
         <h3 id="-">提交表单内容到后台</h3>
@@ -117,20 +108,49 @@ YD.debug = <span class="hljs-literal">false</span></pre></div>
 <li>从表单获取数据</li>
 <li>用jquery插件将数据转为json</li>
 <li>提交json给后台api</li>
-<li>调用通用的ajax回调函数</li>
+<li>调用回调函数</li>
 </ol>
 
         
-          <div class='highlight'><pre><span class="hljs-function">
-<span class="hljs-title">postJson</span> = <span class="hljs-params">(url, cssID, callback)</span> -&gt;</span>
-  formData = <span class="hljs-attribute">data</span>: $(cssID).serializeJSON()
+      
+        
+        <p>postJson 适用表单数据可以直接提交的情况。</p>
 
+        
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-title">postJson</span> = <span class="hljs-params">(url, cssID, callback)</span> -&gt;</span>
+  formData = <span class="hljs-attribute">data</span>: $(cssID).serializeJSON()
   note formData
+<span class="hljs-function">
+  <span class="hljs-title">onSuccess</span> = <span class="hljs-params">(data)</span> -&gt;</span>
+    <span class="hljs-keyword">if</span> <span class="hljs-string">"error"</span> <span class="hljs-keyword">of</span> data
+      showStatusMsg data
+    <span class="hljs-keyword">else</span>
+      callback()
+<span class="hljs-function">  <span class="hljs-title">onFailure</span> = <span class="hljs-params">(data, status, xhr)</span> -&gt;</span>
+    showStatusMsg <span class="hljs-string">"<span class="hljs-subst">#{data}</span>, <span class="hljs-subst">#{status}</span>, <span class="hljs-subst">#{xhr}</span>"</span>
 
   $.post url, formData
     .done onSuccess
-    .fail onFailure
-  <span class="hljs-keyword">return</span></pre></div>
+    .fail onFailure</pre></div>
+        
+      
+        
+        <p>postHelper 适用表单数据需要处理一下才能提交的情况。</p>
+
+        
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-title">postHelper</span> = <span class="hljs-params">(url, data, callback)</span> -&gt;</span>
+  note data
+<span class="hljs-function">  <span class="hljs-title">onSuccess</span> = <span class="hljs-params">(data)</span> -&gt;</span>
+    <span class="hljs-keyword">if</span> <span class="hljs-string">"error"</span> <span class="hljs-keyword">of</span> data
+      showStatusMsg data
+    <span class="hljs-keyword">else</span>
+      callback()
+<span class="hljs-function">  <span class="hljs-title">onFailure</span> = <span class="hljs-params">(data, status, xhr)</span> -&gt;</span>
+    showStatusMsg <span class="hljs-string">"<span class="hljs-subst">#{data}</span>, <span class="hljs-subst">#{status}</span>, <span class="hljs-subst">#{xhr}</span>"</span>
+
+  $.post url, data
+    .done onSuccess
+    .fail onFailure</pre></div>
         
       
         
@@ -157,17 +177,28 @@ YD.debug = <span class="hljs-literal">false</span></pre></div>
   <span class="hljs-keyword">return</span>
 <span class="hljs-function">
 <span class="hljs-title">note</span> = <span class="hljs-params">(msg)</span> -&gt;</span>
-  <span class="hljs-built_in">console</span>.log msg  <span class="hljs-keyword">if</span> YD.debug
+  <span class="hljs-built_in">console</span>.log msg  <span class="hljs-keyword">if</span> YD.debug</pre></div>
+        
+      
+        
+        <h3 id="-">检查表单数据是否为空</h3>
+<p>输入：input 框 cssID 的数组。  \</p>
+<p>输出： true / false</p>
+<p>副作用：所有为空的输入框会被加上 “error” 这个css类</p>
+
+        
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-title">hasBlank</span> = <span class="hljs-params">(arrayOfCssElement)</span> -&gt;</span>
+  notValid = <span class="hljs-literal">false</span>
 <span class="hljs-function">
-<span class="hljs-title">hasBlank</span> = <span class="hljs-params">(arr)</span> -&gt;</span>
-<span class="hljs-function">  <span class="hljs-title">isBlank</span> = <span class="hljs-params">(e)</span> -&gt;</span>
+  <span class="hljs-title">isBlank</span> = <span class="hljs-params">(e)</span> -&gt;</span>
     e <span class="hljs-keyword">is</span> <span class="hljs-string">""</span>
 
-  coll = _.map(arr, isBlank)
+  <span class="hljs-keyword">for</span> e <span class="hljs-keyword">in</span> arrayOfCssElement
+    <span class="hljs-keyword">if</span> (isBlank $(e).val())
+      $(e).addClass <span class="hljs-string">"error"</span>
+      notValid = <span class="hljs-literal">true</span>
 
-  _.reduce coll,
-<span class="hljs-function">    <span class="hljs-params">(a, e)</span> -&gt;</span> a <span class="hljs-keyword">or</span> e,
-    <span class="hljs-literal">false</span></pre></div>
+  notValid</pre></div>
         
       
         
@@ -183,7 +214,6 @@ YD.debug = <span class="hljs-literal">false</span></pre></div>
   userinfo = YD.conf.userInfo
   photos = YD.conf.photos
   grades = YD.conf.grades
-
 
   userInfoAll = $
     .<span class="hljs-keyword">when</span> $.ajax(userinfo), $.ajax(grades), $.ajax(photos)
@@ -435,7 +465,7 @@ YD.debug = <span class="hljs-literal">false</span></pre></div>
           <div class='highlight'><pre>    promise.fail onFailure
 
     promise.done <span class="hljs-function"><span class="hljs-params">(data)</span> -&gt;</span>
-      note data <span class="hljs-comment"># for debugging</span>
+      note data
 
     promise.done <span class="hljs-function"><span class="hljs-params">(data)</span> -&gt;</span>
       YD.exam = YD.exam <span class="hljs-keyword">or</span> data
@@ -488,16 +518,23 @@ YD.debug = <span class="hljs-literal">false</span></pre></div>
         
           <div class='highlight'><pre>YD.u<span class="hljs-function"><span class="hljs-title">serLogin</span> = -&gt;</span>
   $<span class="hljs-function"><span class="hljs-params">(<span class="hljs-string">"form"</span>)</span>.<span class="hljs-title">submit</span> <span class="hljs-params">(e)</span> -&gt;</span>
-    e.preventDefault()
+    e.preventDefault()</pre></div>
+        
+      
+        
+        <p>先移除上一次输入框错误的css类，因为这次人家可能写对了</p>
+
+        
+          <div class='highlight'><pre>    $(<span class="hljs-string">"input"</span>).removeClass <span class="hljs-string">"error"</span>
 
     name = $(<span class="hljs-string">"#username"</span>).val()
     password = $(<span class="hljs-string">"#password"</span>).val()
     yz = $(<span class="hljs-string">"#yz"</span>).val()
 
     notValid = hasBlank([
-      name
-      password
-      yz
+      <span class="hljs-string">"#username"</span>
+      <span class="hljs-string">"#password"</span>
+      <span class="hljs-string">"#yz"</span>
     ])
 
     <span class="hljs-keyword">if</span> notValid
@@ -508,9 +545,7 @@ YD.debug = <span class="hljs-literal">false</span></pre></div>
         <span class="hljs-attribute">password</span>: $.md5(password)
         <span class="hljs-attribute">yz</span>: yz
       }
-      $.post YD.conf.userLogin, data
-        .done onSuccess
-        .fail onFailure</pre></div>
+      postHelper YD.conf.userLogin, data,<span class="hljs-function"> -&gt;</span> redirectToUrl(YD.conf.siteHomeUrl)</pre></div>
         
       
         
@@ -524,22 +559,31 @@ YD.debug = <span class="hljs-literal">false</span></pre></div>
         
           <div class='highlight'><pre>YD.r<span class="hljs-function"><span class="hljs-title">esetPass</span> = -&gt;</span>
   $<span class="hljs-function"><span class="hljs-params">(<span class="hljs-string">"form"</span>)</span>.<span class="hljs-title">submit</span> <span class="hljs-params">(e)</span> -&gt;</span>
-    e.preventDefault()
+    e.preventDefault()</pre></div>
+        
+      
+        
+        <p>先移除上一次输入框错误的css类，因为这次人家可能写对了</p>
+
+        
+          <div class='highlight'><pre>    $(<span class="hljs-string">"input"</span>).removeClass <span class="hljs-string">"error"</span>
 
     oldPass = $(<span class="hljs-string">"#old_pass"</span>).val()
     newPass = $(<span class="hljs-string">"#new_pass"</span>).val()
     newPassConfirm = $(<span class="hljs-string">"#new_pass_confirm"</span>).val()
 
     notValid = hasBlank([
-      oldPass
-      newPass
-      newPassConfirm
+      <span class="hljs-string">"#old_pass"</span>
+      <span class="hljs-string">"#new_pass"</span>
+      <span class="hljs-string">"#new_pass_confirm"</span>
     ])
     dontMatch = newPass <span class="hljs-keyword">isnt</span> newPassConfirm
 
     <span class="hljs-keyword">if</span> notValid
       alertBox <span class="hljs-string">"所有输入框都必须填写。"</span>
     <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> dontMatch
+      $(<span class="hljs-string">"#new_pass"</span>).addClass <span class="hljs-string">"error"</span>
+      $(<span class="hljs-string">"#new_pass_confirm"</span>).addClass <span class="hljs-string">"error"</span>
       alertBox <span class="hljs-string">"两次输入的新密码不匹配。"</span>
     <span class="hljs-keyword">else</span>
       data = JSON.stringify {
@@ -547,9 +591,7 @@ YD.debug = <span class="hljs-literal">false</span></pre></div>
         <span class="hljs-attribute">newPass</span>: $.md5(newPass)
         <span class="hljs-attribute">newPassConfirm</span>: $.md5(newPassConfirm)
       }
-      $.post YD.conf.userResetPass, data
-        .done onSuccess
-        .fail onFailure</pre></div>
+      postHelper YD.conf.userResetPass, data,<span class="hljs-function">  -&gt;</span> redirectToUrl(YD.conf.userHomeUrl)</pre></div>
         
       
       <div class="fleur">h</div>
