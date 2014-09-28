@@ -182,7 +182,7 @@ YD.debug = <span class="hljs-literal">false</span></pre></div>
       
         
         <h3 id="-">检查表单数据是否为空</h3>
-<p>输入：input 框 cssID 的数组。  \</p>
+<p>输入：input 框 cssID 的数组。</p>
 <p>输出： true / false</p>
 <p>副作用：所有为空的输入框会被加上 “error” 这个css类</p>
 
@@ -475,19 +475,20 @@ YD.debug = <span class="hljs-literal">false</span></pre></div>
       
         
         <p><strong>决定是否循环检查后台数据</strong></p>
-<p>只有在以下情况都满足时候才反复请求后台服务器</p>
+<p>只有在以下情况都满足时候才反复请求后台服务器。这样极大减少了不必要的对后台请求。</p>
 <ol>
 <li>没有当前考试</li>
 <li>有考试预告</li>
-<li>考试预告中有今天的考试
-这样极大减少了不必要的对后台请求</li>
+<li>考试预告中有今天的考试</li>
 </ol>
+<p>isTodayExam 的值是 true / false</p>
 
         
           <div class='highlight'><pre>    promise.done <span class="hljs-function">-&gt;</span>
       shouldRetry = <span class="hljs-keyword">not</span> (<span class="hljs-string">"currentExam"</span> <span class="hljs-keyword">of</span> YD.exam) <span class="hljs-keyword">and</span>
         (<span class="hljs-string">"upcomingExam"</span> <span class="hljs-keyword">of</span> YD.exam) <span class="hljs-keyword">and</span>
-        _.find YD.exam.upcomingExam, <span class="hljs-function"><span class="hljs-params">(e)</span> -&gt;</span> e.isTodayExam <span class="hljs-comment"># isTodayExam 的值是 true / false</span>
+        _.find YD.exam.upcomingExam, <span class="hljs-function"><span class="hljs-params">(e)</span> -&gt;</span> e.isTodayExam
+
 
       <span class="hljs-keyword">if</span> shouldRetry
         note <span class="hljs-string">"满足刷新条件，页面将会刷新。 <span class="hljs-subst">#{<span class="hljs-keyword">new</span> Date()}</span> "</span>
@@ -591,7 +592,9 @@ YD.debug = <span class="hljs-literal">false</span></pre></div>
         <span class="hljs-attribute">newPass</span>: $.md5(newPass)
         <span class="hljs-attribute">newPassConfirm</span>: $.md5(newPassConfirm)
       }
-      postHelper YD.conf.userResetPass, data,<span class="hljs-function">  -&gt;</span> redirectToUrl(YD.conf.userHomeUrl)</pre></div>
+      postHelper YD.conf.userResetPass,
+        data,<span class="hljs-function">
+        -&gt;</span> redirectToUrl(YD.conf.userHomeUrl)</pre></div>
         
       
       <div class="fleur">h</div>

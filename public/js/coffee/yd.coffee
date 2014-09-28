@@ -301,15 +301,17 @@ YD.startDispache = ->
 
     # **决定是否循环检查后台数据**
     #
-    # 只有在以下情况都满足时候才反复请求后台服务器
+    # 只有在以下情况都满足时候才反复请求后台服务器。这样极大减少了不必要的对后台请求。
     # 1. 没有当前考试
     # 2. 有考试预告
     # 3. 考试预告中有今天的考试
-    # 这样极大减少了不必要的对后台请求
+    #
+    # isTodayExam 的值是 true / false
     promise.done ->
       shouldRetry = not ("currentExam" of YD.exam) and
         ("upcomingExam" of YD.exam) and
-        _.find YD.exam.upcomingExam, (e) -> e.isTodayExam # isTodayExam 的值是 true / false
+        _.find YD.exam.upcomingExam, (e) -> e.isTodayExam
+
 
       if shouldRetry
         note "满足刷新条件，页面将会刷新。 #{new Date()} "
@@ -391,4 +393,6 @@ YD.resetPass = ->
         newPass: $.md5(newPass)
         newPassConfirm: $.md5(newPassConfirm)
       }
-      postHelper YD.conf.userResetPass, data,  -> redirectToUrl(YD.conf.userHomeUrl)
+      postHelper YD.conf.userResetPass,
+        data,
+        -> redirectToUrl(YD.conf.userHomeUrl)
