@@ -71,7 +71,6 @@ YD.debug = <span class="hljs-literal">false</span></pre></div>
         
           <div class='highlight'><pre><span class="hljs-function"><span class="hljs-title">showStatusMsg</span> = <span class="hljs-params">(data)</span> -&gt;</span>
   alertBox data.error
-  <span class="hljs-keyword">return</span>
 <span class="hljs-function">
 <span class="hljs-title">alertBox</span> = <span class="hljs-params">(msg)</span> -&gt;</span>
   $(<span class="hljs-string">"#msg"</span>).text msg
@@ -79,8 +78,7 @@ YD.debug = <span class="hljs-literal">false</span></pre></div>
     <span class="hljs-attribute">modal</span>: <span class="hljs-literal">true</span>
     <span class="hljs-attribute">buttons</span>:
       <span class="hljs-attribute">Ok</span>:<span class="hljs-function"> -&gt;</span> <span class="hljs-comment"># do NOT use fat arror!! or the dialog won't close</span>
-        $(<span class="hljs-keyword">this</span>).dialog <span class="hljs-string">"close"</span>
-  <span class="hljs-keyword">return</span></pre></div>
+        $(<span class="hljs-keyword">this</span>).dialog <span class="hljs-string">"close"</span></pre></div>
         
       
         
@@ -94,15 +92,6 @@ YD.debug = <span class="hljs-literal">false</span></pre></div>
         
       
         
-        <h3 id="-ajax-promise-">通用的 ajax promise 的回调函数</h3>
-<ol>
-<li>如果后台返回带”error”的键名的对象，显示错误并停止提交，停留在当前页面</li>
-<li>如果后台会返回带有”success”键名的对象，表示提交成功，执行回调函数</li>
-</ol>
-
-        
-      
-        
         <h3 id="-">提交表单内容到后台</h3>
 <ol>
 <li>从表单获取数据</li>
@@ -110,11 +99,7 @@ YD.debug = <span class="hljs-literal">false</span></pre></div>
 <li>提交json给后台api</li>
 <li>调用回调函数</li>
 </ol>
-
-        
-      
-        
-        <p>postJson 适用表单数据可以直接提交的情况。</p>
+<p>postJson 适用表单数据可以直接提交的情况。</p>
 
         
           <div class='highlight'><pre><span class="hljs-function"><span class="hljs-title">postJson</span> = <span class="hljs-params">(url, cssID, callback)</span> -&gt;</span>
@@ -170,11 +155,9 @@ YD.debug = <span class="hljs-literal">false</span></pre></div>
     clonedData = _.snapshot (_.extend data, YD.conf)
     <span class="hljs-keyword">new</span> EJS <span class="hljs-attribute">url</span>: <span class="hljs-string">"<span class="hljs-subst">#{YD.conf.tplDir}</span><span class="hljs-subst">#{tpl}</span>"</span>
       .update cssID, cb(clonedData)
-    <span class="hljs-keyword">return</span>
 <span class="hljs-function">
 <span class="hljs-title">redirectToUrl</span> = <span class="hljs-params">(url)</span> -&gt;</span>
   <span class="hljs-built_in">window</span>.location.replace url
-  <span class="hljs-keyword">return</span>
 <span class="hljs-function">
 <span class="hljs-title">note</span> = <span class="hljs-params">(msg)</span> -&gt;</span>
   <span class="hljs-built_in">console</span>.log msg  <span class="hljs-keyword">if</span> YD.debug</pre></div>
@@ -210,7 +193,6 @@ YD.debug = <span class="hljs-literal">false</span></pre></div>
 
         
           <div class='highlight'><pre>YD.u<span class="hljs-function"><span class="hljs-title">ser</span> = -&gt;</span>
-
   userinfo = YD.conf.userInfo
   photos = YD.conf.photos
   grades = YD.conf.grades
@@ -305,15 +287,12 @@ YD.debug = <span class="hljs-literal">false</span></pre></div>
   userinfo = YD.conf.userInfo
   photos = YD.conf.photos
 
-  userInfoAndPhoto = $
-    .<span class="hljs-keyword">when</span> $.ajax(userinfo), $.ajax(photos)
+  $.<span class="hljs-keyword">when</span> $.ajax(userinfo), $.ajax(photos)
     .<span class="hljs-keyword">then</span> <span class="hljs-function"><span class="hljs-params">(a, b)</span> -&gt;</span>
       _.extend a[<span class="hljs-number">0</span>], b[<span class="hljs-number">0</span>]
-
-  userInfoAndPhoto.done <span class="hljs-function"><span class="hljs-params">(data)</span> -&gt;</span>
-    <span class="hljs-keyword">new</span> EJS <span class="hljs-attribute">url</span>: <span class="hljs-string">"<span class="hljs-subst">#{YD.conf.tplDir}</span>user_bar.ejs"</span>
-      .update <span class="hljs-string">"user_bar"</span>, data
-  <span class="hljs-keyword">return</span></pre></div>
+    .done <span class="hljs-function"><span class="hljs-params">(data)</span> -&gt;</span>
+      <span class="hljs-keyword">new</span> EJS <span class="hljs-attribute">url</span>: <span class="hljs-string">"<span class="hljs-subst">#{YD.conf.tplDir}</span>user_bar.ejs"</span>
+        .update <span class="hljs-string">"user_bar"</span>, data</pre></div>
         
       
         
@@ -546,7 +525,9 @@ YD.debug = <span class="hljs-literal">false</span></pre></div>
         <span class="hljs-attribute">password</span>: $.md5(password)
         <span class="hljs-attribute">yz</span>: yz
       }
-      postHelper YD.conf.userLogin, data,<span class="hljs-function"> -&gt;</span> redirectToUrl(YD.conf.siteHomeUrl)</pre></div>
+      postHelper YD.conf.userLogin,
+        data,<span class="hljs-function">
+        -&gt;</span> redirectToUrl(YD.conf.siteHomeUrl)</pre></div>
         
       
         

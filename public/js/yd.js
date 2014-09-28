@@ -11,12 +11,12 @@
   YD.debug = false;
 
   showStatusMsg = function(data) {
-    alertBox(data.error);
+    return alertBox(data.error);
   };
 
   alertBox = function(msg) {
     $("#msg").text(msg);
-    $("#msg").dialog({
+    return $("#msg").dialog({
       modal: true,
       buttons: {
         Ok: function() {
@@ -72,14 +72,14 @@
       var cb, clonedData;
       cb = callback || _.identity;
       clonedData = _.snapshot(_.extend(data, YD.conf));
-      new EJS({
+      return new EJS({
         url: "" + YD.conf.tplDir + tpl
       }).update(cssID, cb(clonedData));
     };
   };
 
   redirectToUrl = function(url) {
-    window.location.replace(url);
+    return window.location.replace(url);
   };
 
   note = function(msg) {
@@ -158,13 +158,12 @@
   };
 
   YD.userBar = function() {
-    var photos, userInfoAndPhoto, userinfo;
+    var photos, userinfo;
     userinfo = YD.conf.userInfo;
     photos = YD.conf.photos;
-    userInfoAndPhoto = $.when($.ajax(userinfo), $.ajax(photos)).then(function(a, b) {
+    return $.when($.ajax(userinfo), $.ajax(photos)).then(function(a, b) {
       return _.extend(a[0], b[0]);
-    });
-    userInfoAndPhoto.done(function(data) {
+    }).done(function(data) {
       return new EJS({
         url: "" + YD.conf.tplDir + "user_bar.ejs"
       }).update("user_bar", data);

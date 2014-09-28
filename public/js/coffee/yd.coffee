@@ -13,7 +13,6 @@ YD.debug = false
 # 与后台约定，错误就是一个字符串，获取方法是读取ajax返回对象的error属性。
 showStatusMsg = (data) ->
   alertBox data.error
-  return
 
 alertBox = (msg) ->
   $("#msg").text msg
@@ -22,7 +21,6 @@ alertBox = (msg) ->
     buttons:
       Ok: -> # do NOT use fat arror!! or the dialog won't close
         $(this).dialog "close"
-  return
 
 # 简化 if (predict) {}，或者说模仿scheme中的when。
 # 注意：action必须是一个返回函数的函数，这样才能延迟执行。
@@ -30,21 +28,12 @@ alertBox = (msg) ->
 doWhen = (predict, action) ->
   action if predict
 
-
-# ### 通用的 ajax promise 的回调函数
-# 1. 如果后台返回带"error"的键名的对象，显示错误并停止提交，停留在当前页面
-# 1. 如果后台会返回带有"success"键名的对象，表示提交成功，执行回调函数
-
-
 # ### 提交表单内容到后台
-#
 # 1. 从表单获取数据
 # 1. 用jquery插件将数据转为json
 # 1. 提交json给后台api
 # 1. 调用回调函数
 #
-
-
 # postJson 适用表单数据可以直接提交的情况。
 postJson = (url, cssID, callback) ->
   formData = data: $(cssID).serializeJSON()
@@ -78,7 +67,6 @@ postHelper = (url, data, callback) ->
     .fail onFailure
 
 
-
 # ### 绑定数据到模版并将渲染结果插入到页面
 # 1. SIDE-EFFECT ONLY 做参数使用请包裹在 functin  {} 中
 # 2. 从局部变量获得数据，绑定模版，插入到html页面中。
@@ -91,11 +79,9 @@ renderLocalData = (data, cssID, tpl, callback) ->
     clonedData = _.snapshot (_.extend data, YD.conf)
     new EJS url: "#{YD.conf.tplDir}#{tpl}"
       .update cssID, cb(clonedData)
-    return
 
 redirectToUrl = (url) ->
   window.location.replace url
-  return
 
 note = (msg) ->
   console.log msg  if YD.debug
@@ -125,7 +111,6 @@ hasBlank = (arrayOfCssElement) ->
 # 1. 后台api的地址在YD.conf中配置
 # 2. 一次将用户数据全部拿到。这样在编辑用户信息和编辑用户头像页面的时候，就不用再发请求了
 YD.user = ->
-
   userinfo = YD.conf.userInfo
   photos = YD.conf.photos
   grades = YD.conf.grades
@@ -184,24 +169,20 @@ YD.user = ->
     $("#user_info").delegate "#user_photo_save", "click", userPhotoSave
 
 
-
 # ## 渲染用户条
 # 后台api的地址在YD.conf中配置
 YD.userBar = ->
   userinfo = YD.conf.userInfo
   photos = YD.conf.photos
 
-  userInfoAndPhoto = $
-    .when $.ajax(userinfo), $.ajax(photos)
+  $.when $.ajax(userinfo), $.ajax(photos)
     .then (a, b) ->
       _.extend a[0], b[0]
+    .done (data) ->
+      new EJS url: "#{YD.conf.tplDir}user_bar.ejs"
+        .update "user_bar", data
 
-  userInfoAndPhoto.done (data) ->
-    new EJS url: "#{YD.conf.tplDir}user_bar.ejs"
-      .update "user_bar", data
-  return
 
-#
 # ## 用户登录后首页
 #
 # 1. 根据后台的数据决定显示哪个模版
@@ -355,7 +336,9 @@ YD.userLogin = ->
         password: $.md5(password)
         yz: yz
       }
-      postHelper YD.conf.userLogin, data, -> redirectToUrl(YD.conf.siteHomeUrl)
+      postHelper YD.conf.userLogin,
+        data,
+        -> redirectToUrl(YD.conf.siteHomeUrl)
 
 #
 # ## 重设密码页面
