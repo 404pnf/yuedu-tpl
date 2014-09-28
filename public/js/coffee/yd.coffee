@@ -33,6 +33,17 @@ alertBox = (msg) ->
 doWhen = (predict, action) ->
   action if predict
 
+
+# ### 通用的ajax请求后成功和失败的回调函数
+onSuccess = (data) ->
+  if "error" of data
+    showStatusMsg data
+  else
+    callback()
+
+onFailure = (data, status, xhr) ->
+  showStatusMsg "#{data}, #{status}, #{xhr}"
+
 # ### 提交表单内容到后台
 #
 # 1. 从表单获取数据
@@ -45,14 +56,14 @@ postJson = (url, cssID, callback) ->
 
   note formData
 
-  onSuccess = (data) ->
-    if "error" of data
-      showStatusMsg data
-    else
-      callback()
+  # onSuccess = (data) ->
+  #   if "error" of data
+  #     showStatusMsg data
+  #   else
+  #     callback()
 
-  onFailure = (data, status, xhr) ->
-    showStatusMsg "#{data}, #{status}, #{xhr}"
+  # onFailure = (data, status, xhr) ->
+  #   showStatusMsg "#{data}, #{status}, #{xhr}"
 
   $.post url, formData
     .done onSuccess
@@ -302,15 +313,6 @@ YD.startDispache = ->
 # 1. 校验不能有input字段唯恐
 # 2. 密码用md5求值后再提交给后台
 YD.userLogin = ->
-  onSuccess = (data) ->
-    if "error" of data
-      showStatusMsg data
-    else
-      callback()
-
-  onFailure = (data, status, xhr) ->
-    showStatusMsg "#{data}, #{status}, #{xhr}"
-
   $("form").submit (e) ->
     e.preventDefault()
 
@@ -348,15 +350,6 @@ YD.userLogin = ->
 # 2. 校验两次输入新密码是否匹配
 # 3. 密码用md5求值后再提交给后台
 YD.resetPass = ->
-  onSuccess = (data) ->
-    if "error" of data
-      showStatusMsg data
-    else
-      callback()
-
-  onFailure = (data, status, xhr) ->
-    showStatusMsg "#{data}, #{status}, #{xhr}"
-
   $("form").submit (e) ->
     e.preventDefault()
 
@@ -379,18 +372,18 @@ YD.resetPass = ->
     else if dontMatch
       alertBox "两次输入的新密码不匹配。"
     else
-      # $("#new_pass").val $.md5(newPass)
-      # $("#old_pass").val $.md5(oldPass)
-      # $("#new_pass_confirm").val $.md5(newPassConfirm)
       data = JSON.stringify {
         oldPass: $.md5(oldPass)
         newPass: $.md5(newPass)
         newPassConfirm: $.md5(newPassConfirm)
       }
-
-      # postJson YD.conf.userResetPass, "#reset_pass_form", ->
-      #   redirectToUrl YD.conf.userHomeUrl
-
       $.post YD.conf.userResetPass, data
         .done onSuccess
         .fail onFailure
+
+      # $("#new_pass").val $.md5(newPass)
+      # $("#old_pass").val $.md5(oldPass)
+      # $("#new_pass_confirm").val $.md5(newPassConfirm)
+
+      # postJson YD.conf.userResetPass, "#reset_pass_form", ->
+      #   redirectToUrl YD.conf.userHomeUrl
