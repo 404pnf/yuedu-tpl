@@ -11,7 +11,7 @@ YD.conf =
   lastExamResult: '/test/personalReport/'
   userTrend: '/charts.html'
 
-  # api的uri
+  # api的路由
   userInfo: '/userController/show/loginUser'
   grades: '/userController/grades'
   photos: '/userController/photos'

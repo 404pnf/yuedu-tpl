@@ -4,93 +4,72 @@
 <head>
   <title>yd.coffee</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="public/stylesheets/normalize.css" />
   <link rel="stylesheet" media="all" href="docco.css" />
 </head>
 <body>
-  <div id="container">
-    <div id="background"></div>
-    
-      <ul id="jump_to">
-        <li>
-          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
-          <a class="small" href="javascript:void(0);">+</a>
-          <div id="jump_wrapper">
-          <div id="jump_page">
-            
+  <div class="container">
+    <div class="page">
+
+      <div class="header">
+        
+          <h1>yd.coffee</h1>
+        
+
+        
+          <div class="toc">
+            <h3>Table of Contents</h3>
+            <ol>
               
-              <a class="source" href="yd.html">
-                yd.coffee
-              </a>
-            
+                
+                <li>
+                  <a class="source" href="yd.html">
+                    yd.coffee
+                  </a>
+                </li>
               
-              <a class="source" href="yd_chart.html">
-                yd_chart.coffee
-              </a>
-            
+                
+                <li>
+                  <a class="source" href="yd_chart.html">
+                    yd_chart.coffee
+                  </a>
+                </li>
               
-              <a class="source" href="yd_conf.html">
-                yd_conf.coffee
-              </a>
-            
+                
+                <li>
+                  <a class="source" href="yd_conf.html">
+                    yd_conf.coffee
+                  </a>
+                </li>
+              
+            </ol>
           </div>
-        </li>
-      </ul>
-    
-    <ul class="sections">
         
-          <li id="title">
-              <div class="annotation">
-                  <h1>yd.coffee</h1>
-              </div>
-          </li>
+      </div>
+
+      
         
-        
-        
-        <li id="section-1">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-1">&#182;</a>
-              </div>
-              <h2 id="-">唯一的全局变量</h2>
+        <h2 id="-">唯一的全局变量</h2>
 <p>也是程序的命名空间</p>
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>root = <span class="hljs-built_in">global</span> ? <span class="hljs-built_in">window</span>
+        
+          <div class='highlight'><pre>root = <span class="hljs-built_in">global</span> ? <span class="hljs-built_in">window</span>
 
 root.YD ?= {}
 
-YD.debug = <span class="hljs-literal">false</span></pre></div></div>
-            
-        </li>
+YD.debug = <span class="hljs-literal">false</span></pre></div>
         
+      
         
-        <li id="section-2">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-2">&#182;</a>
-              </div>
-              <h2 id="-">工具函数</h2>
+        <h2 id="-">工具函数</h2>
 
-            </div>
-            
-        </li>
         
+      
         
-        <li id="section-3">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-3">&#182;</a>
-              </div>
-              <p>与后台约定，错误就是一个字符串，获取方法是读取ajax返回对象的error属性。</p>
+        <p>与后台约定，错误就是一个字符串，获取方法是读取ajax返回对象的error属性。</p>
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-title">showStatusMsg</span> = <span class="hljs-params">(data)</span> -&gt;</span>
+        
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-title">showStatusMsg</span> = <span class="hljs-params">(data)</span> -&gt;</span>
   alertBox data.error
   <span class="hljs-keyword">return</span>
 <span class="hljs-function">
@@ -101,70 +80,49 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
     <span class="hljs-attribute">buttons</span>:
       <span class="hljs-attribute">Ok</span>:<span class="hljs-function"> -&gt;</span> <span class="hljs-comment"># do NOT use fat arror!! or the dialog won't close</span>
         $(<span class="hljs-keyword">this</span>).dialog <span class="hljs-string">"close"</span>
-  <span class="hljs-keyword">return</span></pre></div></div>
-            
-        </li>
+  <span class="hljs-keyword">return</span></pre></div>
         
+      
         
-        <li id="section-4">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-4">&#182;</a>
-              </div>
-              <p>简化 if (predict) {}，
-或者说模仿scheme中的when。
+        <p>简化 if (predict) {}，或者说模仿scheme中的when。
 注意：action必须是一个返回函数的函数，这样才能延迟执行。
 可以用 -&gt; 包裹一下，防止action作为参数时被立即求值。</p>
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-title">doWhen</span> = <span class="hljs-params">(predict, action)</span> -&gt;</span>
-  action <span class="hljs-keyword">if</span> predict</pre></div></div>
-            
-        </li>
         
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-title">doWhen</span> = <span class="hljs-params">(predict, action)</span> -&gt;</span>
+  action <span class="hljs-keyword">if</span> predict</pre></div>
         
-        <li id="section-5">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-5">&#182;</a>
-              </div>
-              <h3 id="-ajax-">通用的ajax请求后成功和失败的回调函数</h3>
+      
+        
+        <h3 id="-ajax-promise-">通用的 ajax promise 的回调函数</h3>
+<ol>
+<li>如果后台返回带”error”的键名的对象，显示错误并停止提交，停留在当前页面</li>
+<li>如果后台会返回带有”success”键名的对象，表示提交成功，执行回调函数</li>
+</ol>
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-title">onSuccess</span> = <span class="hljs-params">(data)</span> -&gt;</span>
+        
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-title">onSuccess</span> = <span class="hljs-params">(data)</span> -&gt;</span>
   <span class="hljs-keyword">if</span> <span class="hljs-string">"error"</span> <span class="hljs-keyword">of</span> data
     showStatusMsg data
   <span class="hljs-keyword">else</span>
     callback()
 <span class="hljs-function">
 <span class="hljs-title">onFailure</span> = <span class="hljs-params">(data, status, xhr)</span> -&gt;</span>
-  showStatusMsg <span class="hljs-string">"<span class="hljs-subst">#{data}</span>, <span class="hljs-subst">#{status}</span>, <span class="hljs-subst">#{xhr}</span>"</span></pre></div></div>
-            
-        </li>
+  showStatusMsg <span class="hljs-string">"<span class="hljs-subst">#{data}</span>, <span class="hljs-subst">#{status}</span>, <span class="hljs-subst">#{xhr}</span>"</span></pre></div>
         
+      
         
-        <li id="section-6">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-6">&#182;</a>
-              </div>
-              <h3 id="-">提交表单内容到后台</h3>
+        <h3 id="-">提交表单内容到后台</h3>
 <ol>
 <li>从表单获取数据</li>
 <li>用jquery插件将数据转为json</li>
 <li>提交json给后台api</li>
-<li>如果后台返回带”error”的键名的对象，显示错误并停止提交，停留在编辑页面</li>
-<li>如果后台会返回带有”success”键名的对象，表示提交成功，执行回调函数</li>
+<li>调用通用的ajax回调函数</li>
 </ol>
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-title">postJson</span> = <span class="hljs-params">(url, cssID, callback)</span> -&gt;</span>
+        
+          <div class='highlight'><pre><span class="hljs-function">
+<span class="hljs-title">postJson</span> = <span class="hljs-params">(url, cssID, callback)</span> -&gt;</span>
   formData = <span class="hljs-attribute">data</span>: $(cssID).serializeJSON()
 
   note formData
@@ -172,18 +130,11 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
   $.post url, formData
     .done onSuccess
     .fail onFailure
-  <span class="hljs-keyword">return</span></pre></div></div>
-            
-        </li>
+  <span class="hljs-keyword">return</span></pre></div>
         
+      
         
-        <li id="section-7">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-7">&#182;</a>
-              </div>
-              <h3 id="-">绑定数据到模版并将渲染结果插入到页面</h3>
+        <h3 id="-">绑定数据到模版并将渲染结果插入到页面</h3>
 <ol>
 <li>SIDE-EFFECT ONLY 做参数使用请包裹在 functin  {} 中</li>
 <li>从局部变量获得数据，绑定模版，插入到html页面中。</li>
@@ -192,9 +143,8 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
 因此不会影响原始数据。</li>
 </ol>
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-title">renderLocalData</span> = <span class="hljs-params">(data, cssID, tpl, callback)</span> -&gt;</span><span class="hljs-function">
+        
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-title">renderLocalData</span> = <span class="hljs-params">(data, cssID, tpl, callback)</span> -&gt;</span><span class="hljs-function">
   -&gt;</span>
     cb = callback <span class="hljs-keyword">or</span> _.identity
     clonedData = _.snapshot (_.extend data, YD.conf)
@@ -217,26 +167,18 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
 
   _.reduce coll,
 <span class="hljs-function">    <span class="hljs-params">(a, e)</span> -&gt;</span> a <span class="hljs-keyword">or</span> e,
-    <span class="hljs-literal">false</span></pre></div></div>
-            
-        </li>
+    <span class="hljs-literal">false</span></pre></div>
         
+      
         
-        <li id="section-8">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-8">&#182;</a>
-              </div>
-              <h2 id="-">用户页面</h2>
+        <h2 id="-">用户页面</h2>
 <ol>
-<li>后台api的地址再YD.conf中配置</li>
+<li>后台api的地址在YD.conf中配置</li>
 <li>一次将用户数据全部拿到。这样在编辑用户信息和编辑用户头像页面的时候，就不用再发请求了</li>
 </ol>
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>YD.u<span class="hljs-function"><span class="hljs-title">ser</span> = -&gt;</span>
+        
+          <div class='highlight'><pre>YD.u<span class="hljs-function"><span class="hljs-title">ser</span> = -&gt;</span>
 
   userinfo = YD.conf.userInfo
   photos = YD.conf.photos
@@ -246,22 +188,14 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
   userInfoAll = $
     .<span class="hljs-keyword">when</span> $.ajax(userinfo), $.ajax(grades), $.ajax(photos)
     .<span class="hljs-keyword">then</span> <span class="hljs-function"><span class="hljs-params">(a, b, c)</span> -&gt;</span>
-      _.extend a[<span class="hljs-number">0</span>], b[<span class="hljs-number">0</span>], c[<span class="hljs-number">0</span>]</pre></div></div>
-            
-        </li>
+      _.extend a[<span class="hljs-number">0</span>], b[<span class="hljs-number">0</span>], c[<span class="hljs-number">0</span>]</pre></div>
         
+      
         
-        <li id="section-9">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-9">&#182;</a>
-              </div>
-              <p>partial application to save typing</p>
+        <p>partial application to save typing</p>
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre><span class="hljs-function">  <span class="hljs-title">userRender</span> = <span class="hljs-params">(tpl, cssID, data)</span> -&gt;</span>
+        
+          <div class='highlight'><pre><span class="hljs-function">  <span class="hljs-title">userRender</span> = <span class="hljs-params">(tpl, cssID, data)</span> -&gt;</span>
     <span class="hljs-keyword">new</span> EJS(<span class="hljs-attribute">url</span>: YD.conf.tplDir + tpl).update cssID, data
 <span class="hljs-function">
   <span class="hljs-title">userShow</span> = -&gt;</span>
@@ -288,112 +222,56 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
     postJson YD.conf.userSave, <span class="hljs-string">"form#user_photo"</span>,<span class="hljs-function"> -&gt;</span>
       redirectToUrl YD.conf.userHomeUrl
 
-  <span class="hljs-keyword">do</span> <span class="hljs-function">-&gt;</span></pre></div></div>
-            
-        </li>
+  <span class="hljs-keyword">do</span> <span class="hljs-function">-&gt;</span></pre></div>
         
+      
         
-        <li id="section-10">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-10">&#182;</a>
-              </div>
-              <p>直接显示用户信息和头像</p>
+        <p>直接显示用户信息和头像</p>
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    userShow()
-    userBarShow()</pre></div></div>
-            
-        </li>
         
+          <div class='highlight'><pre>    userShow()
+    userBarShow()</pre></div>
         
-        <li id="section-11">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-11">&#182;</a>
-              </div>
-              <p><strong>通过jQuery的delegate监听尚未出现在页面的元素</strong>，因为内容动态从单独模版文件中加载。</p>
+      
+        
+        <p><strong>通过jQuery的delegate监听尚未出现在页面的元素</strong>，因为内容动态从单独模版文件中加载。</p>
 
-            </div>
-            
-        </li>
         
+      
         
-        <li id="section-12">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-12">&#182;</a>
-              </div>
-              <p>编辑用户</p>
+        <p>编辑用户</p>
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    $(<span class="hljs-string">"#user_info"</span>).delegate <span class="hljs-string">"#user_info_edit"</span>, <span class="hljs-string">"click"</span>, userEdit</pre></div></div>
-            
-        </li>
         
+          <div class='highlight'><pre>    $(<span class="hljs-string">"#user_info"</span>).delegate <span class="hljs-string">"#user_info_edit"</span>, <span class="hljs-string">"click"</span>, userEdit</pre></div>
         
-        <li id="section-13">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-13">&#182;</a>
-              </div>
-              <p>编辑头像</p>
+      
+        
+        <p>编辑头像</p>
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    $(<span class="hljs-string">"#user_info"</span>).delegate <span class="hljs-string">"#user_photo_edit"</span>, <span class="hljs-string">"click"</span>, userPhotoEdit</pre></div></div>
-            
-        </li>
         
+          <div class='highlight'><pre>    $(<span class="hljs-string">"#user_info"</span>).delegate <span class="hljs-string">"#user_photo_edit"</span>, <span class="hljs-string">"click"</span>, userPhotoEdit</pre></div>
         
-        <li id="section-14">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-14">&#182;</a>
-              </div>
-              <p>保存用户</p>
+      
+        
+        <p>保存用户</p>
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    $(<span class="hljs-string">"#user_info"</span>).delegate <span class="hljs-string">"#user_info_save"</span>, <span class="hljs-string">"click"</span>, userSave</pre></div></div>
-            
-        </li>
         
+          <div class='highlight'><pre>    $(<span class="hljs-string">"#user_info"</span>).delegate <span class="hljs-string">"#user_info_save"</span>, <span class="hljs-string">"click"</span>, userSave</pre></div>
         
-        <li id="section-15">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-15">&#182;</a>
-              </div>
-              <p>保存头像</p>
+      
+        
+        <p>保存头像</p>
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    $(<span class="hljs-string">"#user_info"</span>).delegate <span class="hljs-string">"#user_photo_save"</span>, <span class="hljs-string">"click"</span>, userPhotoSave</pre></div></div>
-            
-        </li>
         
+          <div class='highlight'><pre>    $(<span class="hljs-string">"#user_info"</span>).delegate <span class="hljs-string">"#user_photo_save"</span>, <span class="hljs-string">"click"</span>, userPhotoSave</pre></div>
         
-        <li id="section-16">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-16">&#182;</a>
-              </div>
-              <h2 id="-">渲染用户条</h2>
-<p>后台api的地址再YD.conf中配置</p>
+      
+        
+        <h2 id="-">渲染用户条</h2>
+<p>后台api的地址在YD.conf中配置</p>
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>YD.u<span class="hljs-function"><span class="hljs-title">serBar</span> = -&gt;</span>
+        
+          <div class='highlight'><pre>YD.u<span class="hljs-function"><span class="hljs-title">serBar</span> = -&gt;</span>
   userinfo = YD.conf.userInfo
   photos = YD.conf.photos
 
@@ -405,228 +283,131 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
   userInfoAndPhoto.done <span class="hljs-function"><span class="hljs-params">(data)</span> -&gt;</span>
     <span class="hljs-keyword">new</span> EJS <span class="hljs-attribute">url</span>: <span class="hljs-string">"<span class="hljs-subst">#{YD.conf.tplDir}</span>user_bar.ejs"</span>
       .update <span class="hljs-string">"user_bar"</span>, data
-  <span class="hljs-keyword">return</span></pre></div></div>
-            
-        </li>
+  <span class="hljs-keyword">return</span></pre></div>
         
+      
         
-        <li id="section-17">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-17">&#182;</a>
-              </div>
-              <h2 id="-">用户登录后首页</h2>
+        <h2 id="-">用户登录后首页</h2>
 <ol>
 <li>根据后台的数据决定显示哪个模版</li>
-<li>如果无当前考试，且考试预告有今天的考试，定期刷后台，当有当前考试的时候，显示考试</li>
+<li>如果无当前考试，且考试预告有今天的考试，定期刷后台，当前考试出现的时候，显示考试入口</li>
 </ol>
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>YD.s<span class="hljs-function"><span class="hljs-title">tartDispache</span> = -&gt;</span></pre></div></div>
-            
-        </li>
         
+          <div class='highlight'><pre>YD.s<span class="hljs-function"><span class="hljs-title">tartDispache</span> = -&gt;</span></pre></div>
         
-        <li id="section-18">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-18">&#182;</a>
-              </div>
-              <p>帮助函数</p>
+      
+        
+        <p>帮助函数</p>
 <ol>
-<li>如果考试预告中有考试是今天的就在模版中显示今天两个字</li>
+<li>如果考试预告中有考试是今天的就在模版中显示“今天”两个字</li>
 <li>直接修改了examInfo</li>
 </ol>
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre><span class="hljs-function">  <span class="hljs-title">updateDateText</span> = <span class="hljs-params">(d)</span> -&gt;</span>
+        
+          <div class='highlight'><pre><span class="hljs-function">  <span class="hljs-title">updateDateText</span> = <span class="hljs-params">(d)</span> -&gt;</span>
     o = _.map d.upcomingExam, <span class="hljs-function"><span class="hljs-params">(e)</span> -&gt;</span>
       <span class="hljs-keyword">if</span> e.isTodayExam
         e.endTime = <span class="hljs-string">""</span>
         e.isTodayExam = <span class="hljs-string">"今天"</span>
       <span class="hljs-keyword">else</span>
-        e.isTodayExam = <span class="hljs-string">""</span></pre></div></div>
-            
-        </li>
+        e.isTodayExam = <span class="hljs-string">""</span></pre></div>
         
+      
         
-        <li id="section-19">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-19">&#182;</a>
-              </div>
-              <p>主函数，可能递归调用</p>
+        <p>主函数，可能递归调用</p>
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre><span class="hljs-function">  <span class="hljs-title">next</span> = -&gt;</span>
-    getExamInfo = $.get YD.conf.getExamInfo</pre></div></div>
-            
-        </li>
         
+          <div class='highlight'><pre><span class="hljs-function">  <span class="hljs-title">next</span> = -&gt;</span></pre></div>
         
-        <li id="section-20">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-20">&#182;</a>
-              </div>
-              <p>一次性将数据处理好</p>
+      
+        
+        <p>一次性将数据处理好</p>
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    promise = getExamInfo
+        
+          <div class='highlight'><pre>    getExamInfo = $.get YD.conf.getExamInfo
+    promise = getExamInfo
       .<span class="hljs-keyword">then</span> <span class="hljs-function"><span class="hljs-params">(data)</span> -&gt;</span>
         <span class="hljs-keyword">if</span> (<span class="hljs-string">"upcomingExam"</span> <span class="hljs-keyword">of</span> data)
           _.extend data, updateDateText(data), <span class="hljs-attribute">hasUpcoming</span>: <span class="hljs-literal">true</span>
         <span class="hljs-keyword">else</span>
           _.extend data, <span class="hljs-attribute">hasUpcoming</span>: <span class="hljs-literal">false</span>
 
-
-    note promise</pre></div></div>
-            
-        </li>
+    note promise</pre></div>
         
+      
         
-        <li id="section-21">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-21">&#182;</a>
-              </div>
-              <p>ajax成功获得数据后的回调</p>
+        <p>promise 成功时回调</p>
 <ol>
 <li>将从后台获得的数据（从onSuccess函数的参数传进来）绑定到局部变量。</li>
 <li>将判定抽象为函数。</li>
-<li>将所有可能的情况都加入到promise.done doWhen和判定会选择执行哪个</li>
+<li>将所有可能的情况都加入到 promise.done ，doWhen 和判定会选择执行哪个</li>
 </ol>
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre><span class="hljs-function">    <span class="hljs-title">onSuccess</span> = <span class="hljs-params">(data)</span> -&gt;</span>
+        
+          <div class='highlight'><pre><span class="hljs-function">    <span class="hljs-title">onSuccess</span> = <span class="hljs-params">(data)</span> -&gt;</span>
       examInfo = _.snapshot data
 
       hasCurrentExam =  <span class="hljs-string">"currentExam"</span> <span class="hljs-keyword">of</span> examInfo
       hasUpcomingExam = <span class="hljs-string">"upcomingExam"</span> <span class="hljs-keyword">of</span> examInfo
       haslatestExamResult = <span class="hljs-string">"latestExamResult"</span> <span class="hljs-keyword">of</span> examInfo
-      userExamState = examInfo.currentExam?.userExamState</pre></div></div>
-            
-        </li>
+      userExamState = examInfo.currentExam?.userExamState</pre></div>
         
+      
         
-        <li id="section-22">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-22">&#182;</a>
-              </div>
-              <p>有考试，无上次考试成绩 学生状态模版中判定。</p>
+        <p>有考试，无上次考试成绩 学生状态模版中判定。</p>
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>      ex1up0res0 = hasCurrentExam <span class="hljs-keyword">and</span>
-        <span class="hljs-keyword">not</span> haslatestExamResult</pre></div></div>
-            
-        </li>
         
+          <div class='highlight'><pre>      ex1up0res0 = hasCurrentExam <span class="hljs-keyword">and</span>
+        <span class="hljs-keyword">not</span> haslatestExamResult</pre></div>
         
-        <li id="section-23">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-23">&#182;</a>
-              </div>
-              <p>有考试，有上次考试成绩， 学生状态在模版中判定。</p>
+      
+        
+        <p>有考试，有上次考试成绩， 学生状态在模版中判定。</p>
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>      ex1up0res1 = hasCurrentExam <span class="hljs-keyword">and</span>
-        haslatestExamResult</pre></div></div>
-            
-        </li>
         
+          <div class='highlight'><pre>      ex1up0res1 = hasCurrentExam <span class="hljs-keyword">and</span>
+        haslatestExamResult</pre></div>
         
-        <li id="section-24">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-24">&#182;</a>
-              </div>
-              <p>无考试，有考试预告，无上次考试成绩。</p>
+      
+        
+        <p>无考试，有考试预告，无上次考试成绩。</p>
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>      ex0up1res0 = <span class="hljs-keyword">not</span> hasCurrentExam <span class="hljs-keyword">and</span>
+        
+          <div class='highlight'><pre>      ex0up1res0 = <span class="hljs-keyword">not</span> hasCurrentExam <span class="hljs-keyword">and</span>
         hasUpcomingExam <span class="hljs-keyword">and</span>
-        <span class="hljs-keyword">not</span> haslatestExamResult</pre></div></div>
-            
-        </li>
+        <span class="hljs-keyword">not</span> haslatestExamResult</pre></div>
         
+      
         
-        <li id="section-25">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-25">&#182;</a>
-              </div>
-              <p>无考试，有考试预告，有上次考试成绩。</p>
+        <p>无考试，有考试预告，有上次考试成绩。</p>
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>      ex0up1res1 = <span class="hljs-keyword">not</span> (hasCurrentExam) <span class="hljs-keyword">and</span>
+        
+          <div class='highlight'><pre>      ex0up1res1 = <span class="hljs-keyword">not</span> (hasCurrentExam) <span class="hljs-keyword">and</span>
         hasUpcomingExam <span class="hljs-keyword">and</span>
-        haslatestExamResult</pre></div></div>
-            
-        </li>
+        haslatestExamResult</pre></div>
         
+      
         
-        <li id="section-26">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-26">&#182;</a>
-              </div>
-              <p>无考试，无考试预告，有上次考试成绩。</p>
+        <p>无考试，无考试预告，有上次考试成绩。</p>
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>      ex0up0res1 = <span class="hljs-keyword">not</span> (hasCurrentExam) <span class="hljs-keyword">and</span>
+        
+          <div class='highlight'><pre>      ex0up0res1 = <span class="hljs-keyword">not</span> (hasCurrentExam) <span class="hljs-keyword">and</span>
         <span class="hljs-keyword">not</span> hasUpcomingExam <span class="hljs-keyword">and</span>
-        haslatestExamResult</pre></div></div>
-            
-        </li>
+        haslatestExamResult</pre></div>
         
+      
         
-        <li id="section-27">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-27">&#182;</a>
-              </div>
-              <p>无考试，无考试预告，无上次成绩，
+        <p>无考试，无考试预告，无上次成绩，
 用html的div中默认文字。</p>
 
-            </div>
-            
-        </li>
         
+      
         
-        <li id="section-28">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-28">&#182;</a>
-              </div>
-              <p>partial function to save typing.</p>
+        <p>partial function to save typing.</p>
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>      cssID = <span class="hljs-string">"front_content"</span>
+        
+          <div class='highlight'><pre>      cssID = <span class="hljs-string">"front_content"</span>
       render = _.partial renderLocalData, examInfo, cssID
 
       promise.done doWhen ex1up0res0, render <span class="hljs-string">"start_current.ejs"</span>
@@ -640,26 +421,18 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
       promise.done doWhen ex0up1res1, render <span class="hljs-string">"start_scores_with_upcoming.ejs"</span>
 <span class="hljs-function">
     <span class="hljs-title">onFailure</span> = <span class="hljs-params">(data, status, xhr)</span> -&gt;</span>
-      showStatusMsg <span class="hljs-string">"<span class="hljs-subst">#{data}</span>, <span class="hljs-subst">#{status}</span>, <span class="hljs-subst">#{xhr}</span>"</span></pre></div></div>
-            
-        </li>
+      showStatusMsg <span class="hljs-string">"<span class="hljs-subst">#{data}</span>, <span class="hljs-subst">#{status}</span>, <span class="hljs-subst">#{xhr}</span>"</span></pre></div>
         
+      
         
-        <li id="section-29">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-29">&#182;</a>
-              </div>
-              <h3 id="-">获得数据后执行的函数</h3>
+        <h3 id="-">获得数据后执行的函数</h3>
 <ol>
 <li>存后台数据到本地</li>
 <li>决定是否循环检查后台数据</li>
 </ol>
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    promise.fail onFailure
+        
+          <div class='highlight'><pre>    promise.fail onFailure
 
     promise.done <span class="hljs-function"><span class="hljs-params">(data)</span> -&gt;</span>
       note data <span class="hljs-comment"># for debugging</span>
@@ -667,18 +440,11 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
     promise.done <span class="hljs-function"><span class="hljs-params">(data)</span> -&gt;</span>
       YD.exam = YD.exam <span class="hljs-keyword">or</span> data
 
-    promise.done onSuccess</pre></div></div>
-            
-        </li>
+    promise.done onSuccess</pre></div>
         
+      
         
-        <li id="section-30">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-30">&#182;</a>
-              </div>
-              <p><strong>决定是否循环检查后台数据</strong></p>
+        <p><strong>决定是否循环检查后台数据</strong></p>
 <p>只有在以下情况都满足时候才反复请求后台服务器</p>
 <ol>
 <li>没有当前考试</li>
@@ -687,9 +453,8 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
 这样极大减少了不必要的对后台请求</li>
 </ol>
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    promise.done <span class="hljs-function">-&gt;</span>
+        
+          <div class='highlight'><pre>    promise.done <span class="hljs-function">-&gt;</span>
       shouldRetry = <span class="hljs-keyword">not</span> (<span class="hljs-string">"currentExam"</span> <span class="hljs-keyword">of</span> YD.exam) <span class="hljs-keyword">and</span>
         (<span class="hljs-string">"upcomingExam"</span> <span class="hljs-keyword">of</span> YD.exam) <span class="hljs-keyword">and</span>
         _.find YD.exam.upcomingExam, <span class="hljs-function"><span class="hljs-params">(e)</span> -&gt;</span> e.isTodayExam <span class="hljs-comment"># isTodayExam 的值是 true / false</span>
@@ -698,46 +463,30 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
         note <span class="hljs-string">"满足刷新条件，页面将会刷新。 <span class="hljs-subst">#{<span class="hljs-keyword">new</span> Date()}</span> "</span>
         setTimeout next, <span class="hljs-number">180000</span> <span class="hljs-comment"># 3 mins</span>
 
-    <span class="hljs-keyword">return</span> <span class="hljs-comment"># 明确函数 next 返回值是 undefined。</span></pre></div></div>
-            
-        </li>
+    <span class="hljs-keyword">return</span> <span class="hljs-comment"># 明确函数 next 返回值是 undefined。</span></pre></div>
         
+      
         
-        <li id="section-31">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-31">&#182;</a>
-              </div>
-              <ol>
+        <ol>
 <li>马上开始第一次调用。实际上浏览器规范中要求最少4ms。</li>
 <li>用setTimeout调用另一个setTimeout永远不会出现栈溢出。</li>
 <li>直接 next 调用会栈溢出的。比如10万次递归后。
 参见  effective javascript : tip 64，65, page 155。</li>
 </ol>
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>  setTimeout next, <span class="hljs-number">0</span></pre></div></div>
-            
-        </li>
         
+          <div class='highlight'><pre>  setTimeout next, <span class="hljs-number">0</span></pre></div>
         
-        <li id="section-32">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-32">&#182;</a>
-              </div>
-              <h2 id="-">登陆页面</h2>
+      
+        
+        <h2 id="-">登陆页面</h2>
 <ol>
 <li>校验不能有input字段唯恐</li>
 <li>密码用md5求值后再提交给后台</li>
 </ol>
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>YD.u<span class="hljs-function"><span class="hljs-title">serLogin</span> = -&gt;</span>
+        
+          <div class='highlight'><pre>YD.u<span class="hljs-function"><span class="hljs-title">serLogin</span> = -&gt;</span>
   $<span class="hljs-function"><span class="hljs-params">(<span class="hljs-string">"form"</span>)</span>.<span class="hljs-title">submit</span> <span class="hljs-params">(e)</span> -&gt;</span>
     e.preventDefault()
 
@@ -761,27 +510,19 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
       }
       $.post YD.conf.userLogin, data
         .done onSuccess
-        .fail onFailure</pre></div></div>
-            
-        </li>
+        .fail onFailure</pre></div>
         
+      
         
-        <li id="section-33">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-33">&#182;</a>
-              </div>
-              <h2 id="-">重设密码页面</h2>
+        <h2 id="-">重设密码页面</h2>
 <ol>
 <li>校验不能有input字段为空</li>
 <li>校验两次输入新密码是否匹配</li>
 <li>密码用md5求值后再提交给后台</li>
 </ol>
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>YD.r<span class="hljs-function"><span class="hljs-title">esetPass</span> = -&gt;</span>
+        
+          <div class='highlight'><pre>YD.r<span class="hljs-function"><span class="hljs-title">esetPass</span> = -&gt;</span>
   $<span class="hljs-function"><span class="hljs-params">(<span class="hljs-string">"form"</span>)</span>.<span class="hljs-title">submit</span> <span class="hljs-params">(e)</span> -&gt;</span>
     e.preventDefault()
 
@@ -808,11 +549,11 @@ YD.debug = <span class="hljs-literal">false</span></pre></div></div>
       }
       $.post YD.conf.userResetPass, data
         .done onSuccess
-        .fail onFailure</pre></div></div>
-            
-        </li>
+        .fail onFailure</pre></div>
         
-    </ul>
+      
+      <div class="fleur">h</div>
+    </div>
   </div>
 </body>
 </html>

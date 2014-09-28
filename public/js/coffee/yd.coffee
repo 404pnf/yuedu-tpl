@@ -24,15 +24,16 @@ alertBox = (msg) ->
         $(this).dialog "close"
   return
 
-# 简化 if (predict) {}，
-# 或者说模仿scheme中的when。
+# 简化 if (predict) {}，或者说模仿scheme中的when。
 # 注意：action必须是一个返回函数的函数，这样才能延迟执行。
 # 可以用 -> 包裹一下，防止action作为参数时被立即求值。
 doWhen = (predict, action) ->
   action if predict
 
 
-# ### 通用的ajax请求后成功和失败的回调函数
+# ### 通用的 ajax promise 的回调函数
+# 1. 如果后台返回带"error"的键名的对象，显示错误并停止提交，停留在当前页面
+# 1. 如果后台会返回带有"success"键名的对象，表示提交成功，执行回调函数
 onSuccess = (data) ->
   if "error" of data
     showStatusMsg data
@@ -45,10 +46,10 @@ onFailure = (data, status, xhr) ->
 # ### 提交表单内容到后台
 #
 # 1. 从表单获取数据
-# 2. 用jquery插件将数据转为json
-# 3. 提交json给后台api
-# 4. 如果后台返回带"error"的键名的对象，显示错误并停止提交，停留在编辑页面
-# 5. 如果后台会返回带有"success"键名的对象，表示提交成功，执行回调函数
+# 1. 用jquery插件将数据转为json
+# 1. 提交json给后台api
+# 1. 调用通用的ajax回调函数
+
 postJson = (url, cssID, callback) ->
   formData = data: $(cssID).serializeJSON()
 
@@ -93,7 +94,7 @@ hasBlank = (arr) ->
 #
 # ## 用户页面
 #
-# 1. 后台api的地址再YD.conf中配置
+# 1. 后台api的地址在YD.conf中配置
 # 2. 一次将用户数据全部拿到。这样在编辑用户信息和编辑用户头像页面的时候，就不用再发请求了
 YD.user = ->
 
@@ -158,7 +159,7 @@ YD.user = ->
 
 
 # ## 渲染用户条
-# 后台api的地址再YD.conf中配置
+# 后台api的地址在YD.conf中配置
 YD.userBar = ->
   userinfo = YD.conf.userInfo
   photos = YD.conf.photos
@@ -177,10 +178,10 @@ YD.userBar = ->
 # ## 用户登录后首页
 #
 # 1. 根据后台的数据决定显示哪个模版
-# 2. 如果无当前考试，且考试预告有今天的考试，定期刷后台，当有当前考试的时候，显示考试
+# 2. 如果无当前考试，且考试预告有今天的考试，定期刷后台，当前考试出现的时候，显示考试入口
 YD.startDispache = ->
   # 帮助函数
-  # 1. 如果考试预告中有考试是今天的就在模版中显示今天两个字
+  # 1. 如果考试预告中有考试是今天的就在模版中显示“今天”两个字
   # 1. 直接修改了examInfo
   updateDateText = (d) ->
     o = _.map d.upcomingExam, (e) ->
@@ -192,9 +193,8 @@ YD.startDispache = ->
 
   # 主函数，可能递归调用
   next = ->
-    getExamInfo = $.get YD.conf.getExamInfo
-
     # 一次性将数据处理好
+    getExamInfo = $.get YD.conf.getExamInfo
     promise = getExamInfo
       .then (data) ->
         if ("upcomingExam" of data)
@@ -202,13 +202,12 @@ YD.startDispache = ->
         else
           _.extend data, hasUpcoming: false
 
-
     note promise
 
-    # ajax成功获得数据后的回调
+    # promise 成功时回调
     # 1. 将从后台获得的数据（从onSuccess函数的参数传进来）绑定到局部变量。
     # 1. 将判定抽象为函数。
-    # 1. 将所有可能的情况都加入到promise.done doWhen和判定会选择执行哪个
+    # 1. 将所有可能的情况都加入到 promise.done ，doWhen 和判定会选择执行哪个
     onSuccess = (data) ->
       examInfo = _.snapshot data
 
