@@ -74,15 +74,20 @@
     }
   };
 
-  hasBlank = function(arr) {
-    var coll, isBlank;
+  hasBlank = function(arrayOfCssElement) {
+    var e, isBlank, notValid, _i, _len;
     isBlank = function(e) {
       return e === "";
     };
-    coll = _.map(arr, isBlank);
-    return _.reduce(coll, function(a, e) {
-      return a || e;
-    }, false);
+    notValid = false;
+    for (_i = 0, _len = arrayOfCssElement.length; _i < _len; _i++) {
+      e = arrayOfCssElement[_i];
+      if (isBlank($(e).val())) {
+        $(e).addClass("error");
+        notValid = true;
+      }
+    }
+    return notValid;
   };
 
   YD.user = function() {
@@ -229,10 +234,11 @@
     return $("form").submit(function(e) {
       var data, name, notValid, password, yz;
       e.preventDefault();
+      $("input").removeClass("error");
       name = $("#username").val();
       password = $("#password").val();
       yz = $("#yz").val();
-      notValid = hasBlank([name, password, yz]);
+      notValid = hasBlank(["#username", "#password", "#yz"]);
       if (notValid) {
         return alertBox("所有输入框都必须填写。");
       } else {
@@ -250,14 +256,17 @@
     return $("form").submit(function(e) {
       var data, dontMatch, newPass, newPassConfirm, notValid, oldPass;
       e.preventDefault();
+      $("input").removeClass("error");
       oldPass = $("#old_pass").val();
       newPass = $("#new_pass").val();
       newPassConfirm = $("#new_pass_confirm").val();
-      notValid = hasBlank([oldPass, newPass, newPassConfirm]);
+      notValid = hasBlank(["#old_pass", "#new_pass", "#new_pass_confirm"]);
       dontMatch = newPass !== newPassConfirm;
       if (notValid) {
         return alertBox("所有输入框都必须填写。");
       } else if (dontMatch) {
+        $("#new_pass").addClass("error");
+        $("#new_pass_confirm").addClass("error");
         return alertBox("两次输入的新密码不匹配。");
       } else {
         data = JSON.stringify({

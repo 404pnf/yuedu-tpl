@@ -81,15 +81,23 @@ redirectToUrl = (url) ->
 note = (msg) ->
   console.log msg  if YD.debug
 
-hasBlank = (arr) ->
+# 输入：input 框 cssID 的数组。
+#
+# 输出： true / false
+#
+# 副作用：所有为空的输入框会被加上 "error" 这个css类
+hasBlank = (arrayOfCssElement) ->
   isBlank = (e) ->
     e is ""
 
-  coll = _.map(arr, isBlank)
+  notValid = false
 
-  _.reduce coll,
-    (a, e) -> a or e,
-    false
+  for e in arrayOfCssElement
+    if (isBlank $(e).val())
+      $(e).addClass "error"
+      notValid = true
+
+  notValid
 
 #
 # ## 用户页面
@@ -265,7 +273,7 @@ YD.startDispache = ->
     promise.fail onFailure
 
     promise.done (data) ->
-      note data # for debugging
+      note data
 
     promise.done (data) ->
       YD.exam = YD.exam or data
@@ -305,14 +313,17 @@ YD.userLogin = ->
   $("form").submit (e) ->
     e.preventDefault()
 
+    # 先移除上一次输入框错误的css类，因为这次人家可能写对了
+    $("input").removeClass "error"
+
     name = $("#username").val()
     password = $("#password").val()
     yz = $("#yz").val()
 
     notValid = hasBlank([
-      name
-      password
-      yz
+      "#username"
+      "#password"
+      "#yz"
     ])
 
     if notValid
@@ -337,20 +348,25 @@ YD.resetPass = ->
   $("form").submit (e) ->
     e.preventDefault()
 
+    # 先移除上一次输入框错误的css类，因为这次人家可能写对了
+    $("input").removeClass "error"
+
     oldPass = $("#old_pass").val()
     newPass = $("#new_pass").val()
     newPassConfirm = $("#new_pass_confirm").val()
 
     notValid = hasBlank([
-      oldPass
-      newPass
-      newPassConfirm
+      "#old_pass"
+      "#new_pass"
+      "#new_pass_confirm"
     ])
     dontMatch = newPass isnt newPassConfirm
 
     if notValid
       alertBox "所有输入框都必须填写。"
     else if dontMatch
+      $("#new_pass").addClass "error"
+      $("#new_pass_confirm").addClass "error"
       alertBox "两次输入的新密码不匹配。"
     else
       data = JSON.stringify {
