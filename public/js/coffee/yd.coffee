@@ -2,7 +2,7 @@
 # 也是程序的命名空间
 root = global ? window
 
-root.YD or= {}
+root.YD ?= {}
 
 YD.debug = false
 
@@ -200,6 +200,7 @@ YD.startDispache = ->
         else
           _.extend data, hasUpcoming: false
 
+
     note promise
 
     onSuccess = (data) ->
@@ -211,7 +212,7 @@ YD.startDispache = ->
       hasCurrentExam =  "currentExam" of examInfo
       hasUpcomingExam = "upcomingExam" of examInfo
       haslatestExamResult = "latestExamResult" of examInfo
-      userExamState = examInfo?.currentExam?.userExamState
+      userExamState = examInfo.currentExam?.userExamState
 
       # 有考试，无上次考试成绩 学生状态模版中判定。
       ex1up0res0 = hasCurrentExam and
@@ -301,6 +302,15 @@ YD.startDispache = ->
 # 1. 校验不能有input字段唯恐
 # 2. 密码用md5求值后再提交给后台
 YD.userLogin = ->
+  onSuccess = (data) ->
+    if "error" of data
+      showStatusMsg data
+    else
+      callback()
+
+  onFailure = (data, status, xhr) ->
+    showStatusMsg "#{data}, #{status}, #{xhr}"
+
   $("form").submit (e) ->
     e.preventDefault()
 
@@ -318,9 +328,18 @@ YD.userLogin = ->
     if notValid
       alertBox "所有输入框都必须填写。"
     else
-      $("#password").val $.md5(password)
-      postJson YD.conf.userLogin, "#login", ->
-        redirectToUrl YD.conf.siteHomeUrl
+      data = JSON.stringify {
+        username: name
+        password: $.md5(password)
+        yz: yz
+      }
+      $.post YD.conf.userLogin, data
+        .done onSuccess
+        .fail onFailure
+
+      # $("#password").val $.md5(password)
+      # postJson YD.conf.userLogin, "#login", ->
+      #   redirectToUrl YD.conf.siteHomeUrl
 
 #
 # ## 重设密码页面
@@ -329,6 +348,15 @@ YD.userLogin = ->
 # 2. 校验两次输入新密码是否匹配
 # 3. 密码用md5求值后再提交给后台
 YD.resetPass = ->
+  onSuccess = (data) ->
+    if "error" of data
+      showStatusMsg data
+    else
+      callback()
+
+  onFailure = (data, status, xhr) ->
+    showStatusMsg "#{data}, #{status}, #{xhr}"
+
   $("form").submit (e) ->
     e.preventDefault()
 
@@ -351,8 +379,18 @@ YD.resetPass = ->
     else if dontMatch
       alertBox "两次输入的新密码不匹配。"
     else
-      $("#new_pass").val $.md5(newPass)
-      $("#old_pass").val $.md5(oldPass)
-      $("#new_pass_confirm").val $.md5(newPassConfirm)
-      postJson YD.conf.userResetPass, "#reset_pass_form", ->
-        redirectToUrl YD.conf.userHomeUrl
+      # $("#new_pass").val $.md5(newPass)
+      # $("#old_pass").val $.md5(oldPass)
+      # $("#new_pass_confirm").val $.md5(newPassConfirm)
+      data = JSON.stringify {
+        oldPass: $.md5(oldPass)
+        newPass: $.md5(newPass)
+        newPassConfirm: $.md5(newPassConfirm)
+      }
+
+      # postJson YD.conf.userResetPass, "#reset_pass_form", ->
+      #   redirectToUrl YD.conf.userHomeUrl
+
+      $.post YD.conf.userResetPass, data
+        .done onSuccess
+        .fail onFailure

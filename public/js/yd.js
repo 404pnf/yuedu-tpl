@@ -4,7 +4,9 @@
 
   root = typeof global !== "undefined" && global !== null ? global : window;
 
-  root.YD || (root.YD = {});
+  if (root.YD == null) {
+    root.YD = {};
+  }
 
   YD.debug = false;
 
@@ -182,7 +184,7 @@
         hasCurrentExam = "currentExam" in examInfo;
         hasUpcomingExam = "upcomingExam" in examInfo;
         haslatestExamResult = "latestExamResult" in examInfo;
-        userExamState = examInfo != null ? (_ref = examInfo.currentExam) != null ? _ref.userExamState : void 0 : void 0;
+        userExamState = (_ref = examInfo.currentExam) != null ? _ref.userExamState : void 0;
         ex1up0res0 = hasCurrentExam && !haslatestExamResult;
         ex1up0res1 = hasCurrentExam && haslatestExamResult;
         ex0up1res0 = !hasCurrentExam && hasUpcomingExam && !haslatestExamResult;
@@ -222,8 +224,19 @@
   };
 
   YD.userLogin = function() {
+    var onFailure, onSuccess;
+    onSuccess = function(data) {
+      if ("error" in data) {
+        return showStatusMsg(data);
+      } else {
+        return callback();
+      }
+    };
+    onFailure = function(data, status, xhr) {
+      return showStatusMsg("" + data + ", " + status + ", " + xhr);
+    };
     return $("form").submit(function(e) {
-      var name, notValid, password, yz;
+      var data, name, notValid, password, yz;
       e.preventDefault();
       name = $("#username").val();
       password = $("#password").val();
@@ -232,17 +245,30 @@
       if (notValid) {
         return alertBox("所有输入框都必须填写。");
       } else {
-        $("#password").val($.md5(password));
-        return postJson(YD.conf.userLogin, "#login", function() {
-          return redirectToUrl(YD.conf.siteHomeUrl);
+        data = JSON.stringify({
+          username: name,
+          password: $.md5(password),
+          yz: yz
         });
+        return $.post(YD.conf.userLogin, data).done(onSuccess).fail(onFailure);
       }
     });
   };
 
   YD.resetPass = function() {
+    var onFailure, onSuccess;
+    onSuccess = function(data) {
+      if ("error" in data) {
+        return showStatusMsg(data);
+      } else {
+        return callback();
+      }
+    };
+    onFailure = function(data, status, xhr) {
+      return showStatusMsg("" + data + ", " + status + ", " + xhr);
+    };
     return $("form").submit(function(e) {
-      var dontMatch, newPass, newPassConfirm, notValid, oldPass;
+      var data, dontMatch, newPass, newPassConfirm, notValid, oldPass;
       e.preventDefault();
       oldPass = $("#old_pass").val();
       newPass = $("#new_pass").val();
@@ -254,12 +280,12 @@
       } else if (dontMatch) {
         return alertBox("两次输入的新密码不匹配。");
       } else {
-        $("#new_pass").val($.md5(newPass));
-        $("#old_pass").val($.md5(oldPass));
-        $("#new_pass_confirm").val($.md5(newPassConfirm));
-        return postJson(YD.conf.userResetPass, "#reset_pass_form", function() {
-          return redirectToUrl(YD.conf.userHomeUrl);
+        data = JSON.stringify({
+          oldPass: $.md5(oldPass),
+          newPass: $.md5(newPass),
+          newPassConfirm: $.md5(newPassConfirm)
         });
+        return $.post(YD.conf.userResetPass, data).done(onSuccess).fail(onFailure);
       }
     });
   };
