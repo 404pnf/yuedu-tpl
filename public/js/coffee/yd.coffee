@@ -116,7 +116,7 @@ YD.user = ->
   grades = YD.conf.grades
 
   userInfoAll = $
-    .when $.ajax(userinfo), $.ajax(grades), $.ajax(photos)
+    .when $.get(userinfo), $.get(grades), $.get(photos)
     .then (a, b, c) ->
       _.extend a[0], b[0], c[0]
 
@@ -175,7 +175,7 @@ YD.userBar = ->
   userinfo = YD.conf.userInfo
   photos = YD.conf.photos
 
-  $.when $.ajax(userinfo), $.ajax(photos)
+  $.when $.get(userinfo), $.get(photos)
     .then (a, b) ->
       _.extend a[0], b[0]
     .done (data) ->

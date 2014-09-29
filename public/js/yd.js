@@ -109,7 +109,7 @@
     userinfo = YD.conf.userInfo;
     photos = YD.conf.photos;
     grades = YD.conf.grades;
-    userInfoAll = $.when($.ajax(userinfo), $.ajax(grades), $.ajax(photos)).then(function(a, b, c) {
+    userInfoAll = $.when($.get(userinfo), $.get(grades), $.get(photos)).then(function(a, b, c) {
       return _.extend(a[0], b[0], c[0]);
     });
     userRender = function(tpl, cssID, data) {
@@ -161,7 +161,7 @@
     var photos, userinfo;
     userinfo = YD.conf.userInfo;
     photos = YD.conf.photos;
-    return $.when($.ajax(userinfo), $.ajax(photos)).then(function(a, b) {
+    return $.when($.get(userinfo), $.get(photos)).then(function(a, b) {
       return _.extend(a[0], b[0]);
     }).done(function(data) {
       return new EJS({
