@@ -2,8 +2,10 @@ require 'sinatra'
 require 'sinatra/jsonp'
 
 set public_folder: 'static'
-
+set static_cache_control: [:private, :max_age => 0]
 before do
+
+  expires 0, :private, :must_revalidate
   # 帮助
   # http://stackoverflow.com/questions/20734242/cross-domain-session-with-sinatra-and-angularjs
   headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
@@ -75,12 +77,12 @@ get '/examController/studentLogin' do
   # userExamState:'0|1', //用户考试状态（0：未开始 1：开始 2：结束 3：弃考）
   r = {
 
-    # currentExam: {
-    #   endTime: '2014-09-16 15:20',
-    #   name: '2014秋季测试',
-    #   id: 'exam_id',
-    #   userExamState: '2'
-    # },
+    currentExam: {
+      endTime: '2014-09-16 15:20',
+      name: '2014秋季测试',
+      id: 'exam_id',
+      userExamState: '2'
+    },
 
     # upcomingExam: [{
     #     name: '2014秋季测试',
