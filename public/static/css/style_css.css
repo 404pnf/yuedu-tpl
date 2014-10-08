@@ -1,0 +1,216 @@
+@charset "utf-8";
+/*全局控制*/
+body{margin:0; padding:0; font-size:16px; font-family:'微软雅黑'; background:#43ae6a;}
+a{ text-decoration:none;}
+.fl{ float:left}
+.fr{ float:right}
+.oh{ overflow:hidden}
+.clear{ clear:both}
+.wryh{ font-family:'微软雅黑'}
+.Arial{ font-family:Arial, Helvetica, sans-serif}
+a{ cursor: pointer;}
+fieldset{ border:none;}
+/*清除浏览器默认样式*/
+h1,h2,h3,h4,h5,ul,li,dl,dt,dd,p,img,table,tr,td{margin:0; padding:0; list-style:none; border:none;}
+
+/*common*/
+.wrapper{ width:100%; background:url(../images/wrapper_bg.jpg) repeat-x bottom #bee7f0; padding-top:22px;}
+.no_scollw{ width:1000px; margin:0 auto;}
+.pos_rel{position:relative; clear:both}
+.no_margin{ margin-bottom:0!important;}
+.no_margin_top{ margin-top:0!important;}
+/*exam*/
+.exam_top{ height:169px; margin:0 auto; background:url(../images/exam_top.png) center top no-repeat;}
+.exam_center{ margin:0 auto; background:url(../images/exam_center.jpg) repeat-y center;}
+.exam_bottom{ width:100%; background:url(../images/exam_bottom.jpg) no-repeat bottom;min-height:300px; padding-bottom:160px;}
+.exam_name{ color:#ffffff; font-size:20px; width:87px; font-weight:bold; margin:34px 260px 0 106px; height:44px; line-height:44px; text-align:center}
+.exam_time{ font-size:20px; color:#ffffff; margin-top:34px; width: 157px; display: inline-block;}
+.exam_time span{ font-size:26px; margin-left:10px;}
+.exam_progress{ width:212px; height:22px; margin:42px 74px 0 0;}
+.progress_bar{ background:url(../images/program_bar.png) no-repeat; height:22px;}
+.exam_pause{ color:#ffffff; font-size: 15px; width:68px; margin-top:30px; display:inline-block;height: 44px;line-height: 44px; padding: 3px 0 0 10px;}
+a.exam_pause:hover{ background:url(../images/btn_bg.png) no-repeat 0 -150px}
+/*btn*/
+.btn{background:url(../images/btn_bg.png) no-repeat; width:126px; height:49px; line-height:43px; text-align:center; color:#FFF; font-size:18px;display: inline-block; border:none; font-family:'微软雅黑';}
+.btn:hover{ background:url(../images/btn_bg.png) no-repeat 0 -100px}
+.btn_u{background:url(../images/btn_bg.png) no-repeat 0 -50px!important;}
+.next_btn,.next_unbtn{ position:absolute; bottom:90px; right:60px; background:url(../images/btn_bg.png) no-repeat; width:126px; height:49px; line-height:43px; text-align:center; color:#FFF; font-size:18px;}
+.next_unbtn{  background:url(../images/btn_bg.png) no-repeat 0 -50px!important;}
+a.next_btn:hover{ background:url(../images/btn_bg.png) no-repeat 0 -100px}
+
+/*web界面*/
+@font-face {
+	font-family: 'minijiankatong';
+	/*src: url('../fonts/huakangW12.eot');  IE9 Compat Modes */
+	src: /*url('../fonts/huakangW12.eot?#iefix') format('embedded-opentype'),  IE6-IE8 */
+         url('../fonts/minijiankatong.TTF')  format('truetype') /* Safari, Android, iOS */
+   }
+.main_bg{ background:url(../images/main_bg.png) no-repeat center 81px; height:810px;}
+.web_tit{ width:935px; height:73px; background:url(../images/web_tit_bg.png) no-repeat; margin:0 auto 15px auto; font-family:"minijiankatong"; font-size:40px; color:#FFF; font-weight:bold; line-height:73px; padding-left:65px; letter-spacing:-2px;}
+/*nav*/
+.web_nav{ width:845px; margin:0 auto;}
+.web_first{ margin:56px 0 0 20px;}
+.nav{width:106px; height:76px; background-image:url(../images/web_nav.png); background-repeat:no-repeat; display: inline-block; margin-left:6px;}
+.nav_home{ background-position:0 0;}
+.nav_home:hover{ background-position:0 5px;}
+.nav_mexam{ background-position:-112px 0;}
+.nav_mexam:hover{ background-position:-112px 5px;}
+.nav_pw{ background-position:-226px 0;}
+.nav_pw:hover{ background-position:-226px 5px;}
+.nav_exit{ background:url(../images/exit.png) no-repeat bottom; width:294px; height:133px; display:inline-block;}
+.nav_exit:hover{ background:url(../images/exit_h.png) no-repeat bottom;}
+.nav_head{ position:absolute; z-index:1000; width:121px; height:97px; text-align:center; padding-top:36px;}
+.nav_head img{ display:block; margin:0 auto 8px auto;height: 55px;}
+.nav_head span{ font-size:18px; color:#FFF;}
+.nav_last{ position:relative;}
+
+/*main*/
+.web_main{ width:800px; height:330px; margin: 44px auto 0 auto;}
+.main_left{ width:300px; margin-right:50px;margin-top: 26px;}
+.main_right{ width:423px; padding-top:20px;margin-top: 26px;}
+	/*person_info*/
+.head_box{ margin-bottom:25px;overflow: hidden;}
+.head_box img{ float:left; margin:0 42px 0 30px;height: 80px}
+.head_box a{}
+.form_one{ background:#d1e2e7; border-radius:5px; line-height:44px; height:44px; margin-bottom:20px; display:inline-block;}
+.form_one label{ background:#3d9ee1; color:#ffffff; font-size:18px; display:inline-block; width:102px; text-align:center;border-radius:5px 0 0 5px; height:44px;}
+.form_one .span1{ width:172px; display:inline-block; padding-left:20px;}
+.form_one .span2{ width:300px; display:inline-block; padding-left:20px;}
+	/*index*/
+/*1*/
+.mexam_tip{ background:url(../images/mexam_tip_bg.jpg) no-repeat; height:36px; width:514px; font-size:16px; font-weight:bold; color:#01729c; margin-left:120px; padding-top:30px; text-align:center}
+.exam_name_1{ color:#074f81; font-size:36px; font-weight:bold; text-align:center; margin:26px 0 36px 0;}
+.exam_setout{ background:url(../images/start_bg.jpg) no-repeat top; width:400px; height:143px; font-size:16px; color:#074f81;font-weight:bold; padding:0 0 0 45px;}
+.exam_setout .headset{ width:46px; height:46px; background:url(../images/audio.png);/*audio.gif*/ display:block; margin:10px 0 42px 17px;}
+.exam_setout_margin1{ margin-left:90px;}
+.btn_start{ display:block; background:url(../images/btn_star_bg.jpg) no-repeat top; width:118px; height:145px; line-height:137px; font-size:36px; font-weight:bold; color:#FFF; padding-left:26px; }
+.btn_start:hover{ background:url(../images/btn_star_bg.jpg) 0 -145px;}
+/*2*/
+.noexam{ background:url(../images/no_exam.jpg) no-repeat center; height:144px; }
+.noexam2{margin-top:20px;}
+.next_exam{ margin:26px 0 0 120px;}
+.next_exam h4,.next_exam4 h4{ line-height:180%}
+.next_exam ul li,.next_exam4 ul li{ color:#838383; line-height:180%; list-style:inside;}
+/*3*/
+.btn_goon{display:block; background:url(../images/btn_goon_bg.jpg) no-repeat top left; width:118px; height:176px; line-height:137px; font-size:36px; font-weight:bold; color:#FFF; padding-left:26px; }
+.btn_goon:hover{ background:url(../images/btn_goon_bg.jpg) 0 -176px;}
+/*4*/
+.main_left_4{ width:340px; margin-right:20px;margin-top: 46px;}
+.main_right_4{ width:440px; padding-top:20px;margin-top: 26px;}
+.next_exam4{margin:26px 0 0 60px;}
+.ckrep h3{ color:#074f81; font-size:28px; line-height:190%; margin-left:10px;}
+.ckrep div{ color:#434343; line-height:190%; margin-left:10px;}
+.ckrep span{ margin-left:20px;}
+.ckrep_btn{ margin-left:0!important}
+.ckrep_btn a{ margin:20px 20px 0 0;}
+.ckrep4{ margin:30px 0 0 40px;}
+/*5*/
+.ckrep5{margin: 10px 0 30px 90px;}
+.again{ width:316px; height:194px; background:url(../images/again.jpg) no-repeat 0 73px; margin:0 0 0 56px}
+/*login*/
+.login_bg{ background:url(../images/login_bg.jpg) center  -45px  no-repeat; height:755px;}
+.login_form{ margin:0 auto; width:290px; padding:242px 0 0 60px;}
+.login_form fieldset{ border:none;}
+.login_form .input_un,.login_form .input_pw{ height:42px; line-height:42px; width:245px; border:none; margin-bottom:2px; background:none; padding-right:40px; font-size:16px;}
+.login_form li.highlight .input_un, .login_form li.highlight .input_pw,.login_form li.highlight .input_yz{ background:#eeeeee; border:none}
+.login_form .input_yz{height:42px; line-height:42px; width:180px;border:none; background:none;font-size:16px;}
+.form_ul{ position:relative}
+.error_info_un,.error_info_pw,.error_info_yz{ position:absolute; right:-265px; background:url(../images/error_bg.png) no-repeat; padding-left:60px; width:240px; color:#fff; line-height:34px;}
+.error_info_pw{ top:45px;}
+.login_btn{ margin:10px 0 0 50px; cursor:pointer}
+.fpw{ color:#333; margin-left:15px;}
+.fpw:hover{ color:#007caa; text-decoration:underline;}
+.error_info_yz{ top:90px;}
+.statement{ width: 430px; margin: 200px auto 0 auto; font-size: 10px; color: #04733b;}
+/*edit_info*/
+.old_head{ width:200px; text-align:center; margin-top:50px;}
+/*.old_head_info{ margin-right:20px;}*/
+.new_head_list{ width:530px; margin-top:20px;margin-left: 40px;}
+.new_head_list li{ float:left; margin:0px 16px 10px 80px; text-align:center}
+.btn_box_info button{ margin-right:36px;}
+.info_l{ width:300px; margin-bottom:40px;}
+.info_l label{ width:50px; display: block; float:left; font-weight:bold; margin-top:3px;}
+.info_l div{ margin-top:60px;}
+.info_l div input,.info_l div select{ margin-left:10px;font-size: 16px;}
+.input_style{ border:1px solid #dadada; box-shadow:2px 2px 1px #b2b0ac; height:27px; line-height:27px;}
+.male,.female{ border-radius:20px; padding:2px 20px; color:#fff; margin:0 5px}
+.male{ background:#009dd5;}
+.female{ background:#f2a8c8;}
+.input_style_width{ width:175px;}
+
+/*----------------report------------------*/
+/*one_report*/
+.wrapper_report{ background:url(../images/report_bg.jpg) repeat-x bottom;}
+.report_bottom{ background:url(../images/report_bottom_bg.jpg) bottom #ffffff no-repeat; border-radius:20px;  width:753px; margin:30px auto 0 auto; padding-top:50px; padding-bottom:180px;}
+.report_tit{ background:url(../images/report_tit_bg.jpg) no-repeat center; width:100%; height:129px; margin-bottom:40px; text-align:center}
+.report_tit_p{ background:url(../images/report_tit_p.jpg); width:355px; height:60px; margin-top:37px; display:inline-block}
+.grade_report_tit_p{ width:420px; height:60px; margin-top:43px; display:inline-block; color:#fff; font-size:30px;}
+.report_mylevel{ background:url(../images/report_mylevel.jpg) no-repeat; width:753px; height:393px;}
+.report_mylevel ul{ margin-left:47px;}
+.report_mylevel ul li{ float:left; font-size:13px; color:#ffffff; height:29px; line-height:29px; margin-right:20px;}
+.report_mylevel .user_name{ width:98px}
+.report_mylevel .user_testtime{ width:146px;}
+.report_mylevel .user_school{ width:210px}
+.report_mylevel .user_class{ width:150px;}
+.report_stit_bg{ width:176px; height:43px; background:url(../images/report_stit_bg.jpg); text-align:center; color:#ffffff; font-size:18px; line-height:46px; margin-left:45px; margin-top:70px; position:relative}
+.report_more{ color:#009dd4; font-size:20px; position:absolute; left:160px; width:140px;}
+.mylevel{ border-radius:20px; border:7px solid #009dd4; padding:30px 20px; width:660px; margin:0 auto;}
+.mylevel div{ color:#ab1c27; font-size:20px; font-weight:bold; margin-bottom:5px;}
+.mylevel div span{ color:#ffffff; font-size:30px; border-radius:100px; background:#c4d703; padding:0 10px; margin:0 10px}
+.mylevel p{ color:#009dd4; font-size:16px; line-height:170%;}
+.yz_box{ text-align:center; margin-top:40px;}
+.yz1{ background:url(../images/sample_chapter.jpg) no-repeat; padding:12px 0 5px 36px; margin-right:60px; display:inline-block;}
+.yz2{ background:url(../images/sample_chapter1.jpg) no-repeat; padding:12px 0 5px 36px;display:inline-block;}
+.interested_book_box,.interested_book_box2{ width:685px; margin:0 auto;}
+.interested_book_box li,.interested_book_box2 li{ float:left; text-align:center; width:202px;}
+.interested_book_box li{ background:url(../images/report_book_name.jpg) no-repeat bottom; margin:36px 13px;}
+.interested_book_box2 li{ background:url(../images/report_book_name2.jpg) no-repeat bottom;margin:36px 13px 0 13px;}
+.interested_book_name{ height:28px; line-height:30px; color:#ffffff; font-size:15px;overflow:hidden;text-overflow:ellipsis; white-space:nowrap;}
+.my_chart{ width:629px; height:309px; margin:0 auto; padding-top:70px}
+
+/*grade-report*/
+.grade_info{ background:url(../images/grade_info.jpg) no-repeat; height:52px; padding-top:52px; font-size:13px; padding-left:32px; margin-bottom:30px;}
+.grade_info .grade_name{ color:#ffffff; text-align:center; margin:0 10px 0 0; width:66px!important;}
+.level_description{ background:url(../images/grade_comment.jpg) no-repeat; height:232px; margin-top:60px;}
+.level_description .level_description_tit{ color:#ffffff; font-size:18px; width:302px; height:39px; line-height:39px; padding:5px 0 0 70px;}
+.level_description .level_description_con{ color:#009dd4; font-size:16px; width:670px; margin:30px auto 0 auto; line-height:31px;}
+.grade_info span{ color:#000000; width:170px; display:inline-block;}
+.report_more_2{ color:#009dd4; font-size:20px; position:absolute; left:260px;top:26px; width:140px;}
+.read_level{ width:304px; height:60px; background-image:url(../images/grade_tit_1.jpg); background-repeat:no-repeat; margin-left:45px; margin-top:86px;}
+.recommend_level{ width:304px; height:60px; background-image:url(../images/grade_tit_2.jpg); background-repeat:no-repeat; margin-left:45px; margin-top:86px;position: relative;}
+
+.level_1{ background-position:0 0;}
+.level_2{ background-position:0 -70px;}
+.level_3{ background-position:0 -145px;}
+.level_4{ background-position:0 -215px;}
+.level_5{ background-position:0 -288px;}
+.level_6{ background-position:0 -358px;}
+.level_7{ background-position:0 -431px;}
+.level_8{ background-position:0 -500px;}
+.level_9{ background-position:0 -570px;}
+.level_10{ background-position:0 639px;}
+.level_11{ background-position:0 -710px;}
+.level_12{ background-position:0 -780px;}
+.level_13{ background-position:0 -853px;}
+.level_14{ background-position:0 -923px;}
+.level_15{ background-position:0 -993px;}
+.level_16{ background-position:0 -1066px;}
+.level_17{ background-position:0 -1138px;}
+.level_18{ background-position:0 -1208px;}
+.level_19{ background-position:0 -1279px;}
+.level_20{ background-position:0 -1346px;}
+
+.big_line_t{ background:url(../images/big_line_t.jpg) no-repeat;}
+.big_line_c{ background:url(../images/big_line_c.jpg) repeat-y;}
+.chartdiv,.dataTables_wrapper{ width:654px; margin:0 auto;}
+.chartdiv_analyze{ color:#ab1c27; font-size:21px;}
+.chartdiv_analyze span{ width:19px; height:19px; display:inline-block; margin-right:5px; background:#ab1c27; margin-top:35px;}
+
+/*-----------------pw---------------------------*/
+.pw_box{ width: 406px; margin: 100px 0 0 153px;}
+.pw_box label{ width:100px; display:inline-block; text-align:right; margin-right:20px;}
+.pw_box div{ margin-bottom:30px;}
+.pw_box div .input_style{ width:270px;}
+.pw_box .btn_box_info{ margin-left:120px;}
+.pw_box .btn_box_info .btn{ margin-right:15px;}
+.pw_box .btn_box_info .btn_u{ margin-right:0px!important;}

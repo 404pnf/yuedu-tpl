@@ -13,11 +13,11 @@ end
 
 get '/' do
   text = %q(
-    <a href=/charts.html>charts.html</a><br>
-    <a href=/personal_info.html>user</a><br>
-    <a href=/front.html>front.html</a><br>
-    <a href=/login.html>login.html</a><br>
-    <a href=/pw_edit.html>pw_edit.html</a><br>
+    <a href=/static/charts.html>charts.html</a><br>
+    <a href=/static/personal_info.html>user</a><br>
+    <a href=/static/front.html>front.html</a><br>
+    <a href=/static/login.html>login.html</a><br>
+    <a href=/static/pw_edit.html>pw_edit.html</a><br>
   )
   text
 end

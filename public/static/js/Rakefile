@@ -1,0 +1,37 @@
+desc '将使用的第三方js库拼接成一个大文件'
+task :concat do
+  Dir.chdir('lib') { system('cat jquery.js jquery-ui.js jquery.serialize-object.js jquery.md5.js underscore-min.js ejs.js underscore.object.builders.js json2.js> ../lib.all.js') }
+  Dir.chdir('lib') { system('cat amcharts.js serial.js amstock.js > ../amcharts.all.js') }
+end
+
+desc '用google-closure编译js文件'
+task :compile do
+  system('java -jar ~/gogole-closure-compiler/compiler.jar --js yd.js > yd.min.js')
+end
+
+task :default do
+  # :concat
+end
+
+desc '用jslint和jshint检查js代码'
+task :lint do
+  # system('jslint yd*.js')
+  # system('jshint yd*.js')
+  system('coffeelint coffee/')
+end
+
+desc '监视coffeescript代码并在有修改的时候自动编译为js'
+task :watch do
+  system('coffee -cwo . coffee &')
+end
+
+desc '启动server'
+task :server do
+  system('shotgun -p4567 ../../../app.rb &')
+end
+
+desc 'generate documenations'
+task :doc do
+  #system('/Users/bai/.nvm/v0.11.12/bin/docco coffee/*.coffee')
+  system('/Users/bai/.nvm/v0.11.12/bin/docco -l linear coffee/*.coffee')
+end
