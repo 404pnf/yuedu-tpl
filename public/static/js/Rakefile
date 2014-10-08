@@ -27,7 +27,7 @@ end
 
 desc '启动server'
 task :server do
-  system('shotgun -p4567 ../../app.rb &')
+  system('shotgun -p4567 ../../../app.rb &')
 end
 
 desc 'generate documenations'
