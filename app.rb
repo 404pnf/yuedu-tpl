@@ -1,6 +1,8 @@
 require 'sinatra'
 require 'sinatra/jsonp'
 
+set public_folder: 'static'
+
 before do
   # 帮助
   # http://stackoverflow.com/questions/20734242/cross-domain-session-with-sinatra-and-angularjs
