@@ -5,7 +5,7 @@ root.YD ?= {}
 YD.conf =
   # 静态路由
   siteHomeUrl: '/'
-  tplDir: '/tpl/'
+  tplDir: 'js/template/'
   userLogout: '/log/out '
   userHomeUrl: '/personal_info.html'
   lastExamResult: '/test/personalReport/'
