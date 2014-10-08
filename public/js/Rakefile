@@ -1,6 +1,6 @@
 desc '将使用的第三方js库拼接成一个大文件'
 task :concat do
-  Dir.chdir('lib') { system('cat jquery.js jquery.serialize-object.js jquery.md5.js underscore-min.js ejs.js underscore.object.builders.js json2.js> ../lib.all.js') }
+  Dir.chdir('lib') { system('cat jquery.js jquery-ui.js jquery.serialize-object.js jquery.md5.js underscore-min.js ejs.js underscore.object.builders.js json2.js> ../lib.all.js') }
   Dir.chdir('lib') { system('cat amcharts.js serial.js amstock.js > ../amcharts.all.js') }
 end
 
