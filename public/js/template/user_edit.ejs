@@ -1,0 +1,81 @@
+<div class="old_head fl old_head_info"><img src=<%= photo.value %> width="110px" /><br /><bottun type="button" id="user_photo_edit" class="btn">更换头像</button></div>
+
+<form id="user_info">
+  <div class="info_l fl">
+    <div><label>姓名:</label><input type="text" name="userName" value=<%= userName %> class="input_style wryh" /></div>
+
+    <div><label>性别:</label>
+      <% _.each({male: "男", female: "女"}, function(v, k) { %>
+        <input type="radio" name="gender" value=<%= k %>
+          <% if (gender.key === k) { %>
+            checked
+          <% } %>
+        ><span class=<%= k %>><%= v %></span>
+       <% }); %>
+    </div>
+
+    <div>
+      <label>生日:</label>
+      <select name="year" class="input_style ">
+        <option value="-1">年</option>
+        <% _.each(_.range(2000, 2014), function (e) { %>
+          <option value="<%= e %>"
+            <% if (year === e) { %>
+              selected
+            <% } %>
+          ><%= e %></option>
+        <% }); %>
+      </select>
+      <select name="month" class="input_style ">
+        <option value="-1">月</option>
+       <% _.each(_.range(1, 13), function (e) { %>
+          <option value="<%= e %>"
+            <% if (month === e) { %>
+              selected
+            <% } %>
+          ><%= e %></option>
+        <% }); %>
+      </select>
+      <select name="day" class="input_style ">
+        <option value="-1">日</option>
+        <% _.each(_.range(1, 32), function (e) { %>
+          <option value="<%= e %>"
+            <% if (day === e) { %>
+              selected
+            <% } %>
+          ><%= e %></option>
+        <% }); %>
+      </select>
+    </div>
+  </div> <!-- end <div class="info_l fl"> -->
+
+  <div class="info_l fl">
+    <div><label>年级:</label>
+      <select name="grade" class="input_style wryh input_style_width">
+        <% _.each(grades, function(e) { %>
+          <option value=<%= e.key %>
+            <% if (e.key === grade.key) { %>
+              selected
+            <% } %>
+          >
+          <%= e.value %>
+          </option>
+        <% }); %>
+      </select>
+    </div>
+
+    <!--   <div><label>学校:</label><input type="text" name="school" value=<%= school %> class="input_style wryh"/></div>  -->
+
+    <div>
+      <label>邮箱:</label>
+      <input type="text"  name="email" value="<%= email %>" class="input_style wryh" />
+    </div>
+  </div>
+
+</from>
+
+<div class="fr btn_box_info clear">
+  <button type ="button" id = "user_info_save" class="btn">保存</button>
+  <button type ="button" id="user_cancel_edit" class="btn btn_u">取消</bottun>
+</div>
+

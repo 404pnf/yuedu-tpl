@@ -10,11 +10,11 @@
 
   YD.conf = {
     siteHomeUrl: '/',
-    tplDir: '/tpl/',
+    tplDir: 'js/template/',
     userLogout: '/log/out ',
-    userHomeUrl: '/personal_info.html',
+    userHomeUrl: '/static/personal_info.html',
     lastExamResult: '/test/personalReport/',
-    userTrend: '/charts.html',
+    userTrend: '/static/charts.html',
     userInfo: '/userController/show/loginUser',
     grades: '/userController/grades',
     photos: '/userController/photos',
