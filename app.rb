@@ -79,27 +79,27 @@ get '/examController/studentLogin' do
     #   endTime: '2014-09-16 15:20',
     #   name: '2014秋季测试',
     #   id: 'exam_id',
-    #   userExamState: '1'
+    #   userExamState: '2'
     # },
 
-    upcomingExam: [{
-        name: '2014秋季测试',
-        startTime: '2014-03-26 15:20',
-        endTime: '2014-03-26 15:20',
-        isTodayExam: true
-      },
-      {
-        name: '2014秋季测试',
-        startTime: '2014-04-26 15:20',
-        endTime: '2014-04-26 15:20',
-        isTodayExam: false
-      },
-      {
-        name: '2014秋季测试',
-        startTime: '2014-04-29 15:20',
-        endTime: '2014-04-29 15:20',
-        isTodayExam: false
-      }],
+    # upcomingExam: [{
+    #     name: '2014秋季测试',
+    #     startTime: '2014-03-26 15:20',
+    #     endTime: '2014-03-26 15:20',
+    #     isTodayExam: true
+    #   },
+    #   {
+    #     name: '2014秋季测试',
+    #     startTime: '2014-04-26 15:20',
+    #     endTime: '2014-04-26 15:20',
+    #     isTodayExam: false
+    #   },
+    #   {
+    #     name: '2014秋季测试',
+    #     startTime: '2014-04-29 15:20',
+    #     endTime: '2014-04-29 15:20',
+    #     isTodayExam: false
+    #   }],
 
     # latestExamResult: {
     #   examGradeResult: '4级，还不错',
