@@ -1,7 +1,11 @@
 require 'sinatra'
 require 'sinatra/jsonp'
 
+set public_folder: 'static'
+set static_cache_control: [:private, :max_age => 0]
 before do
+
+  expires 0, :private, :must_revalidate
   # 帮助
   # http://stackoverflow.com/questions/20734242/cross-domain-session-with-sinatra-and-angularjs
   headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
@@ -13,11 +17,11 @@ end
 
 get '/' do
   text = %q(
-    <a href=/static/charts.html>charts.html</a><br>
-    <a href=/static/personal_info.html>user</a><br>
-    <a href=/static/front.html>front.html</a><br>
-    <a href=/static/login.html>login.html</a><br>
-    <a href=/static/pw_edit.html>pw_edit.html</a><br>
+    <a href=/charts.html>charts.html</a><br>
+    <a href=/personal_info.html>user</a><br>
+    <a href=/front.html>front.html</a><br>
+    <a href=/login.html>login.html</a><br>
+    <a href=/pw_edit.html>pw_edit.html</a><br>
   )
   text
 end
@@ -77,7 +81,7 @@ get '/examController/studentLogin' do
       endTime: '2014-09-16 15:20',
       name: '2014秋季测试',
       id: 'exam_id',
-      userExamState: '1'
+      userExamState: '2'
     },
 
     # upcomingExam: [{
@@ -99,13 +103,13 @@ get '/examController/studentLogin' do
     #     isTodayExam: false
     #   }],
 
-    latestExamResult: {
-      examGradeResult: '4级，还不错',
-      vocabularySize: '22000',
-      personalEndTime: '2014-08-26',
-      duration: '15', # 分钟
-      id: 'exam_result_id'
-    }
+    # latestExamResult: {
+    #   examGradeResult: '4级，还不错',
+    #   vocabularySize: '22000',
+    #   personalEndTime: '2014-08-26',
+    #   duration: '15', # 分钟
+    #   id: 'exam_result_id'
+    # }
 
   }
   JSONP r
