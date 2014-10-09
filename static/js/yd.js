@@ -111,6 +111,17 @@
     grades = YD.conf.grades;
     userInfoAll = $.when($.get(userinfo), $.get(grades), $.get(photos)).then(function(a, b, c) {
       return _.extend(a[0], b[0], c[0]);
+    }).then(function(d) {
+      var days, isFeb, isLeap, lunarMonth, month, solarMonth, year;
+      year = d.year;
+      month = d.month;
+      note("" + year + ", " + month);
+      isLeap = year === 2004 || year === 2008 || year === 2012 || year === 2016 || year === 2020;
+      solarMonth = month === 1 || month === 3 || month === 5 || month === 7 || month === 8 || month === 10 || month === 12;
+      lunarMonth = month === 4 || month === 6 || month === 9 || month === 11;
+      isFeb = month === 2;
+      days = isLeap && isFeb ? 29 : isFeb ? 28 : lunarMonth ? 30 : 31;
+      return _.extend(d, d.days = days);
     });
     userRender = function(tpl, cssID, data) {
       return new EJS({
@@ -129,12 +140,12 @@
     };
     userEdit = function() {
       return userInfoAll.done(function(data) {
-        userRender("student/user_edit.ejs", "user_info", data);
-        return YD.setDaysOfMonth;
+        note(data);
+        return userRender("student/user_edit.ejs", "user_info", data);
       });
     };
     buildDays = function() {
-      var buildOptions, day, isFeb, isLeap, lunarMonth, month, renderDays, solarMonth, year;
+      var buildOptions, day, isFeb, isLeap, lunarMonth, month, solarMonth, year;
       year = parseInt($("#year").val(), 10);
       month = parseInt($("#month").val(), 10);
       day = parseInt($("#day").val(), 10);
@@ -150,24 +161,17 @@
         }, "<option value='-1'>日</option>");
         return $("#day").html(res);
       };
-      renderDays = function() {
-        if (isLeap && isFeb) {
-          note("here");
-          return buildOptions(30);
-        } else if (isFeb) {
-          return buildOptions(29);
-        } else if (lunarMonth) {
-          return buildOptions(31);
-        } else {
-          return buildOptions(32);
-        }
-      };
-      return $('#day').focus(function() {
-        return renderDays();
-      });
+      if (isLeap && isFeb) {
+        return buildOptions(30);
+      } else if (isFeb) {
+        return buildOptions(29);
+      } else if (lunarMonth) {
+        return buildOptions(31);
+      } else {
+        return buildOptions(32);
+      }
     };
     setDaysOfMonth = function() {
-      buildDays();
       return $('#year, #month').change(function() {
         return buildDays();
       });
