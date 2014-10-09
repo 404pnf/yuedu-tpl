@@ -150,7 +150,7 @@
       month = parseInt($("#month").val(), 10);
       day = parseInt($("#day").val(), 10);
       note("" + year + ", " + month);
-      isLeap = year === 2004 || year === 2008 || year === 2012 || year === 2016 || year === 2020;
+      isLeap = year === 2000 || year === 2004 || year === 2008 || year === 2012 || year === 2016 || year === 2020;
       solarMonth = month === 1 || month === 3 || month === 5 || month === 7 || month === 8 || month === 10 || month === 12;
       lunarMonth = month === 4 || month === 6 || month === 9 || month === 11;
       isFeb = month === 2;

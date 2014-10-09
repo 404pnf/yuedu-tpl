@@ -57,7 +57,7 @@
 
 root.YD ?= {}
 
-YD.debug = <span class="hljs-literal">false</span></pre></div>
+YD.debug = <span class="hljs-literal">true</span></pre></div>
         
       
         
@@ -189,6 +189,7 @@ YD.debug = <span class="hljs-literal">false</span></pre></div>
 <ol>
 <li>后台api的地址在YD.conf中配置</li>
 <li>一次将用户数据全部拿到。这样在编辑用户信息和编辑用户头像页面的时候，就不用再发请求了</li>
+<li>给模版提供信息，初始化页面的时候，根据用户生日的月份来预填有多少天</li>
 </ol>
 
         
@@ -198,9 +199,26 @@ YD.debug = <span class="hljs-literal">false</span></pre></div>
   grades = YD.conf.grades
 
   userInfoAll = $
-    .<span class="hljs-keyword">when</span> $.ajax(userinfo), $.ajax(grades), $.ajax(photos)
+    .<span class="hljs-keyword">when</span> $.get(userinfo), $.get(grades), $.get(photos)
     .<span class="hljs-keyword">then</span> <span class="hljs-function"><span class="hljs-params">(a, b, c)</span> -&gt;</span>
-      _.extend a[<span class="hljs-number">0</span>], b[<span class="hljs-number">0</span>], c[<span class="hljs-number">0</span>]</pre></div>
+      _.extend a[<span class="hljs-number">0</span>], b[<span class="hljs-number">0</span>], c[<span class="hljs-number">0</span>]
+    .<span class="hljs-keyword">then</span> <span class="hljs-function"><span class="hljs-params">(d)</span> -&gt;</span>
+      year = d.year
+      month = d.month
+      note(<span class="hljs-string">"<span class="hljs-subst">#{year}</span>, <span class="hljs-subst">#{month}</span>"</span>)
+      isLeap = year <span class="hljs-keyword">in</span> [<span class="hljs-number">2004</span>, <span class="hljs-number">2008</span>, <span class="hljs-number">2012</span>, <span class="hljs-number">2016</span>, <span class="hljs-number">2020</span>]
+      solarMonth = month <span class="hljs-keyword">in</span> [<span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">5</span>, <span class="hljs-number">7</span>, <span class="hljs-number">8</span>, <span class="hljs-number">10</span>, <span class="hljs-number">12</span>]
+      lunarMonth = month <span class="hljs-keyword">in</span> [<span class="hljs-number">4</span>, <span class="hljs-number">6</span>, <span class="hljs-number">9</span>, <span class="hljs-number">11</span>]
+      isFeb = month <span class="hljs-keyword">is</span> <span class="hljs-number">2</span>
+      days = <span class="hljs-keyword">if</span> isLeap <span class="hljs-keyword">and</span> isFeb
+        <span class="hljs-number">29</span>
+      <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> isFeb
+        <span class="hljs-number">28</span>
+      <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> lunarMonth
+        <span class="hljs-number">30</span>
+      <span class="hljs-keyword">else</span>
+        <span class="hljs-number">31</span>
+      _.extend d, d.days = days</pre></div>
         
       
         
@@ -212,19 +230,65 @@ YD.debug = <span class="hljs-literal">false</span></pre></div>
 <span class="hljs-function">
   <span class="hljs-title">userShow</span> = -&gt;</span>
     userInfoAll.done <span class="hljs-function"><span class="hljs-params">(data)</span> -&gt;</span>
-      userRender <span class="hljs-string">"user_show.ejs"</span>, <span class="hljs-string">"user_info"</span>, data
+      userRender <span class="hljs-string">"student/user_show.ejs"</span>, <span class="hljs-string">"user_info"</span>, data
 <span class="hljs-function">
   <span class="hljs-title">userBarShow</span> = -&gt;</span>
     userInfoAll.done <span class="hljs-function"><span class="hljs-params">(data)</span> -&gt;</span>
-      userRender <span class="hljs-string">"user_bar.ejs"</span>, <span class="hljs-string">"user_bar"</span>, data
+      userRender <span class="hljs-string">"student/user_bar.ejs"</span>, <span class="hljs-string">"user_bar"</span>, data
 <span class="hljs-function">
   <span class="hljs-title">userEdit</span> = -&gt;</span>
     userInfoAll.done <span class="hljs-function"><span class="hljs-params">(data)</span> -&gt;</span>
-      userRender <span class="hljs-string">"user_edit.ejs"</span>, <span class="hljs-string">"user_info"</span>, data
+      note data
+      userRender <span class="hljs-string">"student/user_edit.ejs"</span>, <span class="hljs-string">"user_info"</span>, data</pre></div>
+        
+      
+        
+        <p>YD.setDaysOfMonth</p>
+
+        
+      
+        
+        <p>setDaysOfMonth 的帮助函数。
+在用户改变了出生日期的“年”或“月”下拉框时，根据情况重新生成“日”的下拉框。</p>
+
+        
+          <div class='highlight'><pre><span class="hljs-function">  <span class="hljs-title">buildDays</span> = -&gt;</span>
+    year = parseInt $(<span class="hljs-string">"#year"</span>).val(), <span class="hljs-number">10</span>
+    month = parseInt $(<span class="hljs-string">"#month"</span>).val(), <span class="hljs-number">10</span>
+    day = parseInt $(<span class="hljs-string">"#day"</span>).val(), <span class="hljs-number">10</span>
+    note(<span class="hljs-string">"<span class="hljs-subst">#{year}</span>, <span class="hljs-subst">#{month}</span>"</span>)
+    isLeap = year <span class="hljs-keyword">in</span> [<span class="hljs-number">2000</span>, <span class="hljs-number">2004</span>, <span class="hljs-number">2008</span>, <span class="hljs-number">2012</span>, <span class="hljs-number">2016</span>, <span class="hljs-number">2020</span>]
+    solarMonth = month <span class="hljs-keyword">in</span> [<span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">5</span>, <span class="hljs-number">7</span>, <span class="hljs-number">8</span>, <span class="hljs-number">10</span>, <span class="hljs-number">12</span>]
+    lunarMonth = month <span class="hljs-keyword">in</span> [<span class="hljs-number">4</span>, <span class="hljs-number">6</span>, <span class="hljs-number">9</span>, <span class="hljs-number">11</span>]
+    isFeb = month <span class="hljs-keyword">is</span> <span class="hljs-number">2</span>
+<span class="hljs-function">    <span class="hljs-title">buildOptions</span> = <span class="hljs-params">(n)</span> -&gt;</span>
+      res = _.reduce(
+        _.range(<span class="hljs-number">1</span>, n),
+<span class="hljs-function">        <span class="hljs-params">(a, e)</span> -&gt;</span> a += <span class="hljs-string">"&lt;option value=<span class="hljs-subst">#{e}</span>&gt;<span class="hljs-subst">#{e}</span>&lt;/option&gt;"</span>,
+        <span class="hljs-string">"&lt;option value='-1'&gt;日&lt;/option&gt;"</span>
+      )
+      $(<span class="hljs-string">"#day"</span>).html(res)
+    <span class="hljs-keyword">if</span> isLeap <span class="hljs-keyword">and</span> isFeb
+      buildOptions <span class="hljs-number">30</span>
+    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> isFeb
+      buildOptions <span class="hljs-number">29</span>
+    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> lunarMonth
+      buildOptions <span class="hljs-number">31</span>
+    <span class="hljs-keyword">else</span>
+      buildOptions <span class="hljs-number">32</span></pre></div>
+        
+      
+        
+        <p>只有在 year 和 month 变化时才重新生成日期选项。
+不能在日期有变化的时候也重新生成日期选项，那样每次选完又会重新生成日期选项，造成根本无法选中任何日期了。</p>
+
+        
+          <div class='highlight'><pre><span class="hljs-function">  <span class="hljs-title">setDaysOfMonth</span> = -&gt;</span>
+    $(<span class="hljs-string">'#year, #month'</span>).change <span class="hljs-function">-&gt;</span> buildDays()
 <span class="hljs-function">
   <span class="hljs-title">userPhotoEdit</span> = -&gt;</span>
     userInfoAll.done <span class="hljs-function"><span class="hljs-params">(data)</span> -&gt;</span>
-      userRender <span class="hljs-string">"user_photo_edit.ejs"</span>, <span class="hljs-string">"user_info"</span>, data
+      userRender <span class="hljs-string">"student/user_photo_edit.ejs"</span>, <span class="hljs-string">"user_info"</span>, data
 <span class="hljs-function">
   <span class="hljs-title">userSave</span> = -&gt;</span>
     postJson YD.conf.userSave, <span class="hljs-string">"form#user_info"</span>,<span class="hljs-function"> -&gt;</span>
@@ -254,7 +318,8 @@ YD.debug = <span class="hljs-literal">false</span></pre></div>
         <p>编辑用户</p>
 
         
-          <div class='highlight'><pre>    $(<span class="hljs-string">"#user_info"</span>).delegate <span class="hljs-string">"#user_info_edit"</span>, <span class="hljs-string">"click"</span>, userEdit</pre></div>
+          <div class='highlight'><pre>    $(<span class="hljs-string">"#user_info"</span>).delegate <span class="hljs-string">"#user_info_edit"</span>, <span class="hljs-string">"click"</span>, userEdit
+    $(<span class="hljs-string">"#user_info"</span>).delegate <span class="hljs-string">"select"</span>, <span class="hljs-string">"change"</span>, setDaysOfMonth</pre></div>
         
       
         
@@ -287,11 +352,11 @@ YD.debug = <span class="hljs-literal">false</span></pre></div>
   userinfo = YD.conf.userInfo
   photos = YD.conf.photos
 
-  $.<span class="hljs-keyword">when</span> $.ajax(userinfo), $.ajax(photos)
+  $.<span class="hljs-keyword">when</span> $.get(userinfo), $.get(photos)
     .<span class="hljs-keyword">then</span> <span class="hljs-function"><span class="hljs-params">(a, b)</span> -&gt;</span>
       _.extend a[<span class="hljs-number">0</span>], b[<span class="hljs-number">0</span>]
     .done <span class="hljs-function"><span class="hljs-params">(data)</span> -&gt;</span>
-      <span class="hljs-keyword">new</span> EJS <span class="hljs-attribute">url</span>: <span class="hljs-string">"<span class="hljs-subst">#{YD.conf.tplDir}</span>user_bar.ejs"</span>
+      <span class="hljs-keyword">new</span> EJS <span class="hljs-attribute">url</span>: <span class="hljs-string">"<span class="hljs-subst">#{YD.conf.tplDir}</span>student/user_bar.ejs"</span>
         .update <span class="hljs-string">"user_bar"</span>, data</pre></div>
         
       
@@ -408,7 +473,7 @@ YD.debug = <span class="hljs-literal">false</span></pre></div>
       
         
         <p>无考试，无考试预告，无上次成绩，
-用html的div中默认文字。</p>
+用html的div中默认文字和图片。</p>
 
         
       
@@ -419,15 +484,18 @@ YD.debug = <span class="hljs-literal">false</span></pre></div>
           <div class='highlight'><pre>      cssID = <span class="hljs-string">"front_content"</span>
       render = _.partial renderLocalData, examInfo, cssID
 
-      promise.done doWhen ex1up0res0, render <span class="hljs-string">"start_current.ejs"</span>
+      promise.done doWhen ex1up0res0, render <span class="hljs-string">"student/start_current.ejs"</span>
 
-      promise.done doWhen ex1up0res1, render <span class="hljs-string">"start_scores.ejs"</span>
+      promise.done doWhen ex1up0res1, render <span class="hljs-string">"student/start_scores.ejs"</span>
 
-      promise.done doWhen ex0up1res0, render <span class="hljs-string">"start_upcoming.ejs"</span>
+      promise.done doWhen ex0up1res0,
+        render <span class="hljs-string">"student/start_upcoming.ejs"</span>
 
-      promise.done doWhen ex0up0res1, render <span class="hljs-string">"start_scores_with_upcoming.ejs"</span>
+      promise.done doWhen(ex0up0res1,
+        render <span class="hljs-string">"student/start_scores_with_upcoming.ejs"</span>)
 
-      promise.done doWhen ex0up1res1, render <span class="hljs-string">"start_scores_with_upcoming.ejs"</span>
+      promise.done doWhen(ex0up1res1,
+        render <span class="hljs-string">"student/start_scores_with_upcoming.ejs"</span>)
 <span class="hljs-function">
     <span class="hljs-title">onFailure</span> = <span class="hljs-params">(data, status, xhr)</span> -&gt;</span>
       showStatusMsg <span class="hljs-string">"<span class="hljs-subst">#{data}</span>, <span class="hljs-subst">#{status}</span>, <span class="hljs-subst">#{xhr}</span>"</span></pre></div>
@@ -560,9 +628,13 @@ YD.debug = <span class="hljs-literal">false</span></pre></div>
       <span class="hljs-string">"#new_pass_confirm"</span>
     ])
     dontMatch = newPass <span class="hljs-keyword">isnt</span> newPassConfirm
-
+    passwdTooShort = newPass.length &lt; <span class="hljs-number">6</span>
     <span class="hljs-keyword">if</span> notValid
       alertBox <span class="hljs-string">"所有输入框都必须填写。"</span>
+    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> passwdTooShort
+      $(<span class="hljs-string">"#new_pass"</span>).addClass <span class="hljs-string">"error"</span>
+      $(<span class="hljs-string">"#new_pass_confirm"</span>).addClass <span class="hljs-string">"error"</span>
+      alertBox <span class="hljs-string">"密码长度至少为6位。"</span>
     <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> dontMatch
       $(<span class="hljs-string">"#new_pass"</span>).addClass <span class="hljs-string">"error"</span>
       $(<span class="hljs-string">"#new_pass_confirm"</span>).addClass <span class="hljs-string">"error"</span>
