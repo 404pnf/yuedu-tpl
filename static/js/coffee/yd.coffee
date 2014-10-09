@@ -110,6 +110,7 @@ hasBlank = (arrayOfCssElement) ->
 #
 # 1. 后台api的地址在YD.conf中配置
 # 2. 一次将用户数据全部拿到。这样在编辑用户信息和编辑用户头像页面的时候，就不用再发请求了
+# 3. 给模版提供信息，初始化页面的时候，根据用户生日的月份来预填有多少天
 YD.user = ->
   userinfo = YD.conf.userInfo
   photos = YD.conf.photos
@@ -119,6 +120,24 @@ YD.user = ->
     .when $.get(userinfo), $.get(grades), $.get(photos)
     .then (a, b, c) ->
       _.extend a[0], b[0], c[0]
+    .then (d) ->
+      year = d.year
+      month = d.month
+      note("#{year}, #{month}")
+      isLeap = year in [2004, 2008, 2012, 2016, 2020]
+      solarMonth = month in [1, 3, 5, 7, 8, 10, 12]
+      lunarMonth = month in [4, 6, 9, 11]
+      isFeb = month is 2
+      days = if isLeap and isFeb
+        29
+      else if isFeb
+        28
+      else if lunarMonth
+        30
+      else
+        31
+      _.extend d, d.days = days
+
 
   # partial application to save typing
   userRender = (tpl, cssID, data) ->
@@ -134,12 +153,12 @@ YD.user = ->
 
   userEdit = ->
     userInfoAll.done (data) ->
+      note data
       userRender "student/user_edit.ejs", "user_info", data
-      YD.setDaysOfMonth
+      # YD.setDaysOfMonth
 
-  # FIXME 当页面初始的时候，如果用户生日是2月，日期选项还是有31号。
-  # 因为ejs模版中写死了31，且此时无事件可以触发我的代码去修改日期选项。
-  # 此时用户确实可以选30和31日。
+  # setDaysOfMonth 的帮助函数。
+  # 在用户改变了出生日期的“年”或“月”下拉框时，根据情况重新生成“日”的下拉框。
   buildDays = ->
     year = parseInt $("#year").val(), 10
     month = parseInt $("#month").val(), 10
@@ -156,23 +175,18 @@ YD.user = ->
         "<option value='-1'>日</option>"
       )
       $("#day").html(res)
-    renderDays = ->
-      # _.range is exculisve
-      if isLeap and isFeb
-        note("here")
-        buildOptions 30
-      else if isFeb
-        buildOptions 29
-      else if lunarMonth
-        buildOptions 31
-      else
-        buildOptions 32
-    $('#day').focus -> renderDays()
+    if isLeap and isFeb
+      buildOptions 30
+    else if isFeb
+      buildOptions 29
+    else if lunarMonth
+      buildOptions 31
+    else
+      buildOptions 32
 
+  # 只有在 year 和 month 变化时才重新生成日期选项。
+  # 不能在日期有变化的时候也重新生成日期选项，那样每次选完又会重新生成日期选项，造成根本无法选中任何日期了。
   setDaysOfMonth = ->
-    buildDays()
-    # 只有在 year 和 month 变化时才重新生成日期选项。
-    # 不能在日期有变化的时候也重新生成日期选项，那样每次选完又会重新生成日期选项，造成根本无法选中任何日期了。
     $('#year, #month').change -> buildDays()
 
   userPhotoEdit = ->
@@ -298,11 +312,14 @@ YD.startDispache = ->
 
       promise.done doWhen ex1up0res1, render "student/start_scores.ejs"
 
-      promise.done doWhen ex0up1res0, render "student/start_upcoming.ejs"
+      promise.done doWhen ex0up1res0,
+        render "student/start_upcoming.ejs"
 
-      promise.done doWhen ex0up0res1, render "student/start_scores_with_upcoming.ejs"
+      promise.done doWhen(ex0up0res1,
+        render "student/start_scores_with_upcoming.ejs")
 
-      promise.done doWhen ex0up1res1, render "student/start_scores_with_upcoming.ejs"
+      promise.done doWhen(ex0up1res1,
+        render "student/start_scores_with_upcoming.ejs")
 
     onFailure = (data, status, xhr) ->
       showStatusMsg "#{data}, #{status}, #{xhr}"
@@ -403,9 +420,13 @@ YD.resetPass = ->
       "#new_pass_confirm"
     ])
     dontMatch = newPass isnt newPassConfirm
-
+    passwdTooShort = newPass.length < 6
     if notValid
       alertBox "所有输入框都必须填写。"
+    else if passwdTooShort
+      $("#new_pass").addClass "error"
+      $("#new_pass_confirm").addClass "error"
+      alertBox "密码长度至少为6位。"
     else if dontMatch
       $("#new_pass").addClass "error"
       $("#new_pass_confirm").addClass "error"
@@ -419,4 +440,3 @@ YD.resetPass = ->
       postHelper YD.conf.userResetPass,
         data,
         -> redirectToUrl(YD.conf.userHomeUrl)
-

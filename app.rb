@@ -1,7 +1,7 @@
 require 'sinatra'
 require 'sinatra/jsonp'
 
-set public_folder: 'static'
+set public_folder: File.dirname(__FILE__) + '/static'
 set static_cache_control: [:private, :max_age => 0]
 before do
 
@@ -58,9 +58,9 @@ get '/userController/show/loginUser' do
     gender: { key: 'male', value: '男' },
     age: 12,
     year: 2012, # 数字，不是字符串
-    month: 8,
+    month: 2,
     day: 23,
-    dob: '2004-07-26 11:37:53 +0800',
+    dob: '2004-02-26 11:37:53 +0800',
     photo: { key: 'e', value: 'images/head1.png' },
     grade: { key: 'd', value: '小学四年级' },
     school: '史家胡同小学',

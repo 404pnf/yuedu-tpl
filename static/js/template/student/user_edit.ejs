@@ -38,7 +38,7 @@
       </select>
       <select name="day" id="day" class="input_style ">
         <option value="-1">日</option>
-        <% _.each(_.range(1, 32), function (e) { %>
+        <% _.each(_.range(1, days + 1), function (e) { %>
           <option value="<%= e %>"
             <% if (day === e) { %>
               selected
