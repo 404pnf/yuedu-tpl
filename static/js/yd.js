@@ -119,17 +119,17 @@
     };
     userShow = function() {
       return userInfoAll.done(function(data) {
-        return userRender("user_show.ejs", "user_info", data);
+        return userRender("student/user_show.ejs", "user_info", data);
       });
     };
     userBarShow = function() {
       return userInfoAll.done(function(data) {
-        return userRender("user_bar.ejs", "user_bar", data);
+        return userRender("student/user_bar.ejs", "user_bar", data);
       });
     };
     userEdit = function() {
       return userInfoAll.done(function(data) {
-        userRender("user_edit.ejs", "user_info", data);
+        userRender("student/user_edit.ejs", "user_info", data);
         return YD.setDaysOfMonth;
       });
     };
@@ -174,7 +174,7 @@
     };
     userPhotoEdit = function() {
       return userInfoAll.done(function(data) {
-        return userRender("user_photo_edit.ejs", "user_info", data);
+        return userRender("student/user_photo_edit.ejs", "user_info", data);
       });
     };
     userSave = function() {
@@ -206,7 +206,7 @@
       return _.extend(a[0], b[0]);
     }).done(function(data) {
       return new EJS({
-        url: "" + YD.conf.tplDir + "user_bar.ejs"
+        url: "" + YD.conf.tplDir + "student/user_bar.ejs"
       }).update("user_bar", data);
     });
   };
@@ -253,11 +253,11 @@
         ex0up0res1 = !hasCurrentExam && !hasUpcomingExam && haslatestExamResult;
         cssID = "front_content";
         render = _.partial(renderLocalData, examInfo, cssID);
-        promise.done(doWhen(ex1up0res0, render("start_current.ejs")));
-        promise.done(doWhen(ex1up0res1, render("start_scores.ejs")));
-        promise.done(doWhen(ex0up1res0, render("start_upcoming.ejs")));
-        promise.done(doWhen(ex0up0res1, render("start_scores_with_upcoming.ejs")));
-        return promise.done(doWhen(ex0up1res1, render("start_scores_with_upcoming.ejs")));
+        promise.done(doWhen(ex1up0res0, render("student/start_current.ejs")));
+        promise.done(doWhen(ex1up0res1, render("student/start_scores.ejs")));
+        promise.done(doWhen(ex0up1res0, render("student/start_upcoming.ejs")));
+        promise.done(doWhen(ex0up0res1, render("student/start_scores_with_upcoming.ejs")));
+        return promise.done(doWhen(ex0up1res1, render("student/start_scores_with_upcoming.ejs")));
       };
       onFailure = function(data, status, xhr) {
         return showStatusMsg("" + data + ", " + status + ", " + xhr);

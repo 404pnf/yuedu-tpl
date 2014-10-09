@@ -126,15 +126,15 @@ YD.user = ->
 
   userShow = ->
     userInfoAll.done (data) ->
-      userRender "user_show.ejs", "user_info", data
+      userRender "student/user_show.ejs", "user_info", data
 
   userBarShow = ->
     userInfoAll.done (data) ->
-      userRender "user_bar.ejs", "user_bar", data
+      userRender "student/user_bar.ejs", "user_bar", data
 
   userEdit = ->
     userInfoAll.done (data) ->
-      userRender "user_edit.ejs", "user_info", data
+      userRender "student/user_edit.ejs", "user_info", data
       YD.setDaysOfMonth
 
   # FIXME 当页面初始的时候，如果用户生日是2月，日期选项还是有31号。
@@ -177,7 +177,7 @@ YD.user = ->
 
   userPhotoEdit = ->
     userInfoAll.done (data) ->
-      userRender "user_photo_edit.ejs", "user_info", data
+      userRender "student/user_photo_edit.ejs", "user_info", data
 
   userSave = ->
     postJson YD.conf.userSave, "form#user_info", ->
@@ -219,7 +219,7 @@ YD.userBar = ->
     .then (a, b) ->
       _.extend a[0], b[0]
     .done (data) ->
-      new EJS url: "#{YD.conf.tplDir}user_bar.ejs"
+      new EJS url: "#{YD.conf.tplDir}student/user_bar.ejs"
         .update "user_bar", data
 
 
@@ -288,21 +288,21 @@ YD.startDispache = ->
         haslatestExamResult
 
       # 无考试，无考试预告，无上次成绩，
-      # 用html的div中默认文字。
+      # 用html的div中默认文字和图片。
 
       # partial function to save typing.
       cssID = "front_content"
       render = _.partial renderLocalData, examInfo, cssID
 
-      promise.done doWhen ex1up0res0, render "start_current.ejs"
+      promise.done doWhen ex1up0res0, render "student/start_current.ejs"
 
-      promise.done doWhen ex1up0res1, render "start_scores.ejs"
+      promise.done doWhen ex1up0res1, render "student/start_scores.ejs"
 
-      promise.done doWhen ex0up1res0, render "start_upcoming.ejs"
+      promise.done doWhen ex0up1res0, render "student/start_upcoming.ejs"
 
-      promise.done doWhen ex0up0res1, render "start_scores_with_upcoming.ejs"
+      promise.done doWhen ex0up0res1, render "student/start_scores_with_upcoming.ejs"
 
-      promise.done doWhen ex0up1res1, render "start_scores_with_upcoming.ejs"
+      promise.done doWhen ex0up1res1, render "student/start_scores_with_upcoming.ejs"
 
     onFailure = (data, status, xhr) ->
       showStatusMsg "#{data}, #{status}, #{xhr}"
