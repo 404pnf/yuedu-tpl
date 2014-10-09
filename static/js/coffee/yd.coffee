@@ -298,11 +298,14 @@ YD.startDispache = ->
 
       promise.done doWhen ex1up0res1, render "student/start_scores.ejs"
 
-      promise.done doWhen ex0up1res0, render "student/start_upcoming.ejs"
+      promise.done doWhen ex0up1res0,
+        render "student/start_upcoming.ejs"
 
-      promise.done doWhen ex0up0res1, render "student/start_scores_with_upcoming.ejs"
+      promise.done doWhen(ex0up0res1,
+        render "student/start_scores_with_upcoming.ejs")
 
-      promise.done doWhen ex0up1res1, render "student/start_scores_with_upcoming.ejs"
+      promise.done doWhen(ex0up1res1,
+        render "student/start_scores_with_upcoming.ejs")
 
     onFailure = (data, status, xhr) ->
       showStatusMsg "#{data}, #{status}, #{xhr}"
@@ -419,4 +422,3 @@ YD.resetPass = ->
       postHelper YD.conf.userResetPass,
         data,
         -> redirectToUrl(YD.conf.userHomeUrl)
-
