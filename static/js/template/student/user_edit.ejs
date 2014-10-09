@@ -1,6 +1,6 @@
 <div class="old_head fl old_head_info"><img src=<%= photo.value %> width="110px" /><br /><bottun type="button" id="user_photo_edit" class="btn">更换头像</button></div>
 
-<form id="user_info">
+<form id="user_info user_edit">
   <div class="info_l fl">
     <div><label>姓名:</label><input type="text" name="userName" value=<%= userName %> class="input_style wryh" /></div>
 
@@ -16,9 +16,9 @@
 
     <div>
       <label>生日:</label>
-      <select name="year" class="input_style ">
+      <select name="year" id="year" class="input_style">
         <option value="-1">年</option>
-        <% _.each(_.range(2000, 2014), function (e) { %>
+        <% _.each(_.range(2000, 2015), function (e) { %>
           <option value="<%= e %>"
             <% if (year === e) { %>
               selected
@@ -26,7 +26,7 @@
           ><%= e %></option>
         <% }); %>
       </select>
-      <select name="month" class="input_style ">
+      <select name="month" id="month" class="input_style ">
         <option value="-1">月</option>
        <% _.each(_.range(1, 13), function (e) { %>
           <option value="<%= e %>"
@@ -36,7 +36,7 @@
           ><%= e %></option>
         <% }); %>
       </select>
-      <select name="day" class="input_style ">
+      <select name="day" id="day" class="input_style ">
         <option value="-1">日</option>
         <% _.each(_.range(1, 32), function (e) { %>
           <option value="<%= e %>"
@@ -78,4 +78,3 @@
   <button type ="button" id = "user_info_save" class="btn">保存</button>
   <a href=<%= YD.conf.userHomeUrl %> type ="button" id="user_cancel_edit" class="btn btn_u">取消</a>
 </div>
-

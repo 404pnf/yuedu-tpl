@@ -8,7 +8,7 @@
     root.YD = {};
   }
 
-  YD.debug = false;
+  YD.debug = true;
 
   showStatusMsg = function(data) {
     return alertBox(data.error);
@@ -105,7 +105,7 @@
   };
 
   YD.user = function() {
-    var grades, photos, userBarShow, userEdit, userInfoAll, userPhotoEdit, userPhotoSave, userRender, userSave, userShow, userinfo;
+    var buildDays, grades, photos, setDaysOfMonth, userBarShow, userEdit, userInfoAll, userPhotoEdit, userPhotoSave, userRender, userSave, userShow, userinfo;
     userinfo = YD.conf.userInfo;
     photos = YD.conf.photos;
     grades = YD.conf.grades;
@@ -119,22 +119,62 @@
     };
     userShow = function() {
       return userInfoAll.done(function(data) {
-        return userRender("user_show.ejs", "user_info", data);
+        return userRender("student/user_show.ejs", "user_info", data);
       });
     };
     userBarShow = function() {
       return userInfoAll.done(function(data) {
-        return userRender("user_bar.ejs", "user_bar", data);
+        return userRender("student/user_bar.ejs", "user_bar", data);
       });
     };
     userEdit = function() {
       return userInfoAll.done(function(data) {
-        return userRender("user_edit.ejs", "user_info", data);
+        userRender("student/user_edit.ejs", "user_info", data);
+        return YD.setDaysOfMonth;
+      });
+    };
+    buildDays = function() {
+      var buildOptions, day, isFeb, isLeap, lunarMonth, month, renderDays, solarMonth, year;
+      year = parseInt($("#year").val(), 10);
+      month = parseInt($("#month").val(), 10);
+      day = parseInt($("#day").val(), 10);
+      note("" + year + ", " + month);
+      isLeap = year === 2004 || year === 2008 || year === 2012 || year === 2016 || year === 2020;
+      solarMonth = month === 1 || month === 3 || month === 5 || month === 7 || month === 8 || month === 10 || month === 12;
+      lunarMonth = month === 4 || month === 6 || month === 9 || month === 11;
+      isFeb = month === 2;
+      buildOptions = function(n) {
+        var res;
+        res = _.reduce(_.range(1, n), function(a, e) {
+          return a += "<option value=" + e + ">" + e + "</option>";
+        }, "<option value='-1'>日</option>");
+        return $("#day").html(res);
+      };
+      renderDays = function() {
+        if (isLeap && isFeb) {
+          note("here");
+          return buildOptions(30);
+        } else if (isFeb) {
+          return buildOptions(29);
+        } else if (lunarMonth) {
+          return buildOptions(31);
+        } else {
+          return buildOptions(32);
+        }
+      };
+      return $('#day').focus(function() {
+        return renderDays();
+      });
+    };
+    setDaysOfMonth = function() {
+      buildDays();
+      return $('#year, #month').change(function() {
+        return buildDays();
       });
     };
     userPhotoEdit = function() {
       return userInfoAll.done(function(data) {
-        return userRender("user_photo_edit.ejs", "user_info", data);
+        return userRender("student/user_photo_edit.ejs", "user_info", data);
       });
     };
     userSave = function() {
@@ -151,6 +191,7 @@
       userShow();
       userBarShow();
       $("#user_info").delegate("#user_info_edit", "click", userEdit);
+      $("#user_info").delegate("select", "change", setDaysOfMonth);
       $("#user_info").delegate("#user_photo_edit", "click", userPhotoEdit);
       $("#user_info").delegate("#user_info_save", "click", userSave);
       return $("#user_info").delegate("#user_photo_save", "click", userPhotoSave);
@@ -165,7 +206,7 @@
       return _.extend(a[0], b[0]);
     }).done(function(data) {
       return new EJS({
-        url: "" + YD.conf.tplDir + "user_bar.ejs"
+        url: "" + YD.conf.tplDir + "student/user_bar.ejs"
       }).update("user_bar", data);
     });
   };
@@ -212,11 +253,11 @@
         ex0up0res1 = !hasCurrentExam && !hasUpcomingExam && haslatestExamResult;
         cssID = "front_content";
         render = _.partial(renderLocalData, examInfo, cssID);
-        promise.done(doWhen(ex1up0res0, render("start_current.ejs")));
-        promise.done(doWhen(ex1up0res1, render("start_scores.ejs")));
-        promise.done(doWhen(ex0up1res0, render("start_upcoming.ejs")));
-        promise.done(doWhen(ex0up0res1, render("start_scores_with_upcoming.ejs")));
-        return promise.done(doWhen(ex0up1res1, render("start_scores_with_upcoming.ejs")));
+        promise.done(doWhen(ex1up0res0, render("student/start_current.ejs")));
+        promise.done(doWhen(ex1up0res1, render("student/start_scores.ejs")));
+        promise.done(doWhen(ex0up1res0, render("student/start_upcoming.ejs")));
+        promise.done(doWhen(ex0up0res1, render("student/start_scores_with_upcoming.ejs")));
+        return promise.done(doWhen(ex0up1res1, render("student/start_scores_with_upcoming.ejs")));
       };
       onFailure = function(data, status, xhr) {
         return showStatusMsg("" + data + ", " + status + ", " + xhr);
