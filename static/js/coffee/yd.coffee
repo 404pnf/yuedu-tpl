@@ -137,26 +137,43 @@ YD.user = ->
       userRender "user_edit.ejs", "user_info", data
       YD.setDaysOfMonth
 
-  setDaysOfMonth = ->
-    $('select').change ->
-      year = parseInt $("#year").val(), 10
-      month = parseInt $("#month").val(), 10
-      note("#{year}, #{month}")
-      isLeap = [2004, 2008, 20012, 2016, 2020]
-      solarMonth = [1, 3, 5, 7, 8, 10, 12]
-      lunarMonth = [4, 6, 9, 11]
-      # 默认day是31天
-      if (year in isLeap) and (month is 2)
+  # FIXME 当页面初始的时候，如果用户生日是2月，日期选项还是有31号。
+  # 因为ejs模版中写死了31，且此时无事件可以触发我的代码去修改日期选项。
+  # 此时用户确实可以选30和31日。
+  buildDays = ->
+    year = parseInt $("#year").val(), 10
+    month = parseInt $("#month").val(), 10
+    day = parseInt $("#day").val(), 10
+    note("#{year}, #{month}")
+    isLeap = year in [2004, 2008, 2012, 2016, 2020]
+    solarMonth = month in [1, 3, 5, 7, 8, 10, 12]
+    lunarMonth = month in [4, 6, 9, 11]
+    isFeb = month is 2
+    buildOptions = (n) ->
+      res = _.reduce(
+        _.range(1, n),
+        (a, e) -> a += "<option value=#{e}>#{e}</option>",
+        "<option value='-1'>日</option>"
+      )
+      $("#day").html(res)
+    renderDays = ->
+      # _.range is exculisve
+      if isLeap and isFeb
         note("here")
-        $("#day option[value='31']").remove()
-        $("#day option[value='30']").remove()
-      else if month is 2
-        note("i am here")
-        $("#day option[value='31']").remove()
-        $("#day option[value='30']").remove()
-        $("#day option[value='29']").remove()
-      else if month in lunarMonth
-        $("#day option[value='31']").remove()
+        buildOptions 30
+      else if isFeb
+        buildOptions 29
+      else if lunarMonth
+        buildOptions 31
+      else
+        buildOptions 32
+    $('#day').focus -> renderDays()
+
+  setDaysOfMonth = ->
+    buildDays()
+    # 只有在 year 和 month 变化时才重新生成日期选项。
+    # 不能在日期有变化的时候也重新生成日期选项，那样每次选完又会重新生成日期选项，造成根本无法选中任何日期了。
+    $('#year, #month').change -> buildDays()
 
   userPhotoEdit = ->
     userInfoAll.done (data) ->
