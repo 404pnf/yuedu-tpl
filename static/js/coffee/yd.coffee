@@ -406,9 +406,13 @@ YD.resetPass = ->
       "#new_pass_confirm"
     ])
     dontMatch = newPass isnt newPassConfirm
-
+    passwdTooShort = newPass.length < 6
     if notValid
       alertBox "所有输入框都必须填写。"
+    else if passwdTooShort
+      $("#new_pass").addClass "error"
+      $("#new_pass_confirm").addClass "error"
+      alertBox "密码长度至少为6位。"
     else if dontMatch
       $("#new_pass").addClass "error"
       $("#new_pass_confirm").addClass "error"

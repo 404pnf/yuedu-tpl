@@ -310,7 +310,7 @@
 
   YD.resetPass = function() {
     return $("form").submit(function(e) {
-      var data, dontMatch, newPass, newPassConfirm, notValid, oldPass;
+      var data, dontMatch, newPass, newPassConfirm, notValid, oldPass, passwdTooShort;
       e.preventDefault();
       $("input").removeClass("error");
       oldPass = $("#old_pass").val();
@@ -318,8 +318,13 @@
       newPassConfirm = $("#new_pass_confirm").val();
       notValid = hasBlank(["#old_pass", "#new_pass", "#new_pass_confirm"]);
       dontMatch = newPass !== newPassConfirm;
+      passwdTooShort = newPass.length < 6;
       if (notValid) {
         return alertBox("所有输入框都必须填写。");
+      } else if (passwdTooShort) {
+        $("#new_pass").addClass("error");
+        $("#new_pass_confirm").addClass("error");
+        return alertBox("密码长度至少为6位。");
       } else if (dontMatch) {
         $("#new_pass").addClass("error");
         $("#new_pass_confirm").addClass("error");
