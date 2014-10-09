@@ -3,6 +3,7 @@ root = global ? window
 root.YD ?= {}
 
 YD.conf =
+  # ## 本地配置
   # 静态路由
   siteHomeUrl: '/'
   tplDir: 'js/template/'

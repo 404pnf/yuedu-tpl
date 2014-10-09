@@ -4,7 +4,7 @@ root = global ? window
 
 root.YD ?= {}
 
-YD.debug = false
+YD.debug = true
 
 #
 # ## 工具函数
@@ -135,6 +135,28 @@ YD.user = ->
   userEdit = ->
     userInfoAll.done (data) ->
       userRender "user_edit.ejs", "user_info", data
+      YD.setDaysOfMonth
+
+  setDaysOfMonth = ->
+    $('select').change ->
+      year = parseInt $("#year").val(), 10
+      month = parseInt $("#month").val(), 10
+      note("#{year}, #{month}")
+      isLeap = [2004, 2008, 20012, 2016, 2020]
+      solarMonth = [1, 3, 5, 7, 8, 10, 12]
+      lunarMonth = [4, 6, 9, 11]
+      # 默认day是31天
+      if (year in isLeap) and (month is 2)
+        note("here")
+        $("#day option[value='31']").remove()
+        $("#day option[value='30']").remove()
+      else if month is 2
+        note("i am here")
+        $("#day option[value='31']").remove()
+        $("#day option[value='30']").remove()
+        $("#day option[value='29']").remove()
+      else if month in lunarMonth
+        $("#day option[value='31']").remove()
 
   userPhotoEdit = ->
     userInfoAll.done (data) ->
@@ -158,6 +180,7 @@ YD.user = ->
 
     # 编辑用户
     $("#user_info").delegate "#user_info_edit", "click", userEdit
+    $("#user_info").delegate "select", "change", setDaysOfMonth
 
     # 编辑头像
     $("#user_info").delegate "#user_photo_edit", "click", userPhotoEdit
@@ -379,3 +402,4 @@ YD.resetPass = ->
       postHelper YD.conf.userResetPass,
         data,
         -> redirectToUrl(YD.conf.userHomeUrl)
+
