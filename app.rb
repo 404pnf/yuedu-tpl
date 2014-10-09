@@ -1,7 +1,7 @@
 require 'sinatra'
 require 'sinatra/jsonp'
 
-set public_folder: 'static'
+set public_folder: File.dirname(__FILE__) + '/static'
 set static_cache_control: [:private, :max_age => 0]
 before do
 
