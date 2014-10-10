@@ -8,7 +8,7 @@
     root.YD = {};
   }
 
-  testing = true;
+  testing = false;
 
   if (testing) {
     YD.conf = {
