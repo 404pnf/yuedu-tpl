@@ -11,9 +11,6 @@ YD.debug = false
 #
 
 # 与后台约定，错误就是一个字符串，获取方法是读取ajax返回对象的error属性。
-showStatusMsg = (data) ->
-  alertBox data.error
-
 alertBox = (msg) ->
   $("#msg").text msg
   $("#msg").dialog
@@ -41,7 +38,7 @@ postJson = (url, cssID, callback) ->
 
   onSuccess = (data) ->
     if "error" of data
-      showStatusMsg data
+      alertBox data.error
     else
       callback()
   onFailure = (data, status, xhr) ->
@@ -57,7 +54,7 @@ postHelper = (url, data, callback) ->
 
   onSuccess = (data) ->
     if "error" of data
-      showStatusMsg data
+      alertBox data.error
     else
       callback()
   onFailure = (data, status, xhr) ->
@@ -323,7 +320,7 @@ YD.startDispache = ->
         render "student/start_scores_with_upcoming.ejs")
 
     onFailure = (data, status, xhr) ->
-      showStatusMsg "#{data}, #{status}, #{xhr}"
+      alertBox "#{data}, #{status}, #{xhr}"
 
     # ### 获得数据后执行的函数
     # 1. 存后台数据到本地
