@@ -385,11 +385,12 @@ YD.userLogin = ->
     if notValid
       alertBox "所有输入框都必须填写。"
     else
+      # 键名是后台写死的。不要变。
       data = JSON.stringify {
-        username: name
+        user: name
         password: $.md5(password)
-        yz: yz
-        role: 2
+        user_code: yz
+        role: "2"
       }
       postHelper YD.conf.userLogin,
         data,

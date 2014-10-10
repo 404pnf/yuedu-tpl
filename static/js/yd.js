@@ -288,10 +288,10 @@
         return alertBox("所有输入框都必须填写。");
       } else {
         data = JSON.stringify({
-          username: name,
+          user: name,
           password: $.md5(password),
-          yz: yz,
-          role: 2
+          user_code: yz,
+          role: "2"
         });
         return postHelper(YD.conf.userLogin, data, function() {
           return redirectToUrl(YD.conf.siteHomeUrl);
