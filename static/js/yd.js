@@ -8,7 +8,7 @@
     root.YD = {};
   }
 
-  YD.debug = false;
+  YD.debug = true;
 
   showStatusMsg = function(data) {
     return alertBox(data.error);
@@ -64,7 +64,9 @@
     onFailure = function(data, status, xhr) {
       return showStatusMsg("" + data + ", " + status + ", " + xhr);
     };
-    return $.post(url, data).done(onSuccess).fail(onFailure);
+    return $.post(url, {
+      data: data
+    }).done(onSuccess).fail(onFailure);
   };
 
   renderLocalData = function(data, cssID, tpl, callback) {
@@ -92,7 +94,7 @@
     var e, isBlank, notValid, _i, _len;
     notValid = false;
     isBlank = function(e) {
-      return e === "" || e.replace(/^\s+|\s+$/g, "") === "";
+      return e === "";
     };
     for (_i = 0, _len = arrayOfCssElement.length; _i < _len; _i++) {
       e = arrayOfCssElement[_i];

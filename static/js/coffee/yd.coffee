@@ -4,7 +4,7 @@ root = global ? window
 
 root.YD ?= {}
 
-YD.debug = false
+YD.debug = true
 
 #
 # ## 工具函数
@@ -63,7 +63,7 @@ postHelper = (url, data, callback) ->
   onFailure = (data, status, xhr) ->
     showStatusMsg "#{data}, #{status}, #{xhr}"
 
-  $.post url, data
+  $.post url, data: data
     .done onSuccess
     .fail onFailure
 
@@ -99,7 +99,8 @@ hasBlank = (arrayOfCssElement) ->
   notValid = false
 
   isBlank = (e) ->
-    e is "" or e.replace(/^\s+|\s+$/g, "") is ""
+    e is ""
+    # or e.replace(/^\s+|\s+$/g, "") is ""
 
   for e in arrayOfCssElement
     if (isBlank $(e).val())
