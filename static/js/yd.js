@@ -90,7 +90,7 @@
     var e, isBlank, notValid, _i, _len;
     notValid = false;
     isBlank = function(e) {
-      return e === "";
+      return e === "" || e.replace(/^\s+|\s+$/g, "") === "";
     };
     for (_i = 0, _len = arrayOfCssElement.length; _i < _len; _i++) {
       e = arrayOfCssElement[_i];

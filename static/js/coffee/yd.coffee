@@ -96,8 +96,7 @@ hasBlank = (arrayOfCssElement) ->
   notValid = false
 
   isBlank = (e) ->
-    e is ""
-    # or e.replace(/^\s+|\s+$/g, "") is ""
+    e is "" or e.replace(/^\s+|\s+$/g, "") is ""
 
   for e in arrayOfCssElement
     if (isBlank $(e).val())
