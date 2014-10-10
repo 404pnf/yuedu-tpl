@@ -101,6 +101,20 @@ hasBlank = (arrayOfCssElement) ->
 
   notValid
 
+# ### 判断给定日期所在的月份有多少天
+howManyDays = (year, month) ->
+  isLeap = year in [2004, 2008, 2012, 2016, 2020]
+  solarMonth = month in [1, 3, 5, 7, 8, 10, 12]
+  lunarMonth = month in [4, 6, 9, 11]
+  isFeb = month is 2
+  days = if isLeap and isFeb
+    29
+  else if isFeb
+    28
+  else if lunarMonth
+    30
+  else
+    31
 
 # ## 用户页面
 #
@@ -117,21 +131,7 @@ YD.user = ->
     .then (a, b, c) ->
       _.extend a[0], b[0], c[0]
     .then (d) ->
-      year = d.year
-      month = d.month
-      note("#{year}, #{month}")
-      isLeap = year in [2004, 2008, 2012, 2016, 2020]
-      solarMonth = month in [1, 3, 5, 7, 8, 10, 12]
-      lunarMonth = month in [4, 6, 9, 11]
-      isFeb = month is 2
-      days = if isLeap and isFeb
-        29
-      else if isFeb
-        28
-      else if lunarMonth
-        30
-      else
-        31
+      days = howManyDays(d.year, d.month)
       _.extend d, d.days = days
 
 
@@ -160,25 +160,15 @@ YD.user = ->
     month = parseInt $("#month").val(), 10
     day = parseInt $("#day").val(), 10
     note("#{year}, #{month}")
-    isLeap = year in [2004, 2008, 2012, 2016, 2020]
-    solarMonth = month in [1, 3, 5, 7, 8, 10, 12]
-    lunarMonth = month in [4, 6, 9, 11]
-    isFeb = month is 2
+    days = howManyDays year, month
     buildOptions = (n) ->
       res = _.reduce(
-        _.range(1, n),
+        _.range(1, n + 1), # _.range(a, b) is exclusive of b
         (a, e) -> a += "<option value=#{e}>#{e}</option>",
         "<option value='-1'>日</option>"
       )
       $("#day").html(res)
-    if isLeap and isFeb
-      buildOptions 30
-    else if isFeb
-      buildOptions 29
-    else if lunarMonth
-      buildOptions 31
-    else
-      buildOptions 32
+    buildOptions days
 
   # 只有在 year 和 month 变化时才重新生成日期选项。
   # 不能在日期有变化的时候也重新生成日期选项，那样每次选完又会重新生成日期选项，造成根本无法选中任何日期了。
