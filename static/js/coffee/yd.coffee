@@ -441,4 +441,6 @@ YD.resetPass = ->
       note data
       postHelper YD.conf.userResetPass,
         data,
-        -> redirectToUrl(YD.conf.userHomeUrl)
+        ->
+          alertBox "修改成功！"
+          redirectToUrl(YD.conf.userHomeUrl)
