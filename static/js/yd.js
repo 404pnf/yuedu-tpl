@@ -209,7 +209,7 @@
       return o = _.map(d.upcomingExam, function(e) {
         if (e.isTodayExam) {
           e.endTime = "";
-          return e.isTodayExam = "今天";
+          return e.isTodayExam = "<em class='highlight'>今天</em>";
         } else {
           return e.isTodayExam = "";
         }

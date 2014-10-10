@@ -246,7 +246,7 @@ YD.startDispache = ->
     o = _.map d.upcomingExam, (e) ->
       if e.isTodayExam
         e.endTime = ""
-        e.isTodayExam = "今天"
+        e.isTodayExam = "<em class='highlight'>今天</em>" # FIXME no html or css in js
       else
         e.isTodayExam = ""
 
