@@ -164,7 +164,7 @@ YD.user = ->
     month = parseInt $("#month").val(), 10
     day = parseInt $("#day").val(), 10
     note("#{year}, #{month}")
-    isLeap = year in [2000, 2004, 2008, 2012, 2016, 2020]
+    isLeap = year in [2004, 2008, 2012, 2016, 2020]
     solarMonth = month in [1, 3, 5, 7, 8, 10, 12]
     lunarMonth = month in [4, 6, 9, 11]
     isFeb = month is 2
