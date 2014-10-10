@@ -57,7 +57,7 @@
 
 root.YD ?= {}
 
-YD.debug = <span class="hljs-literal">true</span></pre></div>
+YD.debug = <span class="hljs-literal">false</span></pre></div>
         
       
         
@@ -69,10 +69,7 @@ YD.debug = <span class="hljs-literal">true</span></pre></div>
         <p>与后台约定，错误就是一个字符串，获取方法是读取ajax返回对象的error属性。</p>
 
         
-          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-title">showStatusMsg</span> = <span class="hljs-params">(data)</span> -&gt;</span>
-  alertBox data.error
-<span class="hljs-function">
-<span class="hljs-title">alertBox</span> = <span class="hljs-params">(msg)</span> -&gt;</span>
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-title">alertBox</span> = <span class="hljs-params">(msg)</span> -&gt;</span>
   $(<span class="hljs-string">"#msg"</span>).text msg
   $(<span class="hljs-string">"#msg"</span>).dialog
     <span class="hljs-attribute">modal</span>: <span class="hljs-literal">true</span>
@@ -108,11 +105,11 @@ YD.debug = <span class="hljs-literal">true</span></pre></div>
 <span class="hljs-function">
   <span class="hljs-title">onSuccess</span> = <span class="hljs-params">(data)</span> -&gt;</span>
     <span class="hljs-keyword">if</span> <span class="hljs-string">"error"</span> <span class="hljs-keyword">of</span> data
-      showStatusMsg data
+      alertBox data.error
     <span class="hljs-keyword">else</span>
       callback()
 <span class="hljs-function">  <span class="hljs-title">onFailure</span> = <span class="hljs-params">(data, status, xhr)</span> -&gt;</span>
-    showStatusMsg <span class="hljs-string">"<span class="hljs-subst">#{data}</span>, <span class="hljs-subst">#{status}</span>, <span class="hljs-subst">#{xhr}</span>"</span>
+    alertBox <span class="hljs-string">"<span class="hljs-subst">#{data}</span>, <span class="hljs-subst">#{status}</span>, <span class="hljs-subst">#{xhr}</span>"</span>
 
   $.post url, formData
     .done onSuccess
@@ -128,13 +125,13 @@ YD.debug = <span class="hljs-literal">true</span></pre></div>
 <span class="hljs-function">
   <span class="hljs-title">onSuccess</span> = <span class="hljs-params">(data)</span> -&gt;</span>
     <span class="hljs-keyword">if</span> <span class="hljs-string">"error"</span> <span class="hljs-keyword">of</span> data
-      showStatusMsg data
+      alertBox data.error
     <span class="hljs-keyword">else</span>
       callback()
 <span class="hljs-function">  <span class="hljs-title">onFailure</span> = <span class="hljs-params">(data, status, xhr)</span> -&gt;</span>
-    showStatusMsg <span class="hljs-string">"<span class="hljs-subst">#{data}</span>, <span class="hljs-subst">#{status}</span>, <span class="hljs-subst">#{xhr}</span>"</span>
+    alertBox <span class="hljs-string">"<span class="hljs-subst">#{data}</span>, <span class="hljs-subst">#{status}</span>, <span class="hljs-subst">#{xhr}</span>"</span>
 
-  $.post url, data
+  $.post url, <span class="hljs-attribute">data</span>: data
     .done onSuccess
     .fail onFailure</pre></div>
         
@@ -533,7 +530,7 @@ $(“#user_info”).delegate “.monitor”, “change”, setDaysOfMonth</li>
         render <span class="hljs-string">"student/start_scores_with_upcoming.ejs"</span>)
 <span class="hljs-function">
     <span class="hljs-title">onFailure</span> = <span class="hljs-params">(data, status, xhr)</span> -&gt;</span>
-      showStatusMsg <span class="hljs-string">"<span class="hljs-subst">#{data}</span>, <span class="hljs-subst">#{status}</span>, <span class="hljs-subst">#{xhr}</span>"</span></pre></div>
+      alertBox <span class="hljs-string">"<span class="hljs-subst">#{data}</span>, <span class="hljs-subst">#{status}</span>, <span class="hljs-subst">#{xhr}</span>"</span></pre></div>
         
       
         
@@ -622,11 +619,18 @@ $(“#user_info”).delegate “.monitor”, “change”, setDaysOfMonth</li>
 
     <span class="hljs-keyword">if</span> notValid
       alertBox <span class="hljs-string">"所有输入框都必须填写。"</span>
-    <span class="hljs-keyword">else</span>
-      data = JSON.stringify {
-        <span class="hljs-attribute">username</span>: name
+    <span class="hljs-keyword">else</span></pre></div>
+        
+      
+        
+        <p>键名是后台写死的。不要变。</p>
+
+        
+          <div class='highlight'><pre>      data = JSON.stringify {
+        <span class="hljs-attribute">user</span>: name
         <span class="hljs-attribute">password</span>: $.md5(password)
-        <span class="hljs-attribute">yz</span>: yz
+        <span class="hljs-attribute">user_code</span>: yz
+        <span class="hljs-attribute">role</span>: <span class="hljs-string">"2"</span>
       }
       postHelper YD.conf.userLogin,
         data,<span class="hljs-function">
@@ -683,7 +687,9 @@ $(“#user_info”).delegate “.monitor”, “change”, setDaysOfMonth</li>
       note data
       postHelper YD.conf.userResetPass,
         data,<span class="hljs-function">
-        -&gt;</span> redirectToUrl(YD.conf.userHomeUrl)</pre></div>
+        -&gt;</span>
+          alertBox <span class="hljs-string">"修改成功！"</span>
+          redirectToUrl(YD.conf.userHomeUrl)</pre></div>
         
       
       <div class="fleur">h</div>

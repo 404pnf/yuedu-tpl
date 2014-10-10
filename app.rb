@@ -163,7 +163,7 @@ post '/userController/login' do
 end
 
 post "/students/password/reset" do
-  r = { error: '用户名和密码不对。' }
-  #r = {success: '成功啦'}
+  # r = { error: '用户名和密码不对。' }
+  r = {success: '成功啦'}
   JSONP r
 end
