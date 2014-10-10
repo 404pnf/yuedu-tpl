@@ -46,7 +46,7 @@
       }
     };
     onFailure = function(data, status, xhr) {
-      return showStatusMsg("" + data + ", " + status + ", " + xhr);
+      return alertBox("" + data + ", " + status + ", " + xhr);
     };
     return $.post(url, formData).done(onSuccess).fail(onFailure);
   };
@@ -62,7 +62,7 @@
       }
     };
     onFailure = function(data, status, xhr) {
-      return showStatusMsg("" + data + ", " + status + ", " + xhr);
+      return alertBox("" + data + ", " + status + ", " + xhr);
     };
     return $.post(url, {
       data: data

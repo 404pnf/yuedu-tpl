@@ -45,7 +45,7 @@ postJson = (url, cssID, callback) ->
     else
       callback()
   onFailure = (data, status, xhr) ->
-    showStatusMsg "#{data}, #{status}, #{xhr}"
+    alertBox "#{data}, #{status}, #{xhr}"
 
   $.post url, formData
     .done onSuccess
@@ -61,7 +61,7 @@ postHelper = (url, data, callback) ->
     else
       callback()
   onFailure = (data, status, xhr) ->
-    showStatusMsg "#{data}, #{status}, #{xhr}"
+    alertBox "#{data}, #{status}, #{xhr}"
 
   $.post url, data: data
     .done onSuccess
