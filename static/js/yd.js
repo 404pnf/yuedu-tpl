@@ -290,7 +290,8 @@
         data = JSON.stringify({
           username: name,
           password: $.md5(password),
-          yz: yz
+          yz: yz,
+          role: 2
         });
         return postHelper(YD.conf.userLogin, data, function() {
           return redirectToUrl(YD.conf.siteHomeUrl);

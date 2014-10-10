@@ -389,6 +389,7 @@ YD.userLogin = ->
         username: name
         password: $.md5(password)
         yz: yz
+        role: 2
       }
       postHelper YD.conf.userLogin,
         data,
