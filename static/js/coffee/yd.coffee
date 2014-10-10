@@ -28,6 +28,15 @@ alertBox = (msg) ->
 doWhen = (predict, action) ->
   action if predict
 
+# ## 通用ajax提交表单后的回调函数。
+onSuccess = (data) ->
+  if "error" of data
+    showStatusMsg data
+  else
+    callback()
+onFailure = (data, status, xhr) ->
+  showStatusMsg "#{data}, #{status}, #{xhr}"
+
 # ### 提交表单内容到后台
 # 1. 从表单获取数据
 # 1. 用jquery插件将数据转为json
@@ -39,14 +48,6 @@ postJson = (url, cssID, callback) ->
   formData = data: $(cssID).serializeJSON()
   note formData
 
-  onSuccess = (data) ->
-    if "error" of data
-      showStatusMsg data
-    else
-      callback()
-  onFailure = (data, status, xhr) ->
-    showStatusMsg "#{data}, #{status}, #{xhr}"
-
   $.post url, formData
     .done onSuccess
     .fail onFailure
@@ -54,13 +55,6 @@ postJson = (url, cssID, callback) ->
 # postHelper 适用表单数据需要处理一下才能提交的情况。
 postHelper = (url, data, callback) ->
   note data
-  onSuccess = (data) ->
-    if "error" of data
-      showStatusMsg data
-    else
-      callback()
-  onFailure = (data, status, xhr) ->
-    showStatusMsg "#{data}, #{status}, #{xhr}"
 
   $.post url, data
     .done onSuccess
@@ -80,18 +74,20 @@ renderLocalData = (data, cssID, tpl, callback) ->
     new EJS url: "#{YD.conf.tplDir}#{tpl}"
       .update cssID, cb(clonedData)
 
+# 客户端重定向。
 redirectToUrl = (url) ->
   window.location.replace url
 
+# 封装console.log。且只在debug模式下调用console.log。
+# 因为ie没有console.log。如果代码中使用了它，整个js都无法在ie下正常使用。
 note = (msg) ->
   console.log msg  if YD.debug
 
 # ### 检查表单数据是否为空
-# 输入：input 框 cssID 的数组。
 #
-# 输出： true / false
-#
-# 副作用：所有为空的输入框会被加上 "error" 这个css类
+# 1. 输入：input 框 cssID 的数组。
+# 1. 输出： true / false。
+# 1. 副作用：所有为空的输入框会被加上 "error" 这个css类。
 hasBlank = (arrayOfCssElement) ->
   notValid = false
 
