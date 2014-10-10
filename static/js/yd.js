@@ -8,7 +8,7 @@
     root.YD = {};
   }
 
-  YD.debug = false;
+  YD.debug = true;
 
   showStatusMsg = function(data) {
     return alertBox(data.error);
@@ -92,7 +92,7 @@
     var e, isBlank, notValid, _i, _len;
     notValid = false;
     isBlank = function(e) {
-      return e === "";
+      return e === "" || e.replace(/^\s+|\s+$/g, "") === "";
     };
     for (_i = 0, _len = arrayOfCssElement.length; _i < _len; _i++) {
       e = arrayOfCssElement[_i];
@@ -328,6 +328,7 @@
           newPass: $.md5(newPass),
           newPassConfirm: $.md5(newPassConfirm)
         });
+        note(data);
         return postHelper(YD.conf.userResetPass, data, function() {
           return redirectToUrl(YD.conf.userHomeUrl);
         });

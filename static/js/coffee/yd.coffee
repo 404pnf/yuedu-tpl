@@ -4,7 +4,7 @@ root = global ? window
 
 root.YD ?= {}
 
-YD.debug = false
+YD.debug = true
 
 #
 # ## 工具函数
@@ -99,7 +99,7 @@ hasBlank = (arrayOfCssElement) ->
   notValid = false
 
   isBlank = (e) ->
-    e is ""
+    e is "" or e.replace(/^\s+|\s+$/g, "") is ""
 
   for e in arrayOfCssElement
     if (isBlank $(e).val())
@@ -437,6 +437,7 @@ YD.resetPass = ->
         newPass: $.md5(newPass)
         newPassConfirm: $.md5(newPassConfirm)
       }
+      note data
       postHelper YD.conf.userResetPass,
         data,
         -> redirectToUrl(YD.conf.userHomeUrl)

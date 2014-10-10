@@ -188,7 +188,7 @@ YD.debug = <span class="hljs-literal">true</span></pre></div>
   notValid = <span class="hljs-literal">false</span>
 <span class="hljs-function">
   <span class="hljs-title">isBlank</span> = <span class="hljs-params">(e)</span> -&gt;</span>
-    e <span class="hljs-keyword">is</span> <span class="hljs-string">""</span>
+    e <span class="hljs-keyword">is</span> <span class="hljs-string">""</span> <span class="hljs-keyword">or</span> e.replace(<span class="hljs-regexp">/^\s+|\s+$/g</span>, <span class="hljs-string">""</span>) <span class="hljs-keyword">is</span> <span class="hljs-string">""</span>
 
   <span class="hljs-keyword">for</span> e <span class="hljs-keyword">in</span> arrayOfCssElement
     <span class="hljs-keyword">if</span> (isBlank $(e).val())
@@ -680,6 +680,7 @@ $(“#user_info”).delegate “.monitor”, “change”, setDaysOfMonth</li>
         <span class="hljs-attribute">newPass</span>: $.md5(newPass)
         <span class="hljs-attribute">newPassConfirm</span>: $.md5(newPassConfirm)
       }
+      note data
       postHelper YD.conf.userResetPass,
         data,<span class="hljs-function">
         -&gt;</span> redirectToUrl(YD.conf.userHomeUrl)</pre></div>
