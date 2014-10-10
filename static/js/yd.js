@@ -8,7 +8,7 @@
     root.YD = {};
   }
 
-  YD.debug = true;
+  YD.debug = false;
 
   showStatusMsg = function(data) {
     return alertBox(data.error);
