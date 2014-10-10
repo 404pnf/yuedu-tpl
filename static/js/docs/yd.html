@@ -125,7 +125,8 @@ YD.debug = <span class="hljs-literal">true</span></pre></div>
         
           <div class='highlight'><pre><span class="hljs-function"><span class="hljs-title">postHelper</span> = <span class="hljs-params">(url, data, callback)</span> -&gt;</span>
   note data
-<span class="hljs-function">  <span class="hljs-title">onSuccess</span> = <span class="hljs-params">(data)</span> -&gt;</span>
+<span class="hljs-function">
+  <span class="hljs-title">onSuccess</span> = <span class="hljs-params">(data)</span> -&gt;</span>
     <span class="hljs-keyword">if</span> <span class="hljs-string">"error"</span> <span class="hljs-keyword">of</span> data
       showStatusMsg data
     <span class="hljs-keyword">else</span>
@@ -154,20 +155,33 @@ YD.debug = <span class="hljs-literal">true</span></pre></div>
     cb = callback <span class="hljs-keyword">or</span> _.identity
     clonedData = _.snapshot (_.extend data, YD.conf)
     <span class="hljs-keyword">new</span> EJS <span class="hljs-attribute">url</span>: <span class="hljs-string">"<span class="hljs-subst">#{YD.conf.tplDir}</span><span class="hljs-subst">#{tpl}</span>"</span>
-      .update cssID, cb(clonedData)
-<span class="hljs-function">
-<span class="hljs-title">redirectToUrl</span> = <span class="hljs-params">(url)</span> -&gt;</span>
-  <span class="hljs-built_in">window</span>.location.replace url
-<span class="hljs-function">
-<span class="hljs-title">note</span> = <span class="hljs-params">(msg)</span> -&gt;</span>
+      .update cssID, cb(clonedData)</pre></div>
+        
+      
+        
+        <p>客户端重定向。</p>
+
+        
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-title">redirectToUrl</span> = <span class="hljs-params">(url)</span> -&gt;</span>
+  <span class="hljs-built_in">window</span>.location.replace url</pre></div>
+        
+      
+        
+        <p>封装console.log。且只在debug模式下调用console.log。
+因为ie没有console.log。如果代码中使用了它，整个js都无法在ie下正常使用。</p>
+
+        
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-title">note</span> = <span class="hljs-params">(msg)</span> -&gt;</span>
   <span class="hljs-built_in">console</span>.log msg  <span class="hljs-keyword">if</span> YD.debug</pre></div>
         
       
         
         <h3 id="-">检查表单数据是否为空</h3>
-<p>输入：input 框 cssID 的数组。</p>
-<p>输出： true / false</p>
-<p>副作用：所有为空的输入框会被加上 “error” 这个css类</p>
+<ol>
+<li>输入：input 框 cssID 的数组。</li>
+<li>输出： true / false。</li>
+<li>副作用：所有为空的输入框会被加上 “error” 这个css类。</li>
+</ol>
 
         
           <div class='highlight'><pre><span class="hljs-function"><span class="hljs-title">hasBlank</span> = <span class="hljs-params">(arrayOfCssElement)</span> -&gt;</span>
@@ -182,6 +196,25 @@ YD.debug = <span class="hljs-literal">true</span></pre></div>
       notValid = <span class="hljs-literal">true</span>
 
   notValid</pre></div>
+        
+      
+        
+        <h3 id="-">判断给定日期所在的月份有多少天</h3>
+
+        
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-title">howManyDays</span> = <span class="hljs-params">(year, month)</span> -&gt;</span>
+  isLeap = year <span class="hljs-keyword">in</span> [<span class="hljs-number">2004</span>, <span class="hljs-number">2008</span>, <span class="hljs-number">2012</span>, <span class="hljs-number">2016</span>, <span class="hljs-number">2020</span>]
+  solarMonth = month <span class="hljs-keyword">in</span> [<span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">5</span>, <span class="hljs-number">7</span>, <span class="hljs-number">8</span>, <span class="hljs-number">10</span>, <span class="hljs-number">12</span>]
+  lunarMonth = month <span class="hljs-keyword">in</span> [<span class="hljs-number">4</span>, <span class="hljs-number">6</span>, <span class="hljs-number">9</span>, <span class="hljs-number">11</span>]
+  isFeb = month <span class="hljs-keyword">is</span> <span class="hljs-number">2</span>
+  days = <span class="hljs-keyword">if</span> isLeap <span class="hljs-keyword">and</span> isFeb
+    <span class="hljs-number">29</span>
+  <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> isFeb
+    <span class="hljs-number">28</span>
+  <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> lunarMonth
+    <span class="hljs-number">30</span>
+  <span class="hljs-keyword">else</span>
+    <span class="hljs-number">31</span></pre></div>
         
       
         
@@ -203,21 +236,7 @@ YD.debug = <span class="hljs-literal">true</span></pre></div>
     .<span class="hljs-keyword">then</span> <span class="hljs-function"><span class="hljs-params">(a, b, c)</span> -&gt;</span>
       _.extend a[<span class="hljs-number">0</span>], b[<span class="hljs-number">0</span>], c[<span class="hljs-number">0</span>]
     .<span class="hljs-keyword">then</span> <span class="hljs-function"><span class="hljs-params">(d)</span> -&gt;</span>
-      year = d.year
-      month = d.month
-      note(<span class="hljs-string">"<span class="hljs-subst">#{year}</span>, <span class="hljs-subst">#{month}</span>"</span>)
-      isLeap = year <span class="hljs-keyword">in</span> [<span class="hljs-number">2004</span>, <span class="hljs-number">2008</span>, <span class="hljs-number">2012</span>, <span class="hljs-number">2016</span>, <span class="hljs-number">2020</span>]
-      solarMonth = month <span class="hljs-keyword">in</span> [<span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">5</span>, <span class="hljs-number">7</span>, <span class="hljs-number">8</span>, <span class="hljs-number">10</span>, <span class="hljs-number">12</span>]
-      lunarMonth = month <span class="hljs-keyword">in</span> [<span class="hljs-number">4</span>, <span class="hljs-number">6</span>, <span class="hljs-number">9</span>, <span class="hljs-number">11</span>]
-      isFeb = month <span class="hljs-keyword">is</span> <span class="hljs-number">2</span>
-      days = <span class="hljs-keyword">if</span> isLeap <span class="hljs-keyword">and</span> isFeb
-        <span class="hljs-number">29</span>
-      <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> isFeb
-        <span class="hljs-number">28</span>
-      <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> lunarMonth
-        <span class="hljs-number">30</span>
-      <span class="hljs-keyword">else</span>
-        <span class="hljs-number">31</span>
+      days = howManyDays(d.year, d.month)
       _.extend d, d.days = days</pre></div>
         
       
@@ -226,9 +245,14 @@ YD.debug = <span class="hljs-literal">true</span></pre></div>
 
         
           <div class='highlight'><pre><span class="hljs-function">  <span class="hljs-title">userRender</span> = <span class="hljs-params">(tpl, cssID, data)</span> -&gt;</span>
-    <span class="hljs-keyword">new</span> EJS(<span class="hljs-attribute">url</span>: YD.conf.tplDir + tpl).update cssID, data
-<span class="hljs-function">
-  <span class="hljs-title">userShow</span> = -&gt;</span>
+    <span class="hljs-keyword">new</span> EJS(<span class="hljs-attribute">url</span>: YD.conf.tplDir + tpl).update cssID, data</pre></div>
+        
+      
+        
+        <p>各种用户操作</p>
+
+        
+          <div class='highlight'><pre><span class="hljs-function">  <span class="hljs-title">userShow</span> = -&gt;</span>
     userInfoAll.done <span class="hljs-function"><span class="hljs-params">(data)</span> -&gt;</span>
       userRender <span class="hljs-string">"student/user_show.ejs"</span>, <span class="hljs-string">"user_info"</span>, data
 <span class="hljs-function">
@@ -243,13 +267,12 @@ YD.debug = <span class="hljs-literal">true</span></pre></div>
         
       
         
-        <p>YD.setDaysOfMonth</p>
-
-        
-      
-        
-        <p>setDaysOfMonth 的帮助函数。
-在用户改变了出生日期的“年”或“月”下拉框时，根据情况重新生成“日”的下拉框。</p>
+        <p>setDaysOfMonth 的帮助函数。</p>
+<ol>
+<li>在用户改变了出生日期的“年”或“月”下拉框时，根据情况重新生成“日”的下拉框。</li>
+<li>不能在日期有变化的时候也重新生成日期选项，那样每次选完又会重新生成日期选项，
+造成根本无法选中任何日期了。</li>
+</ol>
 
         
           <div class='highlight'><pre><span class="hljs-function">  <span class="hljs-title">buildDays</span> = -&gt;</span>
@@ -257,35 +280,41 @@ YD.debug = <span class="hljs-literal">true</span></pre></div>
     month = parseInt $(<span class="hljs-string">"#month"</span>).val(), <span class="hljs-number">10</span>
     day = parseInt $(<span class="hljs-string">"#day"</span>).val(), <span class="hljs-number">10</span>
     note(<span class="hljs-string">"<span class="hljs-subst">#{year}</span>, <span class="hljs-subst">#{month}</span>"</span>)
-    isLeap = year <span class="hljs-keyword">in</span> [<span class="hljs-number">2004</span>, <span class="hljs-number">2008</span>, <span class="hljs-number">2012</span>, <span class="hljs-number">2016</span>, <span class="hljs-number">2020</span>]
-    solarMonth = month <span class="hljs-keyword">in</span> [<span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">5</span>, <span class="hljs-number">7</span>, <span class="hljs-number">8</span>, <span class="hljs-number">10</span>, <span class="hljs-number">12</span>]
-    lunarMonth = month <span class="hljs-keyword">in</span> [<span class="hljs-number">4</span>, <span class="hljs-number">6</span>, <span class="hljs-number">9</span>, <span class="hljs-number">11</span>]
-    isFeb = month <span class="hljs-keyword">is</span> <span class="hljs-number">2</span>
+    days = howManyDays year, month
 <span class="hljs-function">    <span class="hljs-title">buildOptions</span> = <span class="hljs-params">(n)</span> -&gt;</span>
       res = _.reduce(
-        _.range(<span class="hljs-number">1</span>, n),
+        _.range(<span class="hljs-number">1</span>, n + <span class="hljs-number">1</span>), <span class="hljs-comment"># _.range(a, b) is exclusive of b</span>
 <span class="hljs-function">        <span class="hljs-params">(a, e)</span> -&gt;</span> a += <span class="hljs-string">"&lt;option value=<span class="hljs-subst">#{e}</span>&gt;<span class="hljs-subst">#{e}</span>&lt;/option&gt;"</span>,
         <span class="hljs-string">"&lt;option value='-1'&gt;日&lt;/option&gt;"</span>
       )
       $(<span class="hljs-string">"#day"</span>).html(res)
-    <span class="hljs-keyword">if</span> isLeap <span class="hljs-keyword">and</span> isFeb
-      buildOptions <span class="hljs-number">30</span>
-    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> isFeb
-      buildOptions <span class="hljs-number">29</span>
-    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> lunarMonth
-      buildOptions <span class="hljs-number">31</span>
-    <span class="hljs-keyword">else</span>
-      buildOptions <span class="hljs-number">32</span></pre></div>
+    buildOptions days</pre></div>
         
       
         
-        <p>只有在 year 和 month 变化时才重新生成日期选项。
-不能在日期有变化的时候也重新生成日期选项，那样每次选完又会重新生成日期选项，造成根本无法选中任何日期了。</p>
+        <h3 id="-">注意</h3>
+<ol>
+<li>这里不要再监听任何元素，直接调用buildDays。否则第一次修改年和月的时候，无法触发
+buildDays()函数，从第二次开始就都可以了。这个问题困惑了好一会儿。</li>
+<li>代理监听时要监听 .monitor css类。而不能直接监听 select。
+否则选择日期的时候，在选择的同时又触发了change事件，又重新buildDays。死循环了。
+$(“#user_info”).delegate “.monitor”, “change”, setDaysOfMonth</li>
+</ol>
 
         
           <div class='highlight'><pre><span class="hljs-function">  <span class="hljs-title">setDaysOfMonth</span> = -&gt;</span>
-    $(<span class="hljs-string">'#year, #month'</span>).change <span class="hljs-function">-&gt;</span> buildDays()
-<span class="hljs-function">
+    buildDays()</pre></div>
+        
+      
+        
+        <hr>
+
+        
+      
+        
+        
+        
+          <div class='highlight'><pre><span class="hljs-function">
   <span class="hljs-title">userPhotoEdit</span> = -&gt;</span>
     userInfoAll.done <span class="hljs-function"><span class="hljs-params">(data)</span> -&gt;</span>
       userRender <span class="hljs-string">"student/user_photo_edit.ejs"</span>, <span class="hljs-string">"user_info"</span>, data
@@ -296,13 +325,18 @@ YD.debug = <span class="hljs-literal">true</span></pre></div>
 <span class="hljs-function">
   <span class="hljs-title">userPhotoSave</span> = -&gt;</span>
     postJson YD.conf.userSave, <span class="hljs-string">"form#user_photo"</span>,<span class="hljs-function"> -&gt;</span>
-      redirectToUrl YD.conf.userHomeUrl
-
-  <span class="hljs-keyword">do</span> <span class="hljs-function">-&gt;</span></pre></div>
+      redirectToUrl YD.conf.userHomeUrl</pre></div>
         
       
         
-        <p>直接显示用户信息和头像</p>
+        <h3 id="-">直接执行以下函数</h3>
+
+        
+          <div class='highlight'><pre>  <span class="hljs-keyword">do</span> <span class="hljs-function">-&gt;</span></pre></div>
+        
+      
+        
+        <p>显示用户信息和头像</p>
 
         
           <div class='highlight'><pre>    userShow()
@@ -310,7 +344,8 @@ YD.debug = <span class="hljs-literal">true</span></pre></div>
         
       
         
-        <p><strong>通过jQuery的delegate监听尚未出现在页面的元素</strong>，因为内容动态从单独模版文件中加载。</p>
+        <p><strong>通过jQuery的delegate监听尚未出现在页面的元素</strong>，因为内容是动态从单独模版文件中加载。
+当html文件加载本js文件的时候，那些在模版中的元素还没有出现呢。无法监听到。</p>
 
         
       
@@ -319,7 +354,7 @@ YD.debug = <span class="hljs-literal">true</span></pre></div>
 
         
           <div class='highlight'><pre>    $(<span class="hljs-string">"#user_info"</span>).delegate <span class="hljs-string">"#user_info_edit"</span>, <span class="hljs-string">"click"</span>, userEdit
-    $(<span class="hljs-string">"#user_info"</span>).delegate <span class="hljs-string">"select"</span>, <span class="hljs-string">"change"</span>, setDaysOfMonth</pre></div>
+    $(<span class="hljs-string">"#user_info"</span>).delegate <span class="hljs-string">".monitor"</span>, <span class="hljs-string">"change"</span>, setDaysOfMonth</pre></div>
         
       
         
