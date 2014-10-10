@@ -134,11 +134,11 @@ YD.user = ->
       days = howManyDays(d.year, d.month)
       _.extend d, d.days = days
 
-
   # partial application to save typing
   userRender = (tpl, cssID, data) ->
     new EJS(url: YD.conf.tplDir + tpl).update cssID, data
 
+  # 各种用户操作
   userShow = ->
     userInfoAll.done (data) ->
       userRender "student/user_show.ejs", "user_info", data
@@ -151,10 +151,11 @@ YD.user = ->
     userInfoAll.done (data) ->
       note data
       userRender "student/user_edit.ejs", "user_info", data
-      # YD.setDaysOfMonth
 
   # setDaysOfMonth 的帮助函数。
-  # 在用户改变了出生日期的“年”或“月”下拉框时，根据情况重新生成“日”的下拉框。
+  # 1. 在用户改变了出生日期的“年”或“月”下拉框时，根据情况重新生成“日”的下拉框。
+  # 1. 不能在日期有变化的时候也重新生成日期选项，那样每次选完又会重新生成日期选项，
+  #    造成根本无法选中任何日期了。
   buildDays = ->
     year = parseInt $("#year").val(), 10
     month = parseInt $("#month").val(), 10
@@ -170,10 +171,15 @@ YD.user = ->
       $("#day").html(res)
     buildOptions days
 
-  # 只有在 year 和 month 变化时才重新生成日期选项。
-  # 不能在日期有变化的时候也重新生成日期选项，那样每次选完又会重新生成日期选项，造成根本无法选中任何日期了。
+  # ### 注意
+  # 1. 这里不要再监听任何元素，直接调用buildDays。否则第一次修改年和月的时候，无法触发
+  #    buildDays()函数，从第二次开始就都可以了。这个问题困惑了好一会儿。
+  # 1. 代理监听时要监听 .monitor css类。而不能直接监听 select。
+  #    否则选择日期的时候，在选择的同时又触发了change事件，又重新buildDays。死循环了。
+  #    $("#user_info").delegate ".monitor", "change", setDaysOfMonth
   setDaysOfMonth = ->
-    $('#year, #month').change -> buildDays()
+    buildDays()
+  # ----
 
   userPhotoEdit = ->
     userInfoAll.done (data) ->
@@ -187,17 +193,18 @@ YD.user = ->
     postJson YD.conf.userSave, "form#user_photo", ->
       redirectToUrl YD.conf.userHomeUrl
 
+  # ### 直接执行以下函数
   do ->
-    # 直接显示用户信息和头像
+    # 显示用户信息和头像
     userShow()
     userBarShow()
     #
-    # **通过jQuery的delegate监听尚未出现在页面的元素**，因为内容动态从单独模版文件中加载。
-    #
+    # **通过jQuery的delegate监听尚未出现在页面的元素**，因为内容是动态从单独模版文件中加载。
+    # 当html文件加载本js文件的时候，那些在模版中的元素还没有出现呢。无法监听到。
 
     # 编辑用户
     $("#user_info").delegate "#user_info_edit", "click", userEdit
-    $("#user_info").delegate "select", "change", setDaysOfMonth
+    $("#user_info").delegate ".monitor", "change", setDaysOfMonth
 
     # 编辑头像
     $("#user_info").delegate "#user_photo_edit", "click", userPhotoEdit
