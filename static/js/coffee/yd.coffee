@@ -28,15 +28,6 @@ alertBox = (msg) ->
 doWhen = (predict, action) ->
   action if predict
 
-# ## 通用ajax提交表单后的回调函数。
-onSuccess = (data) ->
-  if "error" of data
-    showStatusMsg data
-  else
-    callback()
-onFailure = (data, status, xhr) ->
-  showStatusMsg "#{data}, #{status}, #{xhr}"
-
 # ### 提交表单内容到后台
 # 1. 从表单获取数据
 # 1. 用jquery插件将数据转为json
@@ -48,6 +39,14 @@ postJson = (url, cssID, callback) ->
   formData = data: $(cssID).serializeJSON()
   note formData
 
+  onSuccess = (data) ->
+    if "error" of data
+      showStatusMsg data
+    else
+      callback()
+  onFailure = (data, status, xhr) ->
+    showStatusMsg "#{data}, #{status}, #{xhr}"
+
   $.post url, formData
     .done onSuccess
     .fail onFailure
@@ -55,6 +54,14 @@ postJson = (url, cssID, callback) ->
 # postHelper 适用表单数据需要处理一下才能提交的情况。
 postHelper = (url, data, callback) ->
   note data
+
+  onSuccess = (data) ->
+    if "error" of data
+      showStatusMsg data
+    else
+      callback()
+  onFailure = (data, status, xhr) ->
+    showStatusMsg "#{data}, #{status}, #{xhr}"
 
   $.post url, data
     .done onSuccess
