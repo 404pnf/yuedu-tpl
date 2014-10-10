@@ -4,7 +4,7 @@ root = global ? window
 
 root.YD ?= {}
 
-YD.debug = true
+YD.debug = false
 
 #
 # ## 工具函数
