@@ -5,6 +5,8 @@ root = global ? window
 
 root.ydMakeChart = ->
   drawChart = (data) ->
+    # AmCharts.makeChart 接受的参数是页面上的 cssID。
+    # 生成的图标将会直接插入到这个cssID所在的div中。
     AmCharts.makeChart "chartdiv",
       {
         type: "serial"
@@ -45,9 +47,10 @@ root.ydMakeChart = ->
       }
 
   onFailure = ->
-    alert "暂时无法获取数据。请稍后再试。会向机房老师反应。"
+    alert "暂时无法从服务器获取数据。请稍后再试。"
 
-  # 请求数据并将图标显示在页面
+  # 请求数据并将图标显示在页面。
+  # 根据数据计算出参加了几次考试和最高成绩，并显示在页面上。
   do ->
     $.get("/resultsController/loginUser")
       .done (d) ->

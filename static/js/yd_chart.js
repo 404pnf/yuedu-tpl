@@ -39,7 +39,7 @@
       });
     };
     onFailure = function() {
-      return alert("暂时无法获取数据。请稍后再试。会向机房老师反应。");
+      return alert("暂时无法获取数据。请稍后再试。或向机房老师反应。");
     };
     return (function() {
       return $.get("/resultsController/loginUser").done(function(d) {
