@@ -56,6 +56,6 @@ root.ydMakeChart = ->
         tryTimes = d.length
         sortedScore = _.sortBy d, (e) -> e.value
         highestScore = _.last(sortedScore).value
-        $("#chart_info").text "我共参加了#{tryTimes}次测试。
+        $("#chart_info").text "我共参加了#{tryTimes}次测试，
           目前最佳成绩是#{highestScore}级。"
       .fail onFailure
