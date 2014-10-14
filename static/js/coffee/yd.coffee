@@ -11,13 +11,17 @@ YD.debug = false
 #
 
 # 与后台约定，错误就是一个字符串，获取方法是读取ajax返回对象的error属性。
-alertBox = (msg) ->
+alertBox = (msg, callback) ->
   $("#msg").text msg
   $("#msg").dialog
     modal: true
     buttons:
-      Ok: -> # do NOT use fat arror!! or the dialog won't close
-        $(this).dialog "close"
+      # do NOT use fat arror!! or the dialog won't close
+      Ok: ->
+        if callback
+          callback()
+        else
+          $(this).dialog "close"
 
 # 简化 if (predict) {}，或者说模仿scheme中的when。
 # 注意：action必须是一个返回函数的函数，这样才能延迟执行。
@@ -440,9 +444,4 @@ YD.resetPass = ->
       postHelper YD.conf.userResetPass,
         data,
         ->
-          $("#msg").text "修改成功！"
-          $("#msg").dialog
-            modal: true
-            buttons:
-              Ok: ->
-                redirectToUrl(YD.conf.userHomeUrl)
+          alertBox("修改成功！", -> redirectToUrl(YD.conf.userHomeUrl))

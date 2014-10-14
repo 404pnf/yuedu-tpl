@@ -10,13 +10,17 @@
 
   YD.debug = false;
 
-  alertBox = function(msg) {
+  alertBox = function(msg, callback) {
     $("#msg").text(msg);
     return $("#msg").dialog({
       modal: true,
       buttons: {
         Ok: function() {
-          return $(this).dialog("close");
+          if (callback) {
+            return callback();
+          } else {
+            return $(this).dialog("close");
+          }
         }
       }
     });
@@ -329,14 +333,8 @@
         });
         note(data);
         return postHelper(YD.conf.userResetPass, data, function() {
-          $("#msg").text("修改成功！");
-          return $("#msg").dialog({
-            modal: true,
-            buttons: {
-              Ok: function() {
-                return redirectToUrl(YD.conf.userHomeUrl);
-              }
-            }
+          return alertBox("修改成功！", function() {
+            return redirectToUrl(YD.conf.userHomeUrl);
           });
         });
       }
