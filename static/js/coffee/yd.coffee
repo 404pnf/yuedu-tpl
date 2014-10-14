@@ -440,5 +440,10 @@ YD.resetPass = ->
       postHelper YD.conf.userResetPass,
         data,
         ->
-          alertBox "修改成功！"
-          redirectToUrl(YD.conf.userHomeUrl)
+          $("#msg").text "修改成功！"
+          $("#msg").dialog
+            modal: true
+            buttons:
+              Ok: ->
+                redirectToUrl(YD.conf.userHomeUrl)
+                

@@ -329,8 +329,15 @@
         });
         note(data);
         return postHelper(YD.conf.userResetPass, data, function() {
-          alertBox("修改成功！");
-          return redirectToUrl(YD.conf.userHomeUrl);
+          $("#msg").text("修改成功！");
+          return $("#msg").dialog({
+            modal: true,
+            buttons: {
+              Ok: function() {
+                return redirectToUrl(YD.conf.userHomeUrl);
+              }
+            }
+          });
         });
       }
     });
