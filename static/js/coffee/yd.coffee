@@ -85,7 +85,7 @@ redirectToUrl = (url) ->
 # 封装console.log。且只在debug模式下调用console.log。
 # 因为ie没有console.log。如果代码中使用了它，整个js都无法在ie下正常使用。
 note = (msg) ->
-  console.log msg  if YD.debug
+  console?.log msg  if YD.debug
 
 # ### 检查表单数据是否为空
 #
@@ -446,4 +446,3 @@ YD.resetPass = ->
             buttons:
               Ok: ->
                 redirectToUrl(YD.conf.userHomeUrl)
-                

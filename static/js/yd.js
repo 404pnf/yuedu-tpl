@@ -82,7 +82,7 @@
 
   note = function(msg) {
     if (YD.debug) {
-      return console.log(msg);
+      return typeof console !== "undefined" && console !== null ? console.log(msg) : void 0;
     }
   };
 
