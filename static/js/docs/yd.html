@@ -69,13 +69,22 @@ YD.debug = <span class="hljs-literal">false</span></pre></div>
         <p>与后台约定，错误就是一个字符串，获取方法是读取ajax返回对象的error属性。</p>
 
         
-          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-title">alertBox</span> = <span class="hljs-params">(msg)</span> -&gt;</span>
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-title">alertBox</span> = <span class="hljs-params">(msg, callback)</span> -&gt;</span>
   $(<span class="hljs-string">"#msg"</span>).text msg
   $(<span class="hljs-string">"#msg"</span>).dialog
     <span class="hljs-attribute">modal</span>: <span class="hljs-literal">true</span>
-    <span class="hljs-attribute">buttons</span>:
-      <span class="hljs-attribute">Ok</span>:<span class="hljs-function"> -&gt;</span> <span class="hljs-comment"># do NOT use fat arror!! or the dialog won't close</span>
-        $(<span class="hljs-keyword">this</span>).dialog <span class="hljs-string">"close"</span></pre></div>
+    <span class="hljs-attribute">buttons</span>:</pre></div>
+        
+      
+        
+        <p>do NOT use fat arror!! or the dialog won’t close</p>
+
+        
+          <div class='highlight'><pre>      <span class="hljs-attribute">Ok</span>: <span class="hljs-function">-&gt;</span>
+        <span class="hljs-keyword">if</span> callback
+          callback()
+        <span class="hljs-keyword">else</span>
+          $(<span class="hljs-keyword">this</span>).dialog <span class="hljs-string">"close"</span></pre></div>
         
       
         
@@ -147,8 +156,8 @@ YD.debug = <span class="hljs-literal">false</span></pre></div>
 </ol>
 
         
-          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-title">renderLocalData</span> = <span class="hljs-params">(data, cssID, tpl, callback)</span> -&gt;</span><span class="hljs-function">
-  -&gt;</span>
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-title">renderLocalData</span> = <span class="hljs-params">(data, cssID, tpl, callback)</span> -&gt;</span>
+  -&gt;
     cb = callback <span class="hljs-keyword">or</span> _.identity
     clonedData = _.snapshot (_.extend data, YD.conf)
     <span class="hljs-keyword">new</span> EJS <span class="hljs-attribute">url</span>: <span class="hljs-string">"<span class="hljs-subst">#{YD.conf.tplDir}</span><span class="hljs-subst">#{tpl}</span>"</span>
@@ -169,7 +178,7 @@ YD.debug = <span class="hljs-literal">false</span></pre></div>
 
         
           <div class='highlight'><pre><span class="hljs-function"><span class="hljs-title">note</span> = <span class="hljs-params">(msg)</span> -&gt;</span>
-  <span class="hljs-built_in">console</span>.log msg  <span class="hljs-keyword">if</span> YD.debug</pre></div>
+  <span class="hljs-built_in">console</span>?.log msg  <span class="hljs-keyword">if</span> YD.debug</pre></div>
         
       
         
@@ -223,16 +232,16 @@ YD.debug = <span class="hljs-literal">false</span></pre></div>
 </ol>
 
         
-          <div class='highlight'><pre>YD.u<span class="hljs-function"><span class="hljs-title">ser</span> = -&gt;</span>
+          <div class='highlight'><pre>YD.user = <span class="hljs-function">-&gt;</span>
   userinfo = YD.conf.userInfo
   photos = YD.conf.photos
   grades = YD.conf.grades
 
   userInfoAll = $
     .<span class="hljs-keyword">when</span> $.get(userinfo), $.get(grades), $.get(photos)
-    .<span class="hljs-keyword">then</span> <span class="hljs-function"><span class="hljs-params">(a, b, c)</span> -&gt;</span>
+    .<span class="hljs-keyword">then</span> (a, b, c) -&gt;
       _.extend a[<span class="hljs-number">0</span>], b[<span class="hljs-number">0</span>], c[<span class="hljs-number">0</span>]
-    .<span class="hljs-keyword">then</span> <span class="hljs-function"><span class="hljs-params">(d)</span> -&gt;</span>
+    .<span class="hljs-keyword">then</span> (d) -&gt;
       days = howManyDays(d.year, d.month)
       _.extend d, d.days = days</pre></div>
         
@@ -250,15 +259,15 @@ YD.debug = <span class="hljs-literal">false</span></pre></div>
 
         
           <div class='highlight'><pre><span class="hljs-function">  <span class="hljs-title">userShow</span> = -&gt;</span>
-    userInfoAll.done <span class="hljs-function"><span class="hljs-params">(data)</span> -&gt;</span>
+    userInfoAll.done (data) -&gt;
       userRender <span class="hljs-string">"student/user_show.ejs"</span>, <span class="hljs-string">"user_info"</span>, data
 <span class="hljs-function">
   <span class="hljs-title">userBarShow</span> = -&gt;</span>
-    userInfoAll.done <span class="hljs-function"><span class="hljs-params">(data)</span> -&gt;</span>
+    userInfoAll.done (data) -&gt;
       userRender <span class="hljs-string">"student/user_bar.ejs"</span>, <span class="hljs-string">"user_bar"</span>, data
 <span class="hljs-function">
   <span class="hljs-title">userEdit</span> = -&gt;</span>
-    userInfoAll.done <span class="hljs-function"><span class="hljs-params">(data)</span> -&gt;</span>
+    userInfoAll.done (data) -&gt;
       note data
       userRender <span class="hljs-string">"student/user_edit.ejs"</span>, <span class="hljs-string">"user_info"</span>, data</pre></div>
         
@@ -281,7 +290,7 @@ YD.debug = <span class="hljs-literal">false</span></pre></div>
 <span class="hljs-function">    <span class="hljs-title">buildOptions</span> = <span class="hljs-params">(n)</span> -&gt;</span>
       res = _.reduce(
         _.range(<span class="hljs-number">1</span>, n + <span class="hljs-number">1</span>), <span class="hljs-comment"># _.range(a, b) is exclusive of b</span>
-<span class="hljs-function">        <span class="hljs-params">(a, e)</span> -&gt;</span> a += <span class="hljs-string">"&lt;option value=<span class="hljs-subst">#{e}</span>&gt;<span class="hljs-subst">#{e}</span>&lt;/option&gt;"</span>,
+        (a, e) -&gt; a += <span class="hljs-string">"&lt;option value=<span class="hljs-subst">#{e}</span>&gt;<span class="hljs-subst">#{e}</span>&lt;/option&gt;"</span>,
         <span class="hljs-string">"&lt;option value='-1'&gt;日&lt;/option&gt;"</span>
       )
       $(<span class="hljs-string">"#day"</span>).html(res)
@@ -313,15 +322,15 @@ $(“#user_info”).delegate “.monitor”, “change”, setDaysOfMonth</li>
         
           <div class='highlight'><pre><span class="hljs-function">
   <span class="hljs-title">userPhotoEdit</span> = -&gt;</span>
-    userInfoAll.done <span class="hljs-function"><span class="hljs-params">(data)</span> -&gt;</span>
+    userInfoAll.done (data) -&gt;
       userRender <span class="hljs-string">"student/user_photo_edit.ejs"</span>, <span class="hljs-string">"user_info"</span>, data
 <span class="hljs-function">
   <span class="hljs-title">userSave</span> = -&gt;</span>
-    postJson YD.conf.userSave, <span class="hljs-string">"form#user_info"</span>,<span class="hljs-function"> -&gt;</span>
+    postJson YD.conf.userSave, <span class="hljs-string">"form#user_info"</span>, <span class="hljs-function">-&gt;</span>
       redirectToUrl YD.conf.userHomeUrl
 <span class="hljs-function">
   <span class="hljs-title">userPhotoSave</span> = -&gt;</span>
-    postJson YD.conf.userSave, <span class="hljs-string">"form#user_photo"</span>,<span class="hljs-function"> -&gt;</span>
+    postJson YD.conf.userSave, <span class="hljs-string">"form#user_photo"</span>, <span class="hljs-function">-&gt;</span>
       redirectToUrl YD.conf.userHomeUrl</pre></div>
         
       
@@ -329,7 +338,7 @@ $(“#user_info”).delegate “.monitor”, “change”, setDaysOfMonth</li>
         <h3 id="-">直接执行以下函数</h3>
 
         
-          <div class='highlight'><pre>  <span class="hljs-keyword">do</span> <span class="hljs-function">-&gt;</span></pre></div>
+          <div class='highlight'><pre>  <span class="hljs-keyword">do</span> -&gt;</pre></div>
         
       
         
@@ -380,14 +389,14 @@ $(“#user_info”).delegate “.monitor”, “change”, setDaysOfMonth</li>
 <p>后台api的地址在YD.conf中配置</p>
 
         
-          <div class='highlight'><pre>YD.u<span class="hljs-function"><span class="hljs-title">serBar</span> = -&gt;</span>
+          <div class='highlight'><pre>YD.userBar = <span class="hljs-function">-&gt;</span>
   userinfo = YD.conf.userInfo
   photos = YD.conf.photos
 
   $.<span class="hljs-keyword">when</span> $.get(userinfo), $.get(photos)
-    .<span class="hljs-keyword">then</span> <span class="hljs-function"><span class="hljs-params">(a, b)</span> -&gt;</span>
+    .<span class="hljs-keyword">then</span> (a, b) -&gt;
       _.extend a[<span class="hljs-number">0</span>], b[<span class="hljs-number">0</span>]
-    .done <span class="hljs-function"><span class="hljs-params">(data)</span> -&gt;</span>
+    .done (data) -&gt;
       <span class="hljs-keyword">new</span> EJS <span class="hljs-attribute">url</span>: <span class="hljs-string">"<span class="hljs-subst">#{YD.conf.tplDir}</span>student/user_bar.ejs"</span>
         .update <span class="hljs-string">"user_bar"</span>, data</pre></div>
         
@@ -400,7 +409,7 @@ $(“#user_info”).delegate “.monitor”, “change”, setDaysOfMonth</li>
 </ol>
 
         
-          <div class='highlight'><pre>YD.s<span class="hljs-function"><span class="hljs-title">tartDispache</span> = -&gt;</span></pre></div>
+          <div class='highlight'><pre>YD.startDispache = <span class="hljs-function">-&gt;</span></pre></div>
         
       
         
@@ -415,7 +424,7 @@ $(“#user_info”).delegate “.monitor”, “change”, setDaysOfMonth</li>
     o = _.map d.upcomingExam, <span class="hljs-function"><span class="hljs-params">(e)</span> -&gt;</span>
       <span class="hljs-keyword">if</span> e.isTodayExam
         e.endTime = <span class="hljs-string">""</span>
-        e.isTodayExam = <span class="hljs-string">"今天"</span>
+        e.isTodayExam = <span class="hljs-string">"&lt;em class='highlight'&gt;今天&lt;/em&gt;"</span> <span class="hljs-comment"># FIXME no html or css in js</span>
       <span class="hljs-keyword">else</span>
         e.isTodayExam = <span class="hljs-string">""</span></pre></div>
         
@@ -433,7 +442,7 @@ $(“#user_info”).delegate “.monitor”, “change”, setDaysOfMonth</li>
         
           <div class='highlight'><pre>    getExamInfo = $.get YD.conf.getExamInfo
     promise = getExamInfo
-      .<span class="hljs-keyword">then</span> <span class="hljs-function"><span class="hljs-params">(data)</span> -&gt;</span>
+      .<span class="hljs-keyword">then</span> (data) -&gt;
         <span class="hljs-keyword">if</span> (<span class="hljs-string">"upcomingExam"</span> <span class="hljs-keyword">of</span> data)
           _.extend data, updateDateText(data), <span class="hljs-attribute">hasUpcoming</span>: <span class="hljs-literal">true</span>
         <span class="hljs-keyword">else</span>
@@ -543,10 +552,10 @@ $(“#user_info”).delegate “.monitor”, “change”, setDaysOfMonth</li>
         
           <div class='highlight'><pre>    promise.fail onFailure
 
-    promise.done <span class="hljs-function"><span class="hljs-params">(data)</span> -&gt;</span>
+    promise.done (data) -&gt;
       note data
 
-    promise.done <span class="hljs-function"><span class="hljs-params">(data)</span> -&gt;</span>
+    promise.done (data) -&gt;
       YD.exam = YD.exam <span class="hljs-keyword">or</span> data
 
     promise.done onSuccess</pre></div>
@@ -563,7 +572,7 @@ $(“#user_info”).delegate “.monitor”, “change”, setDaysOfMonth</li>
 <p>isTodayExam 的值是 true / false</p>
 
         
-          <div class='highlight'><pre>    promise.done <span class="hljs-function">-&gt;</span>
+          <div class='highlight'><pre>    promise.done -&gt;
       shouldRetry = <span class="hljs-keyword">not</span> (<span class="hljs-string">"currentExam"</span> <span class="hljs-keyword">of</span> YD.exam) <span class="hljs-keyword">and</span>
         (<span class="hljs-string">"upcomingExam"</span> <span class="hljs-keyword">of</span> YD.exam) <span class="hljs-keyword">and</span>
         _.find YD.exam.upcomingExam, <span class="hljs-function"><span class="hljs-params">(e)</span> -&gt;</span> e.isTodayExam
@@ -596,8 +605,8 @@ $(“#user_info”).delegate “.monitor”, “change”, setDaysOfMonth</li>
 </ol>
 
         
-          <div class='highlight'><pre>YD.u<span class="hljs-function"><span class="hljs-title">serLogin</span> = -&gt;</span>
-  $<span class="hljs-function"><span class="hljs-params">(<span class="hljs-string">"form"</span>)</span>.<span class="hljs-title">submit</span> <span class="hljs-params">(e)</span> -&gt;</span>
+          <div class='highlight'><pre>YD.userLogin = <span class="hljs-function">-&gt;</span>
+  $(<span class="hljs-string">"form"</span>).submit (e) -&gt;
     e.preventDefault()</pre></div>
         
       
@@ -633,8 +642,8 @@ $(“#user_info”).delegate “.monitor”, “change”, setDaysOfMonth</li>
         <span class="hljs-attribute">role</span>: <span class="hljs-string">"2"</span>
       }
       postHelper YD.conf.userLogin,
-        data,<span class="hljs-function">
-        -&gt;</span> redirectToUrl(YD.conf.siteHomeUrl)</pre></div>
+        data,
+        <span class="hljs-function">-&gt;</span> redirectToUrl(YD.conf.siteHomeUrl)</pre></div>
         
       
         
@@ -646,8 +655,8 @@ $(“#user_info”).delegate “.monitor”, “change”, setDaysOfMonth</li>
 </ol>
 
         
-          <div class='highlight'><pre>YD.r<span class="hljs-function"><span class="hljs-title">esetPass</span> = -&gt;</span>
-  $<span class="hljs-function"><span class="hljs-params">(<span class="hljs-string">"form"</span>)</span>.<span class="hljs-title">submit</span> <span class="hljs-params">(e)</span> -&gt;</span>
+          <div class='highlight'><pre>YD.resetPass = <span class="hljs-function">-&gt;</span>
+  $(<span class="hljs-string">"form"</span>).submit (e) -&gt;
     e.preventDefault()</pre></div>
         
       
@@ -686,10 +695,9 @@ $(“#user_info”).delegate “.monitor”, “change”, setDaysOfMonth</li>
       }
       note data
       postHelper YD.conf.userResetPass,
-        data,<span class="hljs-function">
-        -&gt;</span>
-          alertBox <span class="hljs-string">"修改成功！"</span>
-          redirectToUrl(YD.conf.userHomeUrl)</pre></div>
+        data,
+        <span class="hljs-function">-&gt;</span>
+          alertBox(<span class="hljs-string">"修改成功！"</span>, <span class="hljs-function">-&gt;</span> redirectToUrl(YD.conf.userHomeUrl))</pre></div>
         
       
       <div class="fleur">h</div>

@@ -56,9 +56,16 @@
           <div class='highlight'><pre>
 root = <span class="hljs-built_in">global</span> ? <span class="hljs-built_in">window</span>
 
-root.y<span class="hljs-function"><span class="hljs-title">dMakeChart</span> = -&gt;</span>
-<span class="hljs-function">  <span class="hljs-title">drawChart</span> = <span class="hljs-params">(data)</span> -&gt;</span>
-    AmCharts.makeChart <span class="hljs-string">"chartdiv"</span>,
+root.ydMakeChart = <span class="hljs-function">-&gt;</span>
+<span class="hljs-function">  <span class="hljs-title">drawChart</span> = <span class="hljs-params">(data)</span> -&gt;</span></pre></div>
+        
+      
+        
+        <p>AmCharts.makeChart 接受的参数是页面上的 cssID。
+生成的图标将会直接插入到这个cssID所在的div中。</p>
+
+        
+          <div class='highlight'><pre>    AmCharts.makeChart <span class="hljs-string">"chartdiv"</span>,
       {
         <span class="hljs-attribute">type</span>: <span class="hljs-string">"serial"</span>
         <span class="hljs-attribute">theme</span>: <span class="hljs-string">"light"</span>
@@ -98,22 +105,23 @@ root.y<span class="hljs-function"><span class="hljs-title">dMakeChart</span> = -
       }
 <span class="hljs-function">
   <span class="hljs-title">onFailure</span> = -&gt;</span>
-    alert <span class="hljs-string">"暂时无法获取数据。请稍后再试。会向机房老师反应。"</span></pre></div>
+    alert <span class="hljs-string">"暂时无法从服务器获取数据。请稍后再试。"</span></pre></div>
         
       
         
-        <p>请求数据并将图标显示在页面</p>
+        <p>请求数据并将图标显示在页面。
+根据数据计算出参加了几次考试和最高成绩，并显示在页面上。</p>
 
         
-          <div class='highlight'><pre>  <span class="hljs-keyword">do</span> <span class="hljs-function">-&gt;</span>
+          <div class='highlight'><pre>  <span class="hljs-keyword">do</span> -&gt;
     $.get(<span class="hljs-string">"/resultsController/loginUser"</span>)
-      .done <span class="hljs-function"><span class="hljs-params">(d)</span> -&gt;</span>
+      .done (d) -&gt;
         drawChart d
-      .done <span class="hljs-function"><span class="hljs-params">(d)</span> -&gt;</span>
+      .done (d) -&gt;
         tryTimes = d.length
         sortedScore = _.sortBy d, <span class="hljs-function"><span class="hljs-params">(e)</span> -&gt;</span> e.value
         highestScore = _.last(sortedScore).value
-        $(<span class="hljs-string">"#chart_info"</span>).text <span class="hljs-string">"我共参加了<span class="hljs-subst">#{tryTimes}</span>次测试。
+        $(<span class="hljs-string">"#chart_info"</span>).text <span class="hljs-string">"我共参加了<span class="hljs-subst">#{tryTimes}</span>次测试，
           目前最佳成绩是<span class="hljs-subst">#{highestScore}</span>级。"</span>
       .fail onFailure</pre></div>
         
