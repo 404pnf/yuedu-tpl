@@ -86,8 +86,6 @@ redirectToUrl = (url) ->
   window.location.replace url
 
 # 封装console.log。且只在debug模式下才调用console.log。
-# 由于使用了 console? 做存在探测 ，因此即使忘了关闭debug，在ie中仍不会造成整个js脚本无法执行。
-# 这是coffescript中很好用的一个功能。
 # ie没有console.log。如果代码中使用了它，整个js都无法在ie下使用。
 
 note = (msg) ->
