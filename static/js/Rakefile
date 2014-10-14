@@ -33,5 +33,5 @@ end
 desc 'generate documenations'
 task :doc do
   #system('/Users/bai/.nvm/v0.11.12/bin/docco coffee/*.coffee')
-  system('docco -l linear coffee/*.coffee')
+  system('/Users/bai/.nvm/v0.11.12/bin/docco -l linear coffee/*.coffee')
 end
