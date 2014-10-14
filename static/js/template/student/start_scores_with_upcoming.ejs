@@ -27,7 +27,12 @@
     <ul>
       <% _.each(upcomingExam, function (e) { %>
         <li>
-          <%= e.name %>： <%= e.startTime %> 开始 <%= e.endTime %> 截止 <%= e.isTodayExam %>
+          <%= e.name %>：
+          <%= e.startTime %> 开始
+          <% if (!e.isTodayExam) { %>
+          <%= e.endTime %> 截止
+          <% } %>
+          <%= e.isTodayExam %>
         </li>
       <% }) %>
     </ul>
