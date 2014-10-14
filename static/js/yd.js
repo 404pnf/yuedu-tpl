@@ -28,7 +28,7 @@
 
   doWhen = function(predict, action) {
     if (predict) {
-      return action;
+      return action();
     }
   };
 

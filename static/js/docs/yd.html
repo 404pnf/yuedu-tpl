@@ -73,14 +73,8 @@ YD.debug = <span class="hljs-literal">false</span></pre></div>
   $(<span class="hljs-string">"#msg"</span>).text msg
   $(<span class="hljs-string">"#msg"</span>).dialog
     <span class="hljs-attribute">modal</span>: <span class="hljs-literal">true</span>
-    <span class="hljs-attribute">buttons</span>:</pre></div>
-        
-      
-        
-        <p>do NOT use fat arror!! or the dialog won’t close</p>
-
-        
-          <div class='highlight'><pre>      <span class="hljs-attribute">Ok</span>: <span class="hljs-function">-&gt;</span>
+    <span class="hljs-attribute">buttons</span>:
+      <span class="hljs-attribute">Ok</span>: <span class="hljs-function">-&gt;</span>  <span class="hljs-comment"># do NOT use fat arror!! or the dialog won't close</span>
         <span class="hljs-keyword">if</span> callback
           callback()
         <span class="hljs-keyword">else</span>
@@ -94,7 +88,7 @@ YD.debug = <span class="hljs-literal">false</span></pre></div>
 
         
           <div class='highlight'><pre><span class="hljs-function"><span class="hljs-title">doWhen</span> = <span class="hljs-params">(predict, action)</span> -&gt;</span>
-  action <span class="hljs-keyword">if</span> predict</pre></div>
+  action() <span class="hljs-keyword">if</span> predict</pre></div>
         
       
         
@@ -173,11 +167,14 @@ YD.debug = <span class="hljs-literal">false</span></pre></div>
         
       
         
-        <p>封装console.log。且只在debug模式下调用console.log。
-因为ie没有console.log。如果代码中使用了它，整个js都无法在ie下正常使用。</p>
+        <p>封装console.log。且只在debug模式下才调用console.log。
+由于使用了 console? 做存在探测 ，因此即使忘了关闭debug，在ie中仍不会造成整个js脚本无法执行。
+这是coffescript中很好用的一个功能。
+ie没有console.log。如果代码中使用了它，整个js都无法在ie下使用。</p>
 
         
-          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-title">note</span> = <span class="hljs-params">(msg)</span> -&gt;</span>
+          <div class='highlight'><pre><span class="hljs-function">
+<span class="hljs-title">note</span> = <span class="hljs-params">(msg)</span> -&gt;</span>
   <span class="hljs-built_in">console</span>?.log msg  <span class="hljs-keyword">if</span> YD.debug</pre></div>
         
       

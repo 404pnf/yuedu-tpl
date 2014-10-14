@@ -16,8 +16,7 @@ alertBox = (msg, callback) ->
   $("#msg").dialog
     modal: true
     buttons:
-      # do NOT use fat arror!! or the dialog won't close
-      Ok: ->
+      Ok: ->  # do NOT use fat arror!! or the dialog won't close
         if callback
           callback()
         else
@@ -27,7 +26,7 @@ alertBox = (msg, callback) ->
 # 注意：action必须是一个返回函数的函数，这样才能延迟执行。
 # 可以用 -> 包裹一下，防止action作为参数时被立即求值。
 doWhen = (predict, action) ->
-  action if predict
+  action() if predict
 
 # ### 提交表单内容到后台
 # 1. 从表单获取数据
@@ -86,8 +85,11 @@ renderLocalData = (data, cssID, tpl, callback) ->
 redirectToUrl = (url) ->
   window.location.replace url
 
-# 封装console.log。且只在debug模式下调用console.log。
-# 因为ie没有console.log。如果代码中使用了它，整个js都无法在ie下正常使用。
+# 封装console.log。且只在debug模式下才调用console.log。
+# 由于使用了 console? 做存在探测 ，因此即使忘了关闭debug，在ie中仍不会造成整个js脚本无法执行。
+# 这是coffescript中很好用的一个功能。
+# ie没有console.log。如果代码中使用了它，整个js都无法在ie下使用。
+
 note = (msg) ->
   console?.log msg  if YD.debug
 
