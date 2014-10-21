@@ -8,7 +8,7 @@
     root.YD = {};
   }
 
-  YD.debug = false;
+  YD.debug = true;
 
   alertBox = function(msg, callback) {
     $("#msg").text(msg);
@@ -209,15 +209,20 @@
   YD.startDispache = function() {
     var next, updateDateText;
     updateDateText = function(d) {
-      var o;
-      return o = _.map(d.upcomingExam, function(e) {
+      var newUpcomingExam, upcomingExam;
+      upcomingExam = d.upcomingExam;
+      newUpcomingExam = _.map(upcomingExam, function(e) {
         if (e.isTodayExam) {
           e.endTime = "";
-          return e.isTodayExam = "<em class='highlight'>今天</em>";
+          e.isTodayExam = "<em class='highlight'>今天</em>";
+          return e;
         } else {
-          return e.isTodayExam = "";
+          e.isTodayExam = "";
+          return e;
         }
       });
+      d.upcomingExam = newUpcomingExam;
+      return d;
     };
     next = function() {
       var getExamInfo, onFailure, onSuccess, promise;
@@ -232,8 +237,12 @@
             hasUpcoming: false
           });
         }
+      }).then(function(data) {
+        if ("upcomingExam" in data) {
+          data.upcomingExam.length = 2;
+        }
+        return data;
       });
-      note(promise);
       onSuccess = function(data) {
         var cssID, ex0up0res1, ex0up1res0, ex0up1res1, ex1up0res0, ex1up0res1, examInfo, hasCurrentExam, hasUpcomingExam, haslatestExamResult, render, userExamState, _ref;
         examInfo = _.snapshot(data);
