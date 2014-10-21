@@ -54,9 +54,7 @@
 
         
           <div class='highlight'><pre>root = <span class="hljs-built_in">global</span> ? <span class="hljs-built_in">window</span>
-
 root.YD ?= {}
-
 YD.debug = <span class="hljs-literal">false</span></pre></div>
         
       
@@ -168,8 +166,6 @@ YD.debug = <span class="hljs-literal">false</span></pre></div>
       
         
         <p>封装console.log。且只在debug模式下才调用console.log。
-由于使用了 console? 做存在探测 ，因此即使忘了关闭debug，在ie中仍不会造成整个js脚本无法执行。
-这是coffescript中很好用的一个功能。
 ie没有console.log。如果代码中使用了它，整个js都无法在ie下使用。</p>
 
         
@@ -417,13 +413,32 @@ $(“#user_info”).delegate “.monitor”, “change”, setDaysOfMonth</li>
 </ol>
 
         
-          <div class='highlight'><pre><span class="hljs-function">  <span class="hljs-title">updateDateText</span> = <span class="hljs-params">(d)</span> -&gt;</span>
-    o = _.map d.upcomingExam, <span class="hljs-function"><span class="hljs-params">(e)</span> -&gt;</span>
+          <div class='highlight'><pre><span class="hljs-function">  <span class="hljs-title">updateDateText</span> = <span class="hljs-params">(d)</span> -&gt;</span></pre></div>
+        
+      
+        
+        <p>o = <em>.map d.upcomingExam, (e) -&gt;
+  if e.isTodayExam
+    e.endTime = “”
+    e.isTodayExam = “<em class='highlight'>今天</em>“ # FIXME no html or css in js
+    e
+  else
+    e.isTodayExam = “”
+    e
+</em>.extend d, o</p>
+
+        
+          <div class='highlight'><pre>    upcomingExam = d.upcomingExam
+    newUpcomingExam = _.map upcomingExam, <span class="hljs-function"><span class="hljs-params">(e)</span> -&gt;</span>
       <span class="hljs-keyword">if</span> e.isTodayExam
         e.endTime = <span class="hljs-string">""</span>
         e.isTodayExam = <span class="hljs-string">"&lt;em class='highlight'&gt;今天&lt;/em&gt;"</span> <span class="hljs-comment"># FIXME no html or css in js</span>
+        e
       <span class="hljs-keyword">else</span>
-        e.isTodayExam = <span class="hljs-string">""</span></pre></div>
+        e.isTodayExam = <span class="hljs-string">""</span>
+        e
+    d.upcomingExam = newUpcomingExam
+    d</pre></div>
         
       
         
@@ -444,8 +459,14 @@ $(“#user_info”).delegate “.monitor”, “change”, setDaysOfMonth</li>
           _.extend data, updateDateText(data), <span class="hljs-attribute">hasUpcoming</span>: <span class="hljs-literal">true</span>
         <span class="hljs-keyword">else</span>
           _.extend data, <span class="hljs-attribute">hasUpcoming</span>: <span class="hljs-literal">false</span>
+      .<span class="hljs-keyword">then</span> (data) -&gt;
+        data.upcomingExam.length = <span class="hljs-number">2</span> <span class="hljs-keyword">if</span> (<span class="hljs-string">"upcomingExam"</span> <span class="hljs-keyword">of</span> data)
+        data</pre></div>
+        
+      
+        
+        <p>note promise</p>
 
-    note promise</pre></div>
         
       
         
@@ -694,7 +715,7 @@ $(“#user_info”).delegate “.monitor”, “change”, setDaysOfMonth</li>
       postHelper YD.conf.userResetPass,
         data,
         <span class="hljs-function">-&gt;</span>
-          alertBox(<span class="hljs-string">"修改成功！"</span>, <span class="hljs-function">-&gt;</span> redirectToUrl(YD.conf.userHomeUrl))</pre></div>
+          alertBox(<span class="hljs-string">"修改成功！"</span>, <span class="hljs-function">-&gt;</span> redirectToUrl(YD.conf.siteHomeUrl))</pre></div>
         
       
       <div class="fleur">h</div>

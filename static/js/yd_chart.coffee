@@ -1,6 +1,5 @@
 # ## 使用的库是amchart
 # http://www.amcharts.com/
-
 root = global ? window
 
 root.ydMakeChart = ->

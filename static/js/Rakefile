@@ -9,20 +9,17 @@ task :compile do
   system('java -jar ~/gogole-closure-compiler/compiler.jar --js yd.js > yd.min.js')
 end
 
-task :default do
-  # :concat
-end
+task :default => [:watch, :server]
 
 desc '用jslint和jshint检查js代码'
 task :lint do
   # system('jslint yd*.js')
-  # system('jshint yd*.js')
-  system('coffeelint coffee/')
+  system('coffeelint *.coffee')
 end
 
 desc '监视coffeescript代码并在有修改的时候自动编译为js'
 task :watch do
-  system('coffee -cwo . coffee &')
+  system('coffee -cwo .')
 end
 
 desc '启动server'
@@ -33,5 +30,5 @@ end
 desc 'generate documenations'
 task :doc do
   #system('docco coffee/*.coffee')
-  system('docco -l linear coffee/*.coffee')
+  system('docco -l linear *.coffee')
 end

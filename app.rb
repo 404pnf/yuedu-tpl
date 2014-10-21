@@ -1,5 +1,6 @@
 require 'sinatra'
 require 'sinatra/jsonp'
+require 'json'
 
 set public_folder: File.dirname(__FILE__) + '/static'
 set static_cache_control: [:private, :max_age => 0]
@@ -103,13 +104,13 @@ get '/examController/studentLogin' do
         isTodayExam: false
       }],
 
-    # latestExamResult: {
-    #   examGradeResult: '4级，还不错',
-    #   vocabularySize: '22000',
-    #   personalEndTime: '2014-08-26',
-    #   duration: '15', # 分钟
-    #   id: 'exam_result_id'
-    # }
+    latestExamResult: {
+      examGradeResult: '4级，还不错',
+      vocabularySize: '22000',
+      personalEndTime: '2014-08-26',
+      duration: '15', # 分钟
+      id: 'exam_result_id'
+    }
 
   }
   JSONP r
@@ -157,8 +158,8 @@ post '/userController/login' do
   username = params[:username]
   password = params[:password]
   yanzhengma = params[:yz]
-  # r = { error: '用户名和密码不对。' }
-  r = {success: '成功啦'}
+  r = { error: '用户名和密码不对。' }
+  #r = {success: '成功啦'}
   JSONP r
 end
 

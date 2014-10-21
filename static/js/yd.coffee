@@ -1,9 +1,7 @@
 # ## 唯一的全局变量
 # 也是程序的命名空间
 root = global ? window
-
 root.YD ?= {}
-
 YD.debug = false
 
 #
@@ -247,12 +245,20 @@ YD.startDispache = ->
   # 1. 如果考试预告中有考试是今天的就在模版中显示“今天”两个字
   # 1. 直接修改了examInfo
   updateDateText = (d) ->
-    o = _.map d.upcomingExam, (e) ->
+    upcomingExam = d.upcomingExam
+    newUpcomingExam = _.map upcomingExam, (e) ->
       if e.isTodayExam
         e.endTime = ""
-        e.isTodayExam = "<em class='highlight'>今天</em>" # FIXME no html or css in js
+        # FIXME no html or css in js
+        e.isTodayExam = "<em class='highlight'>今天</em>"
+        e
       else
         e.isTodayExam = ""
+        e
+    d.upcomingExam = newUpcomingExam
+    d
+
+
 
   # 主函数，可能递归调用
   next = ->
@@ -264,8 +270,11 @@ YD.startDispache = ->
           _.extend data, updateDateText(data), hasUpcoming: true
         else
           _.extend data, hasUpcoming: false
+      .then (data) ->
+        data.upcomingExam.length = 2 if ("upcomingExam" of data)
+        data
 
-    note promise
+    # note promise
 
     # promise 成功时回调
     # 1. 将从后台获得的数据（从onSuccess函数的参数传进来）绑定到局部变量。
@@ -444,4 +453,4 @@ YD.resetPass = ->
       postHelper YD.conf.userResetPass,
         data,
         ->
-          alertBox("修改成功！", -> redirectToUrl(YD.conf.userHomeUrl))
+          alertBox("修改成功！", -> redirectToUrl(YD.conf.siteHomeUrl))

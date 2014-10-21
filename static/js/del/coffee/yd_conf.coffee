@@ -1,8 +1,8 @@
 root = global ? window
 
 root.YD ?= {}
+testing = true
 
-testing = false
 if testing
   # ## 本地配置
   YD.conf =
