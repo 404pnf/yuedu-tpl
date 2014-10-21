@@ -8,7 +8,7 @@
     root.YD = {};
   }
 
-  YD.debug = true;
+  YD.debug = false;
 
   alertBox = function(msg, callback) {
     $("#msg").text(msg);
