@@ -19,7 +19,7 @@ end
 
 desc '监视coffeescript代码并在有修改的时候自动编译为js'
 task :watch do
-  system('coffee -cwo .')
+  system('coffee -cw .')
 end
 
 desc '启动server'

@@ -1,8 +1,9 @@
 # ## 使用的库是amchart
 # http://www.amcharts.com/
 root = global ? window
+root.YD ?= {}
 
-root.ydMakeChart = ->
+YD.ydMakeChart = ->
   drawChart = (data) ->
     # AmCharts.makeChart 接受的参数是页面上的 cssID。
     # 生成的图标将会直接插入到这个cssID所在的div中。
