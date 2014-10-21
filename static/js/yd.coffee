@@ -245,20 +245,12 @@ YD.startDispache = ->
   # 1. 如果考试预告中有考试是今天的就在模版中显示“今天”两个字
   # 1. 直接修改了examInfo
   updateDateText = (d) ->
-    # o = _.map d.upcomingExam, (e) ->
-    #   if e.isTodayExam
-    #     e.endTime = ""
-    #     e.isTodayExam = "<em class='highlight'>今天</em>" # FIXME no html or css in js
-    #     e
-    #   else
-    #     e.isTodayExam = ""
-    #     e
-    # _.extend d, o
     upcomingExam = d.upcomingExam
     newUpcomingExam = _.map upcomingExam, (e) ->
       if e.isTodayExam
         e.endTime = ""
-        e.isTodayExam = "<em class='highlight'>今天</em>" # FIXME no html or css in js
+        # FIXME no html or css in js
+        e.isTodayExam = "<em class='highlight'>今天</em>"
         e
       else
         e.isTodayExam = ""

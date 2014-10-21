@@ -14,7 +14,7 @@ task :default => [:watch, :server]
 desc '用jslint和jshint检查js代码'
 task :lint do
   # system('jslint yd*.js')
-  system('coffeelint coffee/*.coffee')
+  system('coffeelint *.coffee')
 end
 
 desc '监视coffeescript代码并在有修改的时候自动编译为js'
@@ -30,5 +30,5 @@ end
 desc 'generate documenations'
 task :doc do
   #system('docco coffee/*.coffee')
-  system('docco -l linear coffee/*.coffee')
+  system('docco -l linear *.coffee')
 end

@@ -25,7 +25,7 @@ else
   # ## 线上配置
   YD.conf =
     # static route
-    siteHomeUrl:"/student/index",
+    siteHomeUrl: "/student/index",
     tplDir: "/static/js/template/",
     userLogout: "/log/out",
     userHomeUrl: "/student/personal_info",
@@ -38,5 +38,5 @@ else
     getExamInfo: "/examController/studentLogin",
     userSave: "/userController/save",
     userLogin: "/userController/login",
-    userResetPass:"/students/password/reset"
+    userResetPass: "/students/password/reset"
 
