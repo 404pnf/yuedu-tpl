@@ -334,7 +334,7 @@
         note(data);
         return postHelper(YD.conf.userResetPass, data, function() {
           return alertBox("修改成功！", function() {
-            return redirectToUrl(YD.conf.userHomeUrl);
+            return redirectToUrl(YD.conf.siteHomeUrl);
           });
         });
       }
