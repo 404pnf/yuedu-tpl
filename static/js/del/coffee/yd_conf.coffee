@@ -1,7 +1,7 @@
 root = global ? window
 
 root.YD ?= {}
-testing = false
+testing = true
 
 if testing
   # ## 本地配置

@@ -7,7 +7,7 @@ if (root.YD == null) {
   root.YD = {};
 }
 
-testing = false;
+testing = true;
 
 if (testing) {
   YD.conf = {
