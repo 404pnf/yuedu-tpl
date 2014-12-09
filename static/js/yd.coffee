@@ -109,18 +109,23 @@ hasBlank = (arrayOfCssElement) ->
 
 # ### 判断给定日期所在的月份有多少天
 howManyDays = (year, month) ->
-  isLeap = year in [2004, 2008, 2012, 2016, 2020]
-  solarMonth = month in [1, 3, 5, 7, 8, 10, 12]
-  lunarMonth = month in [4, 6, 9, 11]
-  isFeb = month is 2
-  days = if isLeap and isFeb
-    29
-  else if isFeb
-    28
-  else if lunarMonth
-    30
-  else
-    31
+  # lastDayOfTheMonth = new Date(1900+now.getYear(), now.getMonth()+1, 0)
+  # http://coffeescriptcookbook.com/chapters/dates_and_times/finding-last-day-of-the-month
+  new Date(year, month, 0).getDate()
+  # 以前的方法
+  #
+  # isLeap = year in [2004, 2008, 2012, 2016, 2020]
+  # solarMonth = month in [1, 3, 5, 7, 8, 10, 12]
+  # lunarMonth = month in [4, 6, 9, 11]
+  # isFeb = month is 2
+  # days = if isLeap and isFeb
+  #   29
+  # else if isFeb
+  #   28
+  # else if lunarMonth
+  #   30
+  # else
+  #   31
 
 # ## 用户页面
 #
@@ -257,8 +262,6 @@ YD.startDispache = ->
         e
     d.upcomingExam = newUpcomingExam
     d
-
-
 
   # 主函数，可能递归调用
   next = ->
